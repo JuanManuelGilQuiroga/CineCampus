@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "mongodb": "^6.8.0"
+  },
+  "name": "proyectomongoii",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "dev": "node --watch --env-file=.env js/main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module"
+}
