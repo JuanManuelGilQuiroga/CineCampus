@@ -1,4 +1,4 @@
-import { Sala } from "./sala.js";
+const { Sala } = require("./sala.model");
 
 /**
  * Inserta una nueva sala en la base de datos.
@@ -8,7 +8,7 @@ import { Sala } from "./sala.js";
  *
  * @returns {Promise<Object>} - Una promesa que resuelve con el resultado de la inserción o un error si la sala ya existe.
  */
-export const insertSala = async (salaParametro) => {
+const insertSala = async (salaParametro) => {
     let salaInstance = new Sala()
     let findSala = await salaInstance.findSalaById({
         nombre: salaParametro.nombre
@@ -24,3 +24,5 @@ export const insertSala = async (salaParametro) => {
     console.log(findSala)
     return res
 }
+
+module.exports = insertSala

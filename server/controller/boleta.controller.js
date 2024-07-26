@@ -1,8 +1,8 @@
-import { ObjectId } from "mongodb"
-import { Boleta } from "./boleta.js"
-import { Cliente } from "../gestionUsuarioYCliente/cliente.js"
-import { Funcion } from "../gestionFuncion/funcion.js"
-import { insertMovimiento } from "../gestionMovimiento/movimientoLogica.js"
+const { ObjectId } = require('mongodb');
+const { Funcion } = require('../funcion/funcion.model');
+const { insertMovimiento } = require('./movimiento.controller');
+const { Cliente } = require('../usuario/usuario.model');
+const { Boleta } = require('./boleta.model');
 
 /**
  * Inserta una nueva boleta en la base de datos.
@@ -15,7 +15,7 @@ import { insertMovimiento } from "../gestionMovimiento/movimientoLogica.js"
  
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la inserción.
  */
-export const insertBoleta = async (boletaParametro) => {
+const insertBoleta = async (boletaParametro) => {
     let boletaInstance = new Boleta()
     let funcionInstance = new Funcion()
     let clienteInstance = new Cliente()
@@ -139,7 +139,7 @@ export const insertBoleta = async (boletaParametro) => {
  * @param {ObjectId} boletaParametro - El objeto que contiene el ObjectId de la boleta que se desea eliminar
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la eliminación.
  */
-export const deleteReserva = async (boletaParametro) => {
+const deleteReserva = async (boletaParametro) => {
     let funcionInstance = new Funcion()
     let boletaInstance = new Boleta()
     let clienteInstance = new Cliente()
@@ -230,3 +230,5 @@ export const deleteReserva = async (boletaParametro) => {
     res.mensaje = `Se ha cancelado la reserva para el asiento ${findReserva.asiento} de la funcion de "${aggregateBoletaInfo.pelicula}" en la ${aggregateBoletaInfo.sala} a las ${fechaFuncion}.`
     return res
 }
+
+module.exports = { insertBoleta, deleteReserva }

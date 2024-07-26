@@ -1,5 +1,5 @@
-import { Cliente } from "./cliente.js";
-import { insertTarjeta } from "../gestionTarjeta/tarjetaLogica.js";
+const { insertTarjeta } = require('../tarjeta/tarjeta.controller');
+const { Cliente } = require('./usuario.model');
 
 /**
  * Crea un nuevo usuario en la base de datos y lo inserta en la colección de clientes.
@@ -16,7 +16,7 @@ import { insertTarjeta } from "../gestionTarjeta/tarjetaLogica.js";
  *
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la creación del usuario y la insercion del cliente o un mensaje de error si se identifica alguno.
  */
-export const createUsuarioYInsertCliente = async (usuarioParametro) => {
+const createUsuarioYInsertCliente = async (usuarioParametro) => {
     let clienteInstance = new Cliente()
 
     // Verificar si el usuario ya existe
@@ -96,7 +96,7 @@ export const createUsuarioYInsertCliente = async (usuarioParametro) => {
  * @param {String} clienteParametro - String que contiene el tipo de usuario
  * @returns {Promise<Array>} Una promesa que resuelve con el resultado de la busqueda
  */
-export const listarClientes = async (clienteParametro) => {
+const listarClientes = async (clienteParametro) => {
     let clienteInstance = new Cliente()
 
     //Busca los usuarios que coincidan con el tipo de usuario
@@ -121,7 +121,7 @@ export const listarClientes = async (clienteParametro) => {
  * @param {String} clienteNick - String que contiene el usuario
  * @returns {Promise<Array>} Una promesa que resuelve con el resultado de la busqueda
  */
-export const findOneCliente = async (clienteNick) => {
+const findOneCliente = async (clienteNick) => {
     let clienteInstance = new Cliente()
     let findCliente = await clienteInstance.findOneCliente({
         nick: clienteNick
@@ -148,4 +148,10 @@ export const findOneCliente = async (clienteNick) => {
         return findCliente
     }
     return detallesCliente
+}
+
+module.exports = {
+    createUsuarioYInsertCliente,
+    listarClientes,
+    findOneCliente
 }

@@ -1,5 +1,5 @@
-import { Tarjeta } from "./tarjeta.js"
-import { Cliente } from "../gestionUsuarioYCliente/cliente.js"
+const { Tarjeta } = require('./tarjeta.model');
+const { Cliente } = require('../usuario/usuario.model')
 
 /**
  * Inserta una nueva tarjeta para un cliente en la colección de tarjetas.
@@ -9,7 +9,7 @@ import { Cliente } from "../gestionUsuarioYCliente/cliente.js"
  *
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la inserción de la tarjeta.
  */
-export const insertTarjeta = async (tarjetaParametro) => {
+const insertTarjeta = async (tarjetaParametro) => {
     let tarjetaInstance = new Tarjeta()
     let clienteInstance = new Cliente()
 
@@ -105,7 +105,7 @@ export const insertTarjeta = async (tarjetaParametro) => {
  * @param {string} numeroTarjeta - El número de la tarjeta que se va a eliminar.
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la eliminación de la tarjeta.
  */
-export const deleteTarjeta = async (numeroTarjeta) => {
+const deleteTarjeta = async (numeroTarjeta) => {
     let tarjetaInstance = new Tarjeta()
     let clienteInstance = new Cliente()
 
@@ -186,4 +186,9 @@ export const deleteTarjeta = async (numeroTarjeta) => {
     )
     res.mensaje = `La tarjeta con numero ${numeroTarjeta} ha sido borrada de la base de datos.`
     return res
+}
+
+module.exports = {
+    insertTarjeta,
+    deleteTarjeta
 }
