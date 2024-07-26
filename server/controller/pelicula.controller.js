@@ -1,4 +1,4 @@
-import { Pelicula } from "./pelicula.js";
+const { Pelicula } = require("./pelicula.model")
 
 /**
  * Inserta una nueva película en la base de datos.
@@ -12,7 +12,7 @@ import { Pelicula } from "./pelicula.js";
  *
  * @returns {Promise<Object>} - Una promesa que resuelve con el resultado de la inserción o un error si la película ya existe.
  */
-export const insertPelicula = async (peliculaParametro) => {
+const insertPelicula = async (peliculaParametro) => {
     let peliculaInstance = new Pelicula()
     let findPelicula = await peliculaInstance.findPelicula(
         {titulo: peliculaParametro.titulo}
@@ -33,7 +33,7 @@ export const insertPelicula = async (peliculaParametro) => {
  * Lista todas las películas con detalles sobre sus funciones.
  * @returns {Promise<Array|Object>} - Una promesa que resuelve con una lista de películas con sus detalles o un error si no se encontraron películas.
  */
-export const listarPeliculas = async () => {
+const listarPeliculas = async () => {
     let peliculaInstance = new Pelicula()
     let res = await peliculaInstance.aggregatePelicula([
         {$lookup: {from: "funcion", localField: "_id", foreignField: "pelicula_id", as: "funciones"}},
@@ -52,11 +52,17 @@ export const listarPeliculas = async () => {
  * @param {ObjectId} peliculaParametro - El ID de la película a buscar.
  * @returns {Promise<Object>} - Una promesa que resuelve con los detalles de la película o un error si no se encontró la película.
  */
-export const detallesPelicula = async (peliculaParametro) => {
+const detallesPelicula = async (peliculaParametro) => {
     let peliculaInstance = new Pelicula()
     let res = await peliculaInstance.findPeliculaById({_id: peliculaParametro})
     if(!res) {
         return { error: "No se encontro la pelicula" }
     }
     return res
+}
+
+module.exports = {
+    insertPelicula,
+    listarPeliculas,
+    detallesPelicula
 }

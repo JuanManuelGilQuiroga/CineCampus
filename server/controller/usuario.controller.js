@@ -1,5 +1,5 @@
-import { Cliente } from "./cliente.js";
-import { insertTarjeta } from "../gestionTarjeta/tarjetaLogica.js";
+const { insertTarjeta } = require('../tarjeta/tarjeta.controller');
+const { Cliente } = require('./usuario.model');
 
 /**
  * Crea un nuevo usuario en la base de datos y lo inserta en la colección de clientes.
@@ -16,7 +16,7 @@ import { insertTarjeta } from "../gestionTarjeta/tarjetaLogica.js";
  *
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la creación del usuario y la insercion del cliente o un mensaje de error si se identifica alguno.
  */
-export const createUsuarioYInsertCliente = async (usuarioParametro) => {
+const createUsuarioYInsertCliente = async (usuarioParametro) => {
     let clienteInstance = new Cliente()
 
     // Verificar si el usuario ya existe
@@ -33,20 +33,37 @@ export const createUsuarioYInsertCliente = async (usuarioParametro) => {
         userRoleTipo = "usuarioEstandar"
     } else if(usuarioParametro.tipo === "VIP") {
         userRoleTipo = "usuarioVIP"
+    }else if(usuarioParametro.tipo === "Admin") {
+        userRoleTipo = "Administrador"
     } else {
         return { error: "El tipo de usuario no es valido." }
     }
 
     // Crear el usuario en la base de datos
-    let createUsuario = await clienteInstance.commandUsuario({
-        createUser: usuarioParametro.nick,
-        pwd: usuarioParametro.pwd,
-        roles: [
-            { role: "read", db: process.env.MONGO_DB },
-            { role: userRoleTipo, db: process.env.MONGO_DB },
-            { role: "dbAdmin", db: process.env.MONGO_DB }
-        ]
-    })
+    if(userRoleTipo == "usuarioEstandar" || userRoleTipo == "usuarioVIP") {
+        var createUsuario = await clienteInstance.commandUsuario({
+            createUser: usuarioParametro.nick,
+            pwd: usuarioParametro.pwd,
+            roles: [
+                { role: "read", db: process.env.MONGO_DB },
+                { role: userRoleTipo, db: process.env.MONGO_DB },
+                { role: "dbAdmin", db: process.env.MONGO_DB }
+            ]
+        })
+
+    } else if(userRoleTipo == "Administrador") {
+        var createUsuario = await clienteInstance.commandUsuario({
+            createUser: usuarioParametro.nick,
+            pwd: usuarioParametro.pwd,
+            roles: [
+                { role: "readWrite", db: process.env.MONGO_DB },
+                { role: userRoleTipo, db: process.env.MONGO_DB },
+                { role: "dbAdmin", db: process.env.MONGO_DB },
+                { role: "userAdminAnyDatabase", db: "admin" },
+                { role: "dbAdminAnyDatabase", db: "admin" }
+            ]
+        })
+    }
 
     // Insertar el cliente en la colección de clientes
     let res = await clienteInstance.insertCliente({
@@ -79,7 +96,7 @@ export const createUsuarioYInsertCliente = async (usuarioParametro) => {
  * @param {String} clienteParametro - String que contiene el tipo de usuario
  * @returns {Promise<Array>} Una promesa que resuelve con el resultado de la busqueda
  */
-export const listarClientes = async (clienteParametro) => {
+const listarClientes = async (clienteParametro) => {
     let clienteInstance = new Cliente()
 
     //Busca los usuarios que coincidan con el tipo de usuario
@@ -104,25 +121,37 @@ export const listarClientes = async (clienteParametro) => {
  * @param {String} clienteNick - String que contiene el usuario
  * @returns {Promise<Array>} Una promesa que resuelve con el resultado de la busqueda
  */
-export const findOneCliente = async (clienteNick) => {
+const findOneCliente = async (clienteNick) => {
     let clienteInstance = new Cliente()
     let findCliente = await clienteInstance.findOneCliente({
         nick: clienteNick
     })
+    let findUsuario = await clienteInstance.findOneCliente({
+        nick: process.env.MONGO_USER
+    })
     if(!findCliente) {
         return { error: "El cliente no existe en la base de datos." }
     }
-
-    if(process.env.MONGO_USER != clienteNick && process.env.MONGO_USER != "admin") {
+    
+    if(process.env.MONGO_USER != clienteNick && findUsuario.tipo != "Admin") {
         return { error: "Sus credenciales no son validas para adquirir la informacion de este cliente." }
     }
-
-    let detallesCliente = await clienteInstance.aggregateCliente([
-        { $match: { nick: clienteNick } },
-        { $lookup: { from: "tarjeta", localField: "_id", foreignField: "cliente_id", as: "tarjeta" } },
-        { $unwind: "$tarjeta"},
-        { $replaceRoot: { newRoot: { $mergeObjects: ["$tarjeta", "$$ROOT"]}}},
-        { $project: { nombre: 1, apellido: 1, nick: 1, email: 1, telefono: 1, tipo: 1, numero_tarjeta: "$numero", } }
-    ])
+    if(findCliente.tipo == "VIP") {
+        var detallesCliente = await clienteInstance.aggregateCliente([
+            { $match: { nick: clienteNick } },
+            { $lookup: { from: "tarjeta", localField: "_id", foreignField: "cliente_id", as: "tarjeta" } },
+            { $unwind: "$tarjeta"},
+            { $replaceRoot: { newRoot: { $mergeObjects: ["$tarjeta", "$$ROOT"]}}},
+            { $project: { nombre: 1, apellido: 1, nick: 1, email: 1, telefono: 1, tipo: 1, numero_tarjeta: "$numero", } }
+        ])
+    } else {
+        return findCliente
+    }
     return detallesCliente
+}
+
+module.exports = {
+    createUsuarioYInsertCliente,
+    listarClientes,
+    findOneCliente
 }
