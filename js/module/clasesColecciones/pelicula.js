@@ -30,4 +30,9 @@ export class Pelicula extends Connect {
         let res = await this.collection.insertOne(peliculaParametro)
         return res
     }
+
+    async aggregatePelicula(peliculaParametro) {
+        let res = await this.collection.aggregate(peliculaParametro).toArray()
+        return res
+    }
 }
