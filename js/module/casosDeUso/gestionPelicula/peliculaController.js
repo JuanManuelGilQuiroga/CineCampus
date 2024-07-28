@@ -1,5 +1,10 @@
 import { Pelicula } from "../../clasesColecciones/pelicula.js";
 
+/**
+ * Inserta una nueva película en la base de datos.
+ * @param {Object} peliculaParametro - El objeto que contiene los detalles de la película a insertar.
+ * @returns {Promise<Object>} - Una promesa que resuelve con el resultado de la inserción o un error si la película ya existe.
+ */
 export const insertPelicula = async (peliculaParametro) => {
     let peliculaInstance = new Pelicula()
     let findPelicula = await peliculaInstance.findPelicula(
@@ -17,6 +22,10 @@ export const insertPelicula = async (peliculaParametro) => {
     return res
 }
 
+/**
+ * Lista todas las películas con detalles sobre sus funciones.
+ * @returns {Promise<Array|Object>} - Una promesa que resuelve con una lista de películas con sus detalles o un error si no se encontraron películas.
+ */
 export const listarPeliculas = async () => {
     let peliculaInstance = new Pelicula()
     let res = await peliculaInstance.aggregatePelicula([
@@ -31,6 +40,11 @@ export const listarPeliculas = async () => {
     return res
 }
 
+/**
+ * Obtiene los detalles de una película específica por ID.
+ * @param {ObjectId} peliculaParametro - El ID de la película a buscar.
+ * @returns {Promise<Object>} - Una promesa que resuelve con los detalles de la película o un error si no se encontró la película.
+ */
 export const detallesPelicula = async (peliculaParametro) => {
     let peliculaInstance = new Pelicula()
     let res = await peliculaInstance.findPeliculaById({_id: peliculaParametro})
