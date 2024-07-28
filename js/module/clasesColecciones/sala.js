@@ -1,10 +1,10 @@
-import { connect } from '../../../helpers/db/connect.js';
+import { Connect } from '../../../helpers/db/connect.js';
 
 /**
  * Clase `Sala` para gestionar operaciones relacionadas con la colección de Salas en la base de datos.
- * Hereda de la clase `connect`, que maneja la conexión a la base de datos.
+ * Hereda de la clase `Connect`, que maneja la conexión a la base de datos.
  */
-export class Sala extends connect {
+export class Sala extends Connect {
     static instanceSala; // Instancia Singleton de la clase Sala
     
     /**
