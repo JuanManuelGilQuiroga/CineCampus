@@ -21,11 +21,20 @@ export class Sala extends Connect {
         return this;
     }
 
+    /**
+     * Obtiene todas las salas de la colección.
+     * @param {Object} salaParametro - El objeto que especifica el filtro para buscar las salas
+     * @returns {Promise<Array>} Una promesa que resuelve con un array de documentos de salas.
+     */
     async findSala(salaParametro) {
         let res = await this.collection.find(salaParametro).toArray()
         return res
     }
 
+    /**
+     * @param {Object} salaParametro - El objeto que especifica el filtro para buscar la sala
+     * @returns {Promise<Object>} Una promesa que resuelve con el documento de la sala buscada
+     */
     async findSalaById(salaParametro) {
         let res = await this.collection.findOne(salaParametro)
         return res
