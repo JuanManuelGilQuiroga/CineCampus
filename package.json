@@ -8,7 +8,8 @@
   "devDependencies": {},
   "scripts": {
     "dev": "node --watch --env-file=.env js/main.js",
-    "pelicula": "node --watch --env-file=.env js/module/casosDeUso/gestionPelicula/peliculaRun.js"
+    "pelicula": "node --watch --env-file=.env js/module/casosDeUso/gestionPelicula/peliculaRun.js",
+    "funcion": "node --watch --env-file=.env js/module/casosDeUso/gestionFuncion/funcionRun.js"
   },
   "keywords": [],
   "author": "",

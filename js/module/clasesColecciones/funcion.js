@@ -20,4 +20,19 @@ export class Funcion extends Connect {
         Funcion.instanceFuncion = this;
         return this;
     }
+
+    async findFuncion(funcionParametro) {
+        let res = await this.collection.find(funcionParametro).toArray()
+        return res
+    }
+
+    async findFuncionById(funcionParametro) {
+        let res = await this.collection.findOne(funcionParametro)
+        return res
+    }
+
+    async insertFuncion(funcionParametro) {
+        let res = await this.collection.insertOne(funcionParametro)
+        return res
+    }
 }

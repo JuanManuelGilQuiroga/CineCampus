@@ -20,4 +20,14 @@ export class Sala extends Connect {
         Sala.instanceSala = this;
         return this;
     }
+
+    async findSala(salaParametro) {
+        let res = await this.collection.find(salaParametro).toArray()
+        return res
+    }
+
+    async findSalaById(salaParametro) {
+        let res = await this.collection.findOne(salaParametro)
+        return res
+    }
 }
