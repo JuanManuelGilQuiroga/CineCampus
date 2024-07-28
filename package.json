@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "node --watch --env-file=.env js/main.js",
     "pelicula": "node --watch --env-file=.env js/module/casosDeUso/gestionPelicula/peliculaRun.js",
-    "funcion": "node --watch --env-file=.env js/module/casosDeUso/gestionFuncion/funcionRun.js"
+    "funcion": "node --watch --env-file=.env js/module/casosDeUso/gestionFuncion/funcionRun.js",
+    "sala": "node --watch --env-file=.env js/module/casosDeUso/gestionSala/salaRun.js"
   },
   "keywords": [],
   "author": "",

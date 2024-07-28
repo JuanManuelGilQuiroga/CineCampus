@@ -39,4 +39,9 @@ export class Sala extends Connect {
         let res = await this.collection.findOne(salaParametro)
         return res
     }
+
+    async insertSala(salaParametro) {
+        let res = await this.collection.insertOne(salaParametro)
+        return res
+    }
 }
