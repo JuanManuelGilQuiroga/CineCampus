@@ -17,7 +17,7 @@ export const insertPelicula = async (peliculaParametro) => {
     return res
 }
 
-export const listarPeliculas = async (peliculaParametro) => {
+export const listarPeliculas = async () => {
     let peliculaInstance = new Pelicula()
     let res = await peliculaInstance.aggregatePelicula([
         {$lookup: {from: "funcion", localField: "_id", foreignField: "pelicula_id", as: "funciones"}},
@@ -27,6 +27,15 @@ export const listarPeliculas = async (peliculaParametro) => {
     ])
     if(!res) {
         return { error: "No se encontraron peliculas" }
+    }
+    return res
+}
+
+export const detallesPelicula = async (peliculaParametro) => {
+    let peliculaInstance = new Pelicula()
+    let res = await peliculaInstance.findPeliculaById({_id: peliculaParametro})
+    if(!res) {
+        return { error: "No se encontro la pelicula" }
     }
     return res
 }

@@ -26,6 +26,11 @@ export class Pelicula extends Connect {
         return res
     }
 
+    async findPeliculaById(peliculaParametro) {
+        let res = await this.collection.findOne(peliculaParametro)
+        return res
+    }
+
     async insertPelicula(peliculaParametro) {
         let res = await this.collection.insertOne(peliculaParametro)
         return res

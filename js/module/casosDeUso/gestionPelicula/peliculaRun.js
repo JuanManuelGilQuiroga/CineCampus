@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { insertPelicula, listarPeliculas} from "./peliculaController.js"
+import { detallesPelicula, insertPelicula, listarPeliculas} from "./peliculaController.js"
 
 let peliculaInsertar = {
     titulo: "Whiplash: música y obsesión",
@@ -10,5 +10,8 @@ let peliculaInsertar = {
     retiro: new Date("2024-09-25")
 }
 
+let peliculaId = new ObjectId('66a597b03d45ef35a8b018ac')
+
 //console.log(await insertPelicula(peliculaInsertar))
-console.log(await listarPeliculas())
+//console.log(await listarPeliculas())
+console.log(await detallesPelicula(peliculaId))
