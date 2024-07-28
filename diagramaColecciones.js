@@ -51,7 +51,14 @@ import { ObjectId } from "mongodb";
     cliente_id: new ObjectId(),
     funcion_id: new ObjectId(),
     asiento: "A1",
-    monto_COP: 7000 
+    estado_pago: false
+}
+
+//movimiento
+{
+    _id: new ObjectId(),
+    boleta_id: new ObjectId(),
+    monto_COP: 7000
 }
 
 //cliente
