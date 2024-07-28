@@ -1,10 +1,10 @@
-import { connect } from '../../../helpers/db/connect.js';
+import { Connect } from '../../../helpers/db/connect.js';
 
 /**
  * Clase `Boleta` para gestionar operaciones relacionadas con la colección de Boletas en la base de datos.
- * Hereda de la clase `connect`, que maneja la conexión a la base de datos.
+ * Hereda de la clase `Connect`, que maneja la conexión a la base de datos.
  */
-export class Boleta extends connect {
+export class Boleta extends Connect {
     static instanceBoleta; // Instancia Singleton de la clase Boleta
     
     /**

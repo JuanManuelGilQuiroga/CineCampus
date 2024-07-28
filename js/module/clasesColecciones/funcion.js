@@ -1,10 +1,10 @@
-import { connect } from '../../../helpers/db/connect.js';
+import { Connect } from '../../../helpers/db/connect.js';
 
 /**
  * Clase `Funcion` para gestionar operaciones relacionadas con la colección de Funciones en la base de datos.
  * Hereda de la clase `connect`, que maneja la conexión a la base de datos.
  */
-export class Funcion extends connect {
+export class Funcion extends Connect {
     static instanceFuncion; // Instancia Singleton de la clase Funcion
     
     /**

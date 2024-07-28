@@ -7,7 +7,8 @@ import { ObjectId } from "mongodb";
     genero: "Drama",
     duracion_m: 107,
     sinopsis: "Andrew Neiman es un joven y ambicioso baterista de jazz. Marcado por el fracaso de la carrera literaria de su padre, está obsesionado con alcanzar la cima dentro del elitista conservatorio de música de la Costa Este en el que estudia.",
-
+    estreno: new Date(),
+    retiro: new Date()
 }
 
 //funcion

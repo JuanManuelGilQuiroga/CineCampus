@@ -8,6 +8,8 @@ export class Connect {
     #cluster;
     #dbName;
     static instance
+    conexion
+    db
     constructor(){
         this.user = process.env.MONGO_USER;
         this.port = process.env.MONGO_PORT;
