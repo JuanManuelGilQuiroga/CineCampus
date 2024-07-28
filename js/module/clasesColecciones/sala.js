@@ -40,6 +40,10 @@ export class Sala extends Connect {
         return res
     }
 
+    /**
+     * @param {Object} salaParametro - El objeto que especifica el documento a insertar en la colección
+     * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la insercion de la sala
+     */
     async insertSala(salaParametro) {
         let res = await this.collection.insertOne(salaParametro)
         return res

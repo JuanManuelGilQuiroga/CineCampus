@@ -1,5 +1,11 @@
 import { insertSala } from "./salaController.js"
 
+/**
+ * Parámetros de la función a insertar.
+ * @type {Object}
+ * @property {string} nombre - El nombre de la sala.
+ * @property {array} asientos - Los asientos que tiene la sala.
+ */
 let salaInsertar = {
     nombre: "Sala 2",
     asientos: [
@@ -13,4 +19,5 @@ let salaInsertar = {
     ]
 }
 
+// Inserta una nueva sala en la base de datos
 console.log(await insertSala(salaInsertar))
