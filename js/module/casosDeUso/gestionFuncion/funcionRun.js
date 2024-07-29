@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { insertFuncion } from "./funcionController.js";
+import { insertFuncion, verificarDisponibilidadAsientos } from "./funcionController.js";
 
 /**
  * Parámetros de la función a insertar.
@@ -18,5 +18,12 @@ let funcionInsertar = {
     precio_COP: 7000
 }
 
+/**
+ * @type {ObjectId} funcionId - El id de la funcion que se quiere buscar
+ */
+let funcionId = new ObjectId('66a743091a52555cff546d3b')
 // Llama a la función para insertar la función y muestra el resultado
-console.log(await insertFuncion(funcionInsertar))
+//console.log(await insertFuncion(funcionInsertar))
+
+//Llama a la función para verificar la disponibilidad de los asientos para la función
+console.log(await verificarDisponibilidadAsientos(funcionId))
