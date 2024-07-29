@@ -23,7 +23,7 @@ let funcionInsertar = {
  */
 let funcionId = new ObjectId('66a70936ccf008aa4825f440')
 // Llama a la función para insertar la función y muestra el resultado
-//console.log(await insertFuncion(funcionInsertar))
+console.log(await insertFuncion(funcionInsertar))
 
 //Llama a la función para verificar la disponibilidad de los asientos para la función
-console.log(await verificarDisponibilidadAsientos(funcionId))
+//console.log(await verificarDisponibilidadAsientos(funcionId))

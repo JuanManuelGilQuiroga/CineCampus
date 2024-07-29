@@ -48,4 +48,9 @@ export class Funcion extends Connect {
         let res = await this.collection.insertOne(funcionParametro)
         return res
     }
+
+    async updateFuncion(funcionFilter, funcionParametro) {
+        let res = await this.collection.updateOne(funcionFilter, funcionParametro)
+        return res
+    }
 }

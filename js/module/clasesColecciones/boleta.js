@@ -20,4 +20,19 @@ export class Boleta extends Connect {
         Boleta.instanceBoleta = this;
         return this;
     }
+
+    async findOneBoleta(boletaParametro) {
+        let res = await this.collection.findOne(boletaParametro)
+        return res
+    }
+
+    async insertBoleta(boletaParametro) {
+        let res = await this.collection.insertOne(boletaParametro)
+        return res
+    }
+
+    async updateBoleta(boletaFilter, boletaParametro) {
+        let res = await this.collection.updateOne(boletaFilter, boletaParametro)
+        return res
+    }
 }
