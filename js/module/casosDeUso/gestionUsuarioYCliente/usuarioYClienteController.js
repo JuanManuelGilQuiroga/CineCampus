@@ -40,3 +40,19 @@ export const createUsuarioYInsertCliente = async (usuarioParametro) => {
     console.log(insertCliente)
     return createUsuario
 }
+
+export const listarClientes = async (clienteParametro) => {
+    let clienteInstance = new Cliente()
+    let findClientes = await clienteInstance.findCliente({
+        tipo: clienteParametro
+    })
+
+    if(clienteParametro != "Admin" && clienteParametro != "Estandar" && clienteParametro != "VIP") {
+        return { error: "El tipo de usuario no es valido." }
+    }
+
+    if(findClientes.length == 0) {
+        return { mensaje: "No hay clientes que coincidan con el tipo" }
+    }
+    return findClientes
+}

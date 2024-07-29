@@ -37,4 +37,9 @@ export class Cliente extends Connect {
         let res = await this.collection.findOne(clienteParametro)
         return res
     }
+
+    async findCliente(clienteParametro) {
+        let res = await this.collection.find(clienteParametro).toArray()
+        return res
+    }
 }

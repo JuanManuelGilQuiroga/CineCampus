@@ -1,4 +1,4 @@
-import { createUsuarioYInsertCliente } from "./usuarioYClienteController.js"
+import { createUsuarioYInsertCliente, listarClientes } from "./usuarioYClienteController.js"
 
 
 let usuarioInsert = {
@@ -11,4 +11,8 @@ let usuarioInsert = {
     tipo: "Estandar"
 }
 
-console.log(await createUsuarioYInsertCliente(usuarioInsert))
+let clientesBuscar = "Estandar"
+
+//console.log(await createUsuarioYInsertCliente(usuarioInsert))
+
+console.log(await listarClientes(clientesBuscar))
