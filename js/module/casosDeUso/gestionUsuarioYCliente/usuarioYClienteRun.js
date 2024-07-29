@@ -1,0 +1,14 @@
+import { createUsuarioYInsertCliente } from "./usuarioYClienteController.js"
+
+
+let usuarioInsert = {
+    nombre: "Juan",
+    apellido: "Gil",
+    nick: "juanMGQ",
+    pwd: "jmgqEstandar",
+    email: "jmgq2007@gmail.com",
+    telefono: "315 6431235",
+    tipo: "Estandar"
+}
+
+console.log(await createUsuarioYInsertCliente(usuarioInsert))

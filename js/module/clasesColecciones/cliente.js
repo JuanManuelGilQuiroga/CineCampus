@@ -18,6 +18,23 @@ export class Cliente extends Connect {
         super();
         this.collection = this.db.collection("cliente");
         Cliente.instanceCliente = this;
+        console.log(this.conexion.db)
         return this;
+    }
+
+    async insertCliente(clienteParametro) {
+        let res = await this.collection.insertOne(clienteParametro)
+        return res
+    }
+
+    async createUsuario(usuarioParametro) {
+        let adminDb = this.conexion.db('admin');
+        let res = await adminDb.command(usuarioParametro)
+        return res
+    }
+
+    async findOneCliente(clienteParametro) {
+        let res = await this.collection.findOne(clienteParametro)
+        return res
     }
 }
