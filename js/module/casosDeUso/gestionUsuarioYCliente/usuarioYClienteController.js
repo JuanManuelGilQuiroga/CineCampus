@@ -1,10 +1,17 @@
 import { ObjectId } from "mongodb";
 import { Cliente } from "../../clasesColecciones/cliente.js"
+import { insertTarjeta } from "../gestionTarjeta/tarjetaController.js";
 
+/**
+ * Crea un nuevo usuario en la base de datos y lo inserta en la colección de clientes.
+ * 
+ * @param {Object} usuarioParametro - El objeto que contiene los detalles del usuario a crear.
+ * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la creación del usuario y la insercion del cliente o un mensaje de error si se identifica alguno.
+ */
 export const createUsuarioYInsertCliente = async (usuarioParametro) => {
     let clienteInstance = new Cliente()
 
-
+    // Verificar si el usuario ya existe
     let findCliente = await clienteInstance.findOneCliente({
         nick: usuarioParametro.nick
     })
@@ -12,32 +19,50 @@ export const createUsuarioYInsertCliente = async (usuarioParametro) => {
         return { mensaje: "El usuario ya existe" }
     }
 
-    let userRoleReadOrWrite = "read"
+    // Asignar el rol correspondiente según el tipo de usuario
     let userRoleTipo = "Usuario"
     if(usuarioParametro.tipo === "Estandar") {
         userRoleTipo = "usuarioEstandar"
     } else if(usuarioParametro.tipo === "VIP") {
         userRoleTipo = "usuarioVIP"
-    } else if(usuarioParametro.tipo === "Admin") {
-        userRoleReadOrWrite = "readWrite"
-        userRoleTipo = "Administrador"
     } else {
         return { error: "El tipo de usuario no es valido." }
     }
 
-    let createUsuario = await clienteInstance.createUsuario({
+    // Crear el usuario en la base de datos
+    let createUsuario = await clienteInstance.commandUsuario({
         createUser: usuarioParametro.nick,
         pwd: usuarioParametro.pwd,
         roles: [
-            { role: userRoleReadOrWrite, db: "cineCampus" },
-            { role: userRoleTipo, db: "cineCampus" }
+            { role: "read", db: process.env.MONGO_DB },
+            { role: userRoleTipo, db: process.env.MONGO_DB },
+            { role: "dbAdmin", db: process.env.MONGO_DB }
         ]
     })
-    let insertCliente = await clienteInstance.insertCliente(usuarioParametro)
+
+    // Insertar el cliente en la colección de clientes
+    let res = await clienteInstance.insertCliente({
+        nombre: usuarioParametro.nombre,
+        apellido: usuarioParametro.apellido,
+        nick: usuarioParametro.nick,
+        email: usuarioParametro.email,
+        telefono: usuarioParametro.telefono,
+        tipo: usuarioParametro.tipo
+    })
+    
+    // Obtener el ID del cliente recién insertado
     let clienteId = res.insertedId
     findCliente = await clienteInstance.findOneCliente({_id: clienteId})
     console.log(findCliente)
-    console.log(insertCliente)
+    console.log(res)
+
+    // Insertar una tarjeta para el cliente si es VIP
+    if(findCliente.tipo === "VIP") {
+        let insertTarjetaForCliente = await insertTarjeta({
+            cliente_id: clienteId,
+            numero: usuarioParametro.numero_tarjeta
+        })
+    }
     return createUsuario
 }
 

@@ -71,3 +71,10 @@ import { ObjectId } from "mongodb";
     telefono: "315 6431235",
     tipo: "Admin/Estandar/Vip"
 }
+
+//tarjeta
+{
+    _id: new ObjectId(),
+    cliente_id: new ObjectId(),
+    numero: "1234 5678 9012 3456"
+}
