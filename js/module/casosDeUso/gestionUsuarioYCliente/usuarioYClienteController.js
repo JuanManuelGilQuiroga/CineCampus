@@ -41,16 +41,25 @@ export const createUsuarioYInsertCliente = async (usuarioParametro) => {
     return createUsuario
 }
 
+/**
+ * Busca los usuarios que coincidan con un tipo de usuario en la base de datos.
+ * @param {String} clienteParametro - String que contiene el tipo de usuario
+ * @returns {Promise<Array>} Una promesa que resuelve con el resultado de la busqueda
+ */
 export const listarClientes = async (clienteParametro) => {
     let clienteInstance = new Cliente()
+
+    //Busca los usuarios que coincidan con el tipo de usuario
     let findClientes = await clienteInstance.findCliente({
         tipo: clienteParametro
     })
 
+    //Valida si el tipo de usuario es correcto
     if(clienteParametro != "Admin" && clienteParametro != "Estandar" && clienteParametro != "VIP") {
         return { error: "El tipo de usuario no es valido." }
     }
 
+    //valida si existen usuarios con este tipo de usuario
     if(findClientes.length == 0) {
         return { mensaje: "No hay clientes que coincidan con el tipo" }
     }

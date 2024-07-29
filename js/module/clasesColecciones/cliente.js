@@ -38,6 +38,11 @@ export class Cliente extends Connect {
         return res
     }
 
+    /**
+     * Obtiene todos los clientes de la colección.
+     * @param {Object} clienteParametro - El objeto que especifica el filtro para buscar los clientes
+     * @returns {Promise<Array>} Una promesa que resuelve con un array de documentos de clientes.
+     */
     async findCliente(clienteParametro) {
         let res = await this.collection.find(clienteParametro).toArray()
         return res

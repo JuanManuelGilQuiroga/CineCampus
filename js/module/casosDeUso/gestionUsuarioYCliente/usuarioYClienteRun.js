@@ -11,8 +11,13 @@ let usuarioInsert = {
     tipo: "Estandar"
 }
 
+/**
+ * Tipo de usuario a buscar
+ * @type {String} Tipo de usuario
+ */
 let clientesBuscar = "Estandar"
 
 //console.log(await createUsuarioYInsertCliente(usuarioInsert))
 
+//Llama a la funcion para pasar el parametro del tipo de usuario y espera respuesta
 console.log(await listarClientes(clientesBuscar))
