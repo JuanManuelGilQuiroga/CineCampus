@@ -66,3 +66,15 @@ export const insertFuncion = async (funcionParametro) => {
     console.log(findFuncion)
     return res
 }
+
+export const verificarDisponibilidadAsientos = async (funcionParametro) => {
+    let funcionInstance = new Funcion()
+    let findFuncion = await funcionInstance.findFuncionById({_id: funcionParametro})
+    if(!findFuncion) {
+        return { error: "La función no existe en la base de datos." }
+    }
+    if(findFuncion.asientos.length == 0) {
+        return { error: "La función no tiene asientos disponibles." }
+    }
+    return findFuncion
+}

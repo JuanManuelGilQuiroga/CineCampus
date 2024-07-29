@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { insertFuncion } from "./funcionController.js";
+import { insertFuncion, verificarDisponibilidadAsientos } from "./funcionController.js";
 
 /**
  * Parámetros de la función a insertar.
@@ -18,5 +18,8 @@ let funcionInsertar = {
     precio_COP: 7000
 }
 
+let funcionId = new ObjectId('66a70936ccf008aa4825f440')
 // Llama a la función para insertar la función y muestra el resultado
-console.log(await insertFuncion(funcionInsertar))
+//console.log(await insertFuncion(funcionInsertar))
+
+console.log(await verificarDisponibilidadAsientos(funcionId))
