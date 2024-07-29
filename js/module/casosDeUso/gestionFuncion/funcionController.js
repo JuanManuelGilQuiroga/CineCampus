@@ -67,6 +67,12 @@ export const insertFuncion = async (funcionParametro) => {
     return res
 }
 
+
+/**
+ * Inserta una nueva función en la base de datos.
+ * @param {Object} funcionParametro - El objeto que contiene el id de la funcion a buscar.
+ * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la busqueda o un error si se encuentra alguno.
+ */
 export const verificarDisponibilidadAsientos = async (funcionParametro) => {
     let funcionInstance = new Funcion()
     let findFuncion = await funcionInstance.findFuncionById({_id: funcionParametro})

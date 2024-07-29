@@ -18,8 +18,12 @@ let funcionInsertar = {
     precio_COP: 7000
 }
 
+/**
+ * @type {ObjectId} funcionId - El id de la funcion que se quiere buscar
+ */
 let funcionId = new ObjectId('66a70936ccf008aa4825f440')
 // Llama a la función para insertar la función y muestra el resultado
 //console.log(await insertFuncion(funcionInsertar))
 
+//Llama a la función para verificar la disponibilidad de los asientos para la función
 console.log(await verificarDisponibilidadAsientos(funcionId))
