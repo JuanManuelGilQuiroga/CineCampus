@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb"
-import { insertBoleta } from "./boletaController.js"
+import { insertBoleta, deleteReserva } from "./boletaController.js"
 
 /**
  * Objeto que contiene los detalles de la boleta a insertar.
@@ -18,5 +18,9 @@ let boletaDetalle = {
     monto_COP: 7000
 }
 
+let boletaId = new ObjectId('66a7c74426300c4323f124c8')
+
 // Llamada a la función insertBoleta con el objeto boletaDetalle y salida del resultado.
 console.log(await insertBoleta(boletaDetalle))
+
+//console.log(await deleteReserva(boletaId))

@@ -48,4 +48,9 @@ export class Boleta extends Connect {
         let res = await this.collection.updateOne(boletaFilter, boletaParametro)
         return res
     }
+
+    async deleteBoleta(boletaParametro) {
+        let res = await this.collection.deleteOne(boletaParametro)
+        return res
+    }
 }

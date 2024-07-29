@@ -32,7 +32,8 @@ export const insertBoleta = async (boletaParametro) => {
     }
 
     // Verificar si el asiento está disponible
-    if(!boletaParametro.asiento in findFuncion.asientos) {
+    let disponibilityAsiento = findFuncion.asientos.includes(boletaParametro.asiento)
+    if(disponibilityAsiento == false) {
         return { error: "El asiento no esta disponible." }
     }
 
@@ -66,5 +67,26 @@ export const insertBoleta = async (boletaParametro) => {
     } else if(boletaParametro.estado_pago === false) {
         console.log(`Acabas de reservar el asiento ${boletaParametro.asiento}, recuerda pagar la boleta antes de ingresar a la función.`)
     }
+    return res
+}
+
+export const deleteReserva = async (boletaParametro) => {
+    let boletaInstance = new Boleta()
+    let findReserva = await boletaInstance.findOneBoleta({
+        _id: boletaParametro
+    })
+
+    if(!findReserva) {
+        return { error: "La reserva no existe en la base de datos." }
+    }
+
+    if(findReserva.estado_pago != false) {
+        return { error: "La reserva ya fue pagada." }
+    }
+
+    let res = await boletaInstance.deleteBoleta({
+        _id: boletaParametro
+    })
+    console.log(`Se ha cancelado la reserva para el asiento ${findReserva.asiento}`)
     return res
 }
