@@ -70,20 +70,28 @@ export const insertBoleta = async (boletaParametro) => {
     return res
 }
 
+/**
+ * Elimina una boleta en la base de datos.
+ * @param {ObjectId} boletaParametro - El objeto que contiene el ObjectId de la boleta que se desea eliminar
+ * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la eliminación.
+ */
 export const deleteReserva = async (boletaParametro) => {
     let boletaInstance = new Boleta()
     let findReserva = await boletaInstance.findOneBoleta({
         _id: boletaParametro
     })
 
+    //validar si la boleta existe
     if(!findReserva) {
         return { error: "La reserva no existe en la base de datos." }
     }
 
+    //validar si la boleta esta pagada
     if(findReserva.estado_pago != false) {
         return { error: "La reserva ya fue pagada." }
     }
 
+    //Eliminar la boleta si no estaba pagada
     let res = await boletaInstance.deleteBoleta({
         _id: boletaParametro
     })

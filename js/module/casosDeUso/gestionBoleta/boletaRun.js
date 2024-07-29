@@ -18,9 +18,14 @@ let boletaDetalle = {
     monto_COP: 7000
 }
 
+/**
+ * Objeto que contiene los detalles de la boleta a insertar.
+ * @type {ObjectId} ObjectId de la boleta que se desea eliminar
+ */
 let boletaId = new ObjectId('66a7c74426300c4323f124c8')
 
 // Llamada a la función insertBoleta con el objeto boletaDetalle y salida del resultado.
 console.log(await insertBoleta(boletaDetalle))
 
+// Llamada a la función deleteReserva con el objeto boletaId y salida del resultado
 //console.log(await deleteReserva(boletaId))

@@ -49,6 +49,10 @@ export class Boleta extends Connect {
         return res
     }
 
+    /**
+     * @param {Object} boletaParametro - El objeto que especifica el documento a eliminar de la coleccion
+     * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la eliminacion de la boleta
+     */
     async deleteBoleta(boletaParametro) {
         let res = await this.collection.deleteOne(boletaParametro)
         return res
