@@ -21,16 +21,29 @@ export class Boleta extends Connect {
         return this;
     }
 
+    /**
+     * @param {Object} boletaParametro - El objeto que especifica el filtro para buscar la boleta
+     * @returns {Promise<Object>} Una promesa que resuelve con el documento de la boleta buscada
+     */
     async findOneBoleta(boletaParametro) {
         let res = await this.collection.findOne(boletaParametro)
         return res
     }
 
+    /**
+     * @param {Object} boletaParametro - El objeto que especifica el documento a insertar en la colección
+     * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la insercion de la boleta
+     */
     async insertBoleta(boletaParametro) {
         let res = await this.collection.insertOne(boletaParametro)
         return res
     }
 
+    /**
+     * @param {Object} boletaFilter - El objeto que especifica el filtro para buscar el documento que se desea actualizar
+     * @param {Object} boletaParametro - El objeto que especifica el documento de lo que se desea actualizar en el documento
+     * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la actualizacion de la boleta
+     */
     async updateBoleta(boletaFilter, boletaParametro) {
         let res = await this.collection.updateOne(boletaFilter, boletaParametro)
         return res

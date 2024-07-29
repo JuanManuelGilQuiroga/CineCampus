@@ -21,11 +21,19 @@ export class Movimiento extends Connect {
         return this;
     }
 
+    /**
+     * @param {Object} movimientoParametro - El objeto que especifica el filtro para buscar el movimiento
+     * @returns {Promise<Object>} Una promesa que resuelve con el documento del movimiento buscada
+     */
     async findOneMovimiento(movimientoParametro) {
         let res = await this.collection.findOne(movimientoParametro)
         return res
     }
 
+    /**
+     * @param {Object} movimientoParametro - El objeto que especifica el documento a insertar en la colección
+     * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la insercion del movimiento
+     */
     async insertMovimiento(movimientoParametro) {
         let res = await this.collection.insertOne(movimientoParametro)
         return res

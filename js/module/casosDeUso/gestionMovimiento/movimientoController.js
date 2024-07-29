@@ -4,15 +4,22 @@ import { Boleta } from "../../clasesColecciones/boleta.js";
 import { Cliente } from "../../clasesColecciones/cliente.js";
 import { Funcion } from "../../clasesColecciones/funcion.js";
 
+/**
+ * Inserta un movimiento de pago en la base de datos.
+ * @param {Object} movimientoParametro - Objeto que contiene los detalles del movimiento a insertar.
+ * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la inserción.
+ */
 export const insertMovimiento = async (movimientoParametro) => {
     let movimientoInstance = new Movimiento()
     let boletaInstance = new Boleta()
     let clienteInstance = new Cliente()
     let funcionInstance = new Funcion()
 
+    // Busca si ya existe un movimiento asociado a la boleta
     let findMovimiento = await movimientoInstance.findOneMovimiento({
         boleta_id: movimientoParametro.boleta_id
     })
+    // Busca la boleta asociada al movimiento
     let findBoleta = await boletaInstance.findOneBoleta({
         _id: movimientoParametro.boleta_id
     })
@@ -29,6 +36,7 @@ export const insertMovimiento = async (movimientoParametro) => {
         _id: findBoleta.funcion_id
     })
 
+    // Verifica que el monto del movimiento coincida con el precio esperado para clientes VIP
     let precioBoletaVIP = findFuncion.precio_COP*0.80
     if(findCliente.tipo == "VIP" && movimientoParametro.monto_COP != precioBoletaVIP) {
         return { error: "El monto de la boleta no coincide con el monto del cliente. Recuerde que por ser cliente VIP tiene un descuento del 20%." }
@@ -36,6 +44,7 @@ export const insertMovimiento = async (movimientoParametro) => {
         return { error: "El monto de la boleta no coincide con el monto del cliente." }
     }
 
+    // Inserta el movimiento en la base de datos
     let res = await movimientoInstance.insertMovimiento(movimientoParametro)
     let movimientoId = res.insertedId
     findMovimiento = await movimientoInstance.findOneMovimiento({
@@ -43,6 +52,7 @@ export const insertMovimiento = async (movimientoParametro) => {
     })
     console.log(findMovimiento)
 
+    // Actualiza el estado de pago de la boleta
     let updateBoletaEstadoPago = await boletaInstance.updateBoleta(
         {_id: movimientoParametro.boleta_id},
         {$set: {estado_pago: true}}

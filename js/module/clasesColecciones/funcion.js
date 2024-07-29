@@ -49,6 +49,11 @@ export class Funcion extends Connect {
         return res
     }
 
+    /**
+     * @param {Object} funcionFilter - El objeto que especifica el filtro para buscar el documento que se desea actualizar
+     * @param {Object} funcionParametro - El objeto que especifica el documento de lo que se desea actualizar en el documento
+     * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la actualizacion de la funcion
+     */
     async updateFuncion(funcionFilter, funcionParametro) {
         let res = await this.collection.updateOne(funcionFilter, funcionParametro)
         return res
