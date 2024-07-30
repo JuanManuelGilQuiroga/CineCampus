@@ -38,4 +38,9 @@ export class Tarjeta extends Connect {
         let res = await this.collection.insertOne(tarjetaParametro)
         return res
     }
+
+    async deleteTarjeta(tarjetaParametro) {
+        let res = await this.collection.deleteOne(tarjetaParametro)
+        return res
+    }
 }

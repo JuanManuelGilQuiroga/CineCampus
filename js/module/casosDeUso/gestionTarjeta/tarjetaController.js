@@ -12,7 +12,6 @@ export const insertTarjeta = async (tarjetaParametro) => {
 
     // Verificar si la tarjeta ya existe para el cliente
     let findTarjeta = await tarjetaInstance.findOneTarjeta({
-        cliente_id: tarjetaParametro.cliente_id,
         numero: tarjetaParametro.numero
     })
 
@@ -89,5 +88,73 @@ export const insertTarjeta = async (tarjetaParametro) => {
         {$set: {tipo: "VIP"}}
     )
     console.log(findTarjeta)
+    return res
+}
+
+export const deleteTarjeta = async (numeroTarjeta) => {
+    let tarjetaInstance = new Tarjeta()
+    let clienteInstance = new Cliente()
+    let findTarjeta = await tarjetaInstance.findOneTarjeta({
+        numero: numeroTarjeta
+    })
+    if(!findTarjeta) {
+        return { error: "La tarjeta no existe." }
+    }
+
+    let findCliente = await clienteInstance.findOneCliente({
+        _id: findTarjeta.cliente_id
+    })
+
+     // Manejo de credenciales y roles
+    if(process.env.MONGO_USER != "admin") {
+        if(process.env.MONGO_USER != findCliente.nick) {
+            return { error: "Sus credenciales no son validas para eliminar una tarjeta VIP a nombre de este cliente." }
+        }
+
+        if(findCliente.tipo == "VIP") {
+            // Revocar rol de usuario VIP
+            let revokeRolesFromUsuario = await clienteInstance.commandUsuario({
+                revokeRolesFromUser: process.env.MONGO_USER,
+                roles: [
+                    { role: 'usuarioVIP', db: process.env.MONGO_DB }
+                ]
+            })
+
+            // Otorgar rol de usuario estandar
+            let grantRolesToUsuario = await clienteInstance.commandUsuario({
+                grantRolesToUser: process.env.MONGO_USER,
+                roles: [
+                    { role: 'usuarioEstandar', db: process.env.MONGO_DB }
+                ]
+            })
+        }
+    }
+
+    if(process.env.MONGO_USER == "admin" && findCliente.tipo == "VIP") {
+        // Revocar rol de usuario VIP
+        let revokeRolesFromUsuario = await clienteInstance.commandUsuario({
+            revokeRolesFromUser: findCliente.nick,
+            roles: [
+                { role: 'usuarioVIP', db: process.env.MONGO_DB }
+            ]
+        })
+
+        // Otorgar rol de usuario estandar
+        let grantRolesToUsuario = await clienteInstance.commandUsuario({
+            grantRolesToUser: findCliente.nick,
+            roles: [
+                { role: 'usuarioEstandar', db: process.env.MONGO_DB }
+            ]
+        })
+    }
+
+    let res = await tarjetaInstance.deleteTarjeta({
+        numero: numeroTarjeta
+    })
+
+    let updateClienteTipo = await clienteInstance.updateCliente(
+        { _id: findTarjeta.cliente_id },
+        {$set: {tipo: "Estandar"}}
+    )
     return res
 }
