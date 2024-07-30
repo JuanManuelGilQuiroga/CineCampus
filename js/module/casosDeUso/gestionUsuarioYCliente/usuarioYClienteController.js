@@ -1,5 +1,4 @@
-import { ObjectId } from "mongodb";
-import { Cliente } from "../../clasesColecciones/cliente.js"
+import { Cliente } from "../../clasesColecciones/cliente.js";
 import { insertTarjeta } from "../gestionTarjeta/tarjetaController.js";
 
 /**
@@ -89,4 +88,27 @@ export const listarClientes = async (clienteParametro) => {
         return { mensaje: "No hay clientes que coincidan con el tipo" }
     }
     return findClientes
+}
+
+export const findOneCliente = async (clienteNick) => {
+    let clienteInstance = new Cliente()
+    let findCliente = await clienteInstance.findOneCliente({
+        nick: clienteNick
+    })
+    if(!findCliente) {
+        return { error: "El cliente no existe en la base de datos." }
+    }
+
+    if(process.env.MONGO_USER != clienteNick && process.env.MONGO_USER != "admin") {
+        return { error: "Sus credenciales no son validas para adquirir la informacion de este cliente." }
+    }
+
+    let detallesCliente = await clienteInstance.aggregateCliente([
+        { $match: { nick: clienteNick } },
+        { $lookup: { from: "tarjeta", localField: "_id", foreignField: "cliente_id", as: "tarjeta" } },
+        { $unwind: "$tarjeta"},
+        { $replaceRoot: { newRoot: { $mergeObjects: ["$tarjeta", "$$ROOT"]}}},
+        { $project: { nombre: 1, apellido: 1, nick: 1, email: 1, telefono: 1, tipo: 1, numero_tarjeta: "$numero", } }
+    ])
+    return detallesCliente
 }
