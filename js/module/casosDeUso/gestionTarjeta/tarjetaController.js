@@ -1,14 +1,22 @@
 import { Tarjeta } from "../../clasesColecciones/tarjeta.js"
 import { Cliente } from "../../clasesColecciones/cliente.js"
 
+/**
+ * Inserta una nueva tarjeta para un cliente en la colección de tarjetas.
+ * @param {Object} tarjetaParametro - El objeto que contiene los detalles de la tarjeta a insertar
+ * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la inserción de la tarjeta.
+ */
 export const insertTarjeta = async (tarjetaParametro) => {
     let tarjetaInstance = new Tarjeta()
     let clienteInstance = new Cliente()
+
+    // Verificar si la tarjeta ya existe para el cliente
     let findTarjeta = await tarjetaInstance.findOneTarjeta({
         cliente_id: tarjetaParametro.cliente_id,
         numero: tarjetaParametro.numero
     })
 
+     // Verificar si el cliente existe
     let findCliente = await clienteInstance.findOneCliente({
         _id: tarjetaParametro.cliente_id
     })
@@ -16,16 +24,19 @@ export const insertTarjeta = async (tarjetaParametro) => {
         return { error: "El cliente no existe." }
     }
 
+    // Verificar si la tarjeta ya existe
     if(findTarjeta) {
         return { error: "La tarjeta ya existe." }
     }
 
+    // Manejo de credenciales y roles
     if(process.env.MONGO_USER != "admin") {
         if(process.env.MONGO_USER != findCliente.nick) {
             return { error: "Sus credenciales no son validas para adquirir una tarjeta VIP a nombre de este cliente." }
         }
 
         if(findCliente.tipo == "Estandar") {
+            // Revocar rol de usuario estándar
             let revokeRolesFromUsuario = await clienteInstance.commandUsuario({
                 revokeRolesFromUser: process.env.MONGO_USER,
                 roles: [
@@ -33,6 +44,7 @@ export const insertTarjeta = async (tarjetaParametro) => {
                 ]
             })
 
+            // Otorgar rol de usuario VIP
             let grantRolesToUsuario = await clienteInstance.commandUsuario({
                 grantRolesToUser: process.env.MONGO_USER,
                 roles: [
@@ -44,12 +56,38 @@ export const insertTarjeta = async (tarjetaParametro) => {
         }
     }
 
+    if(process.env.MONGO_USER == "admin" && findCliente.tipo == "Estandar") {
+        // Revocar rol de usuario estándar
+        let revokeRolesFromUsuario = await clienteInstance.commandUsuario({
+            revokeRolesFromUser: findCliente.nick,
+            roles: [
+                { role: 'usuarioEstandar', db: process.env.MONGO_DB }
+            ]
+        })
+
+        // Otorgar rol de usuario VIP
+        let grantRolesToUsuario = await clienteInstance.commandUsuario({
+            grantRolesToUser: findCliente.nick,
+            roles: [
+                { role: 'usuarioVIP', db: process.env.MONGO_DB }
+            ]
+        })
+    }
+
+    // Insertar la tarjeta en la colección
     let res = await tarjetaInstance.insertTarjeta(tarjetaParametro)
     let tarjetaId = res.insertedId
 
+    // Buscar la tarjeta insertada
     findTarjeta = await tarjetaInstance.findOneTarjeta({
         _id: tarjetaId
     })
+
+    // Actualizar el tipo de cliente a "VIP"
+    let updateClienteTipo = await clienteInstance.updateCliente(
+        { _id: findTarjeta.cliente_id },
+        {$set: {tipo: "VIP"}}
+    )
     console.log(findTarjeta)
     return res
 }

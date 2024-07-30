@@ -12,7 +12,8 @@
     "funcion": "node --watch --env-file=.env js/module/casosDeUso/gestionFuncion/funcionRun.js",
     "sala": "node --watch --env-file=.env js/module/casosDeUso/gestionSala/salaRun.js",
     "cliente": "node --watch --env-file=.env js/module/casosDeUso/gestionUsuarioYCliente/usuarioYClienteRun.js",
-    "boleta": "node --watch --env-file=.env js/module/casosDeUso/gestionBoleta/boletaRun.js"
+    "boleta": "node --watch --env-file=.env js/module/casosDeUso/gestionBoleta/boletaRun.js",
+    "tarjeta": "node --watch --env-file=.env js/module/casosDeUso/gestionTarjeta/tarjetaRun.js"
   },
   "keywords": [],
   "author": "",

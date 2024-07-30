@@ -21,11 +21,19 @@ export class Tarjeta extends Connect {
         return this;
     }
 
+    /**
+     * @param {Object} tarjetaParametro - El objeto que especifica el filtro para buscar la tarjeta
+     * @returns {Promise<Object>} Una promesa que resuelve con el documento de la tarjeta buscada
+     */
     async findOneTarjeta(tarjetaParametro) {
         let res = await this.collection.findOne(tarjetaParametro)
         return res
     }
 
+    /**
+     * @param {Object} tarjetaParametro - El objeto que especifica el documento a insertar en la colección
+     * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la insercion de la tarjeta
+     */
     async insertTarjeta(tarjetaParametro) {
         let res = await this.collection.insertOne(tarjetaParametro)
         return res

@@ -22,16 +22,28 @@ export class Cliente extends Connect {
         return this;
     }
 
+    /**
+     * @param {Object} clienteParametro - El objeto que especifica el documento a insertar en la colección
+     * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la insercion del cliente
+     */
     async insertCliente(clienteParametro) {
         let res = await this.collection.insertOne(clienteParametro)
         return res
     }
 
+    /**
+     * @param {Object} usuarioParametro - El objeto que especifica el comando a usar con respecto a la creacion de usuarios o el asignamiento de roles
+     * @returns {Promise<Object>} Una promesa que resuelve con el documento del usuario insertado o con rol agregado
+     */
     async commandUsuario(usuarioParametro) {
         let res = await this.db.command(usuarioParametro)
         return res
     }
 
+    /**
+     * @param {Object} clienteParametro - El objeto que especifica el filtro para buscar el cliente
+     * @returns {Promise<Object>} Una promesa que resuelve con el documento del cliente buscado
+     */
     async findOneCliente(clienteParametro) {
         let res = await this.collection.findOne(clienteParametro)
         return res
@@ -44,6 +56,16 @@ export class Cliente extends Connect {
      */
     async findCliente(clienteParametro) {
         let res = await this.collection.find(clienteParametro).toArray()
+        return res
+    }
+
+    /**
+     * @param {Object} clienteFilter - El objeto que especifica el filtro para buscar el documento que se desea actualizar
+     * @param {Object} clienteParametro - El objeto que especifica el documento de lo que se desea actualizar en el documento
+     * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la actualizacion del cliente
+     */
+    async updateCliente(clienteFilter, clienteParametro) {
+        let res = await this.collection.updateOne(clienteFilter, clienteParametro)
         return res
     }
 }
