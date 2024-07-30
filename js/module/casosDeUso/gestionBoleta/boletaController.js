@@ -1,8 +1,7 @@
 import { ObjectId } from "mongodb"
-import {Boleta} from "../../clasesColecciones/boleta.js"
-import { Movimiento } from "../../clasesColecciones/movimiento.js"
-import { Funcion } from "../../clasesColecciones/funcion.js"
+import { Boleta } from "../../clasesColecciones/boleta.js"
 import { Cliente } from "../../clasesColecciones/cliente.js"
+import { Funcion } from "../../clasesColecciones/funcion.js"
 import { insertMovimiento } from "../gestionMovimiento/movimientoController.js"
 
 /**
@@ -61,14 +60,21 @@ export const insertBoleta = async (boletaParametro) => {
         {_id: boletaParametro.funcion_id},
         {$pull: {asientos: boletaParametro.asiento}}
     )
-
     // Insertar movimiento si el pago fue realizado
-    if(boletaParametro.estado_pago === true) {
+    if(boletaParametro.estado_pago == true) {
         let insertMovimientoInmediato = await insertMovimiento({
             boleta_id: boletaId,
             monto_COP: boletaParametro.monto_COP
         })
-    } else if(boletaParametro.estado_pago === false) {
+        if(insertMovimientoInmediato.error) {
+            let cambiarEstadoPago = await boletaInstance.updateBoleta(
+                {_id: boletaId},
+                {$set: {estado_pago: false}}
+            )
+            return insertMovimientoInmediato
+        }
+        console.log(insertMovimientoInmediato)
+    } else if(boletaParametro.estado_pago == false) {
         console.log(`Acabas de reservar el asiento ${boletaParametro.asiento}, recuerda pagar la boleta antes de ingresar a la función.`)
     }
     return res
@@ -81,6 +87,7 @@ export const insertBoleta = async (boletaParametro) => {
  */
 export const deleteReserva = async (boletaParametro) => {
     let boletaInstance = new Boleta()
+    let clienteInstance = new Cliente()
     let findReserva = await boletaInstance.findOneBoleta({
         _id: boletaParametro
     })
@@ -93,6 +100,14 @@ export const deleteReserva = async (boletaParametro) => {
     //validar si la boleta esta pagada
     if(findReserva.estado_pago != false) {
         return { error: "La reserva ya fue pagada." }
+    }
+    
+    //validar si el cliente es el que hizo la reserva
+    let findCliente = await clienteInstance.findOneCliente({
+        _id: findReserva.cliente_id
+    })
+    if(findCliente.nick != process.env.MONGO_USER) {
+        return { error: "Sus credenciales no son validas para cancelar una reserva a nombre de este cliente." }
     }
 
     //Eliminar la boleta si no estaba pagada

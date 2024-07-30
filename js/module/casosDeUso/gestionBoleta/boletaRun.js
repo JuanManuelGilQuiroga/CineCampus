@@ -11,21 +11,22 @@ import { insertBoleta, deleteReserva } from "./boletaController.js"
  * @property {number} monto_COP - Monto en COP de la boleta.
  */
 let boletaDetalle = {
-    cliente_id: new ObjectId('66a715232a2950e6300c298f'),
+    cliente_id: new ObjectId('66a95397fca48b17e521f208'),
     funcion_id: new ObjectId('66a743091a52555cff546d3b'),
     asiento: "A1",
     estado_pago: true,
     monto_COP: 7000
 }
 
+// Llamada a la función insertBoleta con el objeto boletaDetalle y salida del resultado.
+console.log(await insertBoleta(boletaDetalle))
+
 /**
  * Objeto que contiene los detalles de la boleta a insertar.
  * @type {ObjectId} ObjectId de la boleta que se desea eliminar
  */
-let boletaId = new ObjectId('66a7c74426300c4323f124c8')
+let boletaId = new ObjectId('66a955298ab239dac586ae43')
 
-// Llamada a la función insertBoleta con el objeto boletaDetalle y salida del resultado.
-console.log(await insertBoleta(boletaDetalle))
 
 // Llamada a la función deleteReserva con el objeto boletaId y salida del resultado
 //console.log(await deleteReserva(boletaId))

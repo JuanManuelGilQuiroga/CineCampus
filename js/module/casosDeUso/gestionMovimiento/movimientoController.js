@@ -1,8 +1,7 @@
-import { ObjectId } from "mongodb";
-import { Movimiento } from "../../clasesColecciones/movimiento.js";
 import { Boleta } from "../../clasesColecciones/boleta.js";
 import { Cliente } from "../../clasesColecciones/cliente.js";
 import { Funcion } from "../../clasesColecciones/funcion.js";
+import { Movimiento } from "../../clasesColecciones/movimiento.js";
 
 /**
  * Inserta un movimiento de pago en la base de datos.
@@ -39,9 +38,9 @@ export const insertMovimiento = async (movimientoParametro) => {
     // Verifica que el monto del movimiento coincida con el precio esperado para clientes VIP
     let precioBoletaVIP = findFuncion.precio_COP*0.80
     if(findCliente.tipo == "VIP" && movimientoParametro.monto_COP != precioBoletaVIP) {
-        return { error: "El monto de la boleta no coincide con el monto del cliente. Recuerde que por ser cliente VIP tiene un descuento del 20%." }
-    } else if(movimientoParametro.monto_COP != findFuncion.precio_COP) {
-        return { error: "El monto de la boleta no coincide con el monto del cliente." }
+        return { error: "El monto de la boleta no coincide con el monto del cliente. Recuerde que por ser cliente VIP tiene un descuento del 20%. Dirijase a pagar la boleta directamente." }
+    } else if(findCliente.tipo == "Estandar" && movimientoParametro.monto_COP != findFuncion.precio_COP) {
+        return { error: "El monto de la boleta no coincide con el monto del cliente. Dirijase a pagar la boleta directamente." }
     }
 
     // Inserta el movimiento en la base de datos
