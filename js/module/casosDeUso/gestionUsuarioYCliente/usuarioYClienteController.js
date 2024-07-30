@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { Cliente } from "../../clasesColecciones/cliente.js"
+import { insertTarjeta } from "../gestionTarjeta/tarjetaController.js";
 
 export const createUsuarioYInsertCliente = async (usuarioParametro) => {
     let clienteInstance = new Cliente()
@@ -12,32 +13,45 @@ export const createUsuarioYInsertCliente = async (usuarioParametro) => {
         return { mensaje: "El usuario ya existe" }
     }
 
-    let userRoleReadOrWrite = "read"
     let userRoleTipo = "Usuario"
     if(usuarioParametro.tipo === "Estandar") {
         userRoleTipo = "usuarioEstandar"
     } else if(usuarioParametro.tipo === "VIP") {
         userRoleTipo = "usuarioVIP"
-    } else if(usuarioParametro.tipo === "Admin") {
-        userRoleReadOrWrite = "readWrite"
-        userRoleTipo = "Administrador"
     } else {
         return { error: "El tipo de usuario no es valido." }
     }
 
-    let createUsuario = await clienteInstance.createUsuario({
+    let createUsuario = await clienteInstance.commandUsuario({
         createUser: usuarioParametro.nick,
         pwd: usuarioParametro.pwd,
         roles: [
-            { role: userRoleReadOrWrite, db: "cineCampus" },
-            { role: userRoleTipo, db: "cineCampus" }
+            { role: "read", db: process.env.MONGO_DB },
+            { role: userRoleTipo, db: process.env.MONGO_DB },
+            { role: "dbAdmin", db: process.env.MONGO_DB }
         ]
     })
-    let insertCliente = await clienteInstance.insertCliente(usuarioParametro)
+
+    let res = await clienteInstance.insertCliente({
+        nombre: usuarioParametro.nombre,
+        apellido: usuarioParametro.apellido,
+        nick: usuarioParametro.nick,
+        email: usuarioParametro.email,
+        telefono: usuarioParametro.telefono,
+        tipo: usuarioParametro.tipo
+    })
+    
     let clienteId = res.insertedId
     findCliente = await clienteInstance.findOneCliente({_id: clienteId})
     console.log(findCliente)
-    console.log(insertCliente)
+    console.log(res)
+
+    if(findCliente.tipo === "VIP") {
+        let insertTarjetaForCliente = await insertTarjeta({
+            cliente_id: clienteId,
+            numero: usuarioParametro.numero_tarjeta
+        })
+    }
     return createUsuario
 }
 

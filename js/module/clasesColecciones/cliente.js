@@ -27,9 +27,8 @@ export class Cliente extends Connect {
         return res
     }
 
-    async createUsuario(usuarioParametro) {
-        let adminDb = this.conexion.db('admin');
-        let res = await adminDb.command(usuarioParametro)
+    async commandUsuario(usuarioParametro) {
+        let res = await this.db.command(usuarioParametro)
         return res
     }
 

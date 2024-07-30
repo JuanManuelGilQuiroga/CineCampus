@@ -20,4 +20,14 @@ export class Tarjeta extends Connect {
         Tarjeta.instanceSala = this;
         return this;
     }
+
+    async findOneTarjeta(tarjetaParametro) {
+        let res = await this.collection.findOne(tarjetaParametro)
+        return res
+    }
+
+    async insertTarjeta(tarjetaParametro) {
+        let res = await this.collection.insertOne(tarjetaParametro)
+        return res
+    }
 }

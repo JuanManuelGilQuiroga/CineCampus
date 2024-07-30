@@ -8,7 +8,8 @@ let usuarioInsert = {
     pwd: "jmgqEstandar",
     email: "jmgq2007@gmail.com",
     telefono: "315 6431235",
-    tipo: "Estandar"
+    tipo: "VIP",
+    numero_tarjeta: "1234 5678 9012 3456"
 }
 
 /**
@@ -17,7 +18,7 @@ let usuarioInsert = {
  */
 let clientesBuscar = "Estandar"
 
-//console.log(await createUsuarioYInsertCliente(usuarioInsert))
+console.log(await createUsuarioYInsertCliente(usuarioInsert))
 
 //Llama a la funcion para pasar el parametro del tipo de usuario y espera respuesta
-console.log(await listarClientes(clientesBuscar))
+//console.log(await listarClientes(clientesBuscar))

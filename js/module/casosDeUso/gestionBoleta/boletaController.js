@@ -37,6 +37,10 @@ export const insertBoleta = async (boletaParametro) => {
         return { error: "El asiento no esta disponible." }
     }
 
+    if(process.env.MONGO_USER != findCliente.nick) {
+        return { error: "Sus credenciales no son validas para apartar/comprar una boleta a nombre de este cliente." }
+    }
+
     // Insertar la boleta en la base de datos
     let res = await boletaInstance.insertBoleta({
         cliente_id: boletaParametro.cliente_id,
