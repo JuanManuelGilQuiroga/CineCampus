@@ -38,4 +38,13 @@ export class Tarjeta extends Connect {
         let res = await this.collection.insertOne(tarjetaParametro)
         return res
     }
+
+    /**
+     * @param {Object} tarjetaParametro - El objeto que especifica el documento a eliminar en la colección
+     * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la eliminacion de la tarjeta
+     */
+    async deleteTarjeta(tarjetaParametro) {
+        let res = await this.collection.deleteOne(tarjetaParametro)
+        return res
+    }
 }

@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { insertTarjeta } from "./tarjetaController.js";
+import { deleteTarjeta, insertTarjeta } from "./tarjetaController.js";
 
 /**
  * Objeto que representa una película a insertar en la base de datos.
@@ -14,3 +14,12 @@ let tarjetaInsertar = {
 
 //inserta una nueva tarjeta VIP
 console.log(await insertTarjeta(tarjetaInsertar))
+
+/**
+ * String que representa la tarjeta que se desea eliminar
+ * @type {String} - Numero de tarjeta
+ */
+let tarjetaEliminar = "1234 5678 9012 3456"
+
+//elimina una tarjeta
+//console.log(await deleteTarjeta(tarjetaEliminar))
