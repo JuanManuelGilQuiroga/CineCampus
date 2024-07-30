@@ -91,9 +91,16 @@ export const insertTarjeta = async (tarjetaParametro) => {
     return res
 }
 
+/**
+ * Elimina una tarjeta de la colección de tarjetas.
+ * @param {string} numeroTarjeta - El número de la tarjeta que se va a eliminar.
+ * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la eliminación de la tarjeta.
+ */
 export const deleteTarjeta = async (numeroTarjeta) => {
     let tarjetaInstance = new Tarjeta()
     let clienteInstance = new Cliente()
+
+    // Verificar si la tarjeta existe
     let findTarjeta = await tarjetaInstance.findOneTarjeta({
         numero: numeroTarjeta
     })
@@ -101,6 +108,7 @@ export const deleteTarjeta = async (numeroTarjeta) => {
         return { error: "La tarjeta no existe." }
     }
 
+    // Verificar si el cliente asociado a la tarjeta existe
     let findCliente = await clienteInstance.findOneCliente({
         _id: findTarjeta.cliente_id
     })
@@ -148,10 +156,12 @@ export const deleteTarjeta = async (numeroTarjeta) => {
         })
     }
 
+    // Eliminar la tarjeta de la colección
     let res = await tarjetaInstance.deleteTarjeta({
         numero: numeroTarjeta
     })
 
+    // Actualizar el tipo de cliente a "Estandar"
     let updateClienteTipo = await clienteInstance.updateCliente(
         { _id: findTarjeta.cliente_id },
         {$set: {tipo: "Estandar"}}
