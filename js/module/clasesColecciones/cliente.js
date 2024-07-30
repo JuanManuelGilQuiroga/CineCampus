@@ -68,4 +68,9 @@ export class Cliente extends Connect {
         let res = await this.collection.updateOne(clienteFilter, clienteParametro)
         return res
     }
+
+    async aggregateCliente(clienteParametro) {
+        let res = await this.collection.aggregate(clienteParametro).toArray()
+        return res
+    }
 }

@@ -1,4 +1,4 @@
-import { createUsuarioYInsertCliente, listarClientes } from "./usuarioYClienteController.js"
+import { findOneCliente } from "./usuarioYClienteController.js"
 
 /**
  * Objeto que representa una película a insertar en la base de datos.
@@ -24,12 +24,17 @@ let usuarioInsert = {
 }
 
 //Crea un nuevo usuario
-console.log(await createUsuarioYInsertCliente(usuarioInsert))
+//console.log(await createUsuarioYInsertCliente(usuarioInsert))
 
 /**
  * Tipo de usuario a buscar
  * @type {String} Tipo de usuario
  */
-let clientesBuscar = "Estandar"
+let clientesBuscar = "VIP"
 //Llama a la funcion para pasar el parametro del tipo de usuario y espera respuesta
 //console.log(await listarClientes(clientesBuscar))
+
+let clienteNick = "juanMGQ"
+
+//Llama a la funcion para pasar el parametro del usuario que se quiere buscar
+console.log(await findOneCliente(clienteNick))
