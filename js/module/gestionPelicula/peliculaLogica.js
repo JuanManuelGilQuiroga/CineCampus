@@ -1,4 +1,4 @@
-import { Pelicula } from "../../clasesColecciones/pelicula.js";
+import { Pelicula } from "./pelicula.js";
 
 /**
  * Inserta una nueva película en la base de datos.

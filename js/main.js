@@ -1,11 +1,11 @@
 import { ObjectId } from "mongodb";
-import { insertBoleta, deleteReserva } from "./module/casosDeUso/gestionBoleta/boletaController.js";
-import { insertFuncion, verificarDisponibilidadAsientos } from "./module/casosDeUso/gestionFuncion/funcionController.js";
-import { insertMovimiento } from "./module/casosDeUso/gestionMovimiento/movimientoController.js";
-import { insertPelicula, listarPeliculas, detallesPelicula } from "./module/casosDeUso/gestionPelicula/peliculaController.js";
-import { insertSala } from "./module/casosDeUso/gestionSala/salaController.js";
-import { insertTarjeta, deleteTarjeta } from "./module/casosDeUso/gestionTarjeta/tarjetaController.js";
-import { createUsuarioYInsertCliente, findOneCliente, listarClientes } from "./module/casosDeUso/gestionUsuarioYCliente/usuarioYClienteController.js";
+import { insertBoleta, deleteReserva } from "./module/gestionBoleta/boletaLogica.js";
+import { insertFuncion, verificarDisponibilidadAsientos } from "./module/gestionFuncion/funcionLogica.js";
+import { insertMovimiento } from "./module/gestionMovimiento/movimientoLogica.js";
+import { insertPelicula, listarPeliculas, detallesPelicula } from "./module/gestionPelicula/peliculaLogica.js";
+import { insertSala } from "./module/gestionSala/salaLogica.js";
+import { insertTarjeta, deleteTarjeta } from "./module/gestionTarjeta/tarjetaLogica.js";
+import { createUsuarioYInsertCliente, findOneCliente, listarClientes } from "./module/gestionUsuarioYCliente/usuarioYClienteLogica.js";
 
 
 /**
@@ -17,12 +17,12 @@ import { createUsuarioYInsertCliente, findOneCliente, listarClientes } from "./m
  * @property {boolean} estado_pago - Estado del pago de la boleta.
  * @property {number} monto_COP - Monto en COP de la boleta.
  */
-// let boletaDetalle = {
-//     cliente_id: new ObjectId('66a95397fca48b17e521f208'),
-//     funcion_id: new ObjectId('66a743091a52555cff546d3b'),
-//     asiento: "A2",
-//     estado_pago: false,
-//     monto_COP: 7000
+//  let boletaDetalle = {
+//      cliente_id: new ObjectId('66a95397fca48b17e521f208'),
+//      funcion_id: new ObjectId('66a743091a52555cff546d3b'),
+//      asiento: "A2",
+//      estado_pago: false,
+//      monto_COP: 7000
 // }
 
 // Llamada a la función insertBoleta con el objeto boletaDetalle y salida del resultado.
@@ -32,7 +32,7 @@ import { createUsuarioYInsertCliente, findOneCliente, listarClientes } from "./m
  * Objeto que contiene los detalles de la boleta a insertar.
  * @type {ObjectId} ObjectId de la boleta que se desea eliminar
  */
-//let boletaId = new ObjectId('66a9e21b5519d848d1e5dc3b')
+//let boletaId = new ObjectId('66a95ceeff645c6c26929794')
 
 
 // Llamada a la función deleteReserva con el objeto boletaId y salida del resultado
@@ -59,12 +59,13 @@ import { createUsuarioYInsertCliente, findOneCliente, listarClientes } from "./m
 //     precio_COP: 7000
 // }
 
+// Llama a la función para insertar la función y muestra el resultado
+//console.log(await insertFuncion(funcionInsertar))
+
 /**
  * @type {ObjectId} funcionId - El id de la funcion que se quiere buscar
  */
 //let funcionId = new ObjectId('66a743091a52555cff546d3b')
-// Llama a la función para insertar la función y muestra el resultado
-//console.log(await insertFuncion(funcionInsertar))
 
 //Llama a la función para verificar la disponibilidad de los asientos para la función
 //console.log(await verificarDisponibilidadAsientos(funcionId))
@@ -110,17 +111,17 @@ import { createUsuarioYInsertCliente, findOneCliente, listarClientes } from "./m
 //     retiro: new Date("2024-09-25")
 // }
 
-/**
- * ObjetoId de la película específica que se usará para buscar detalles.
- * @type {ObjectId}
- */
-//let peliculaId = new ObjectId('66a597b03d45ef35a8b018ac')
-
 // Inserta una nueva película en la base de datos
 //console.log(await insertPelicula(peliculaInsertar))
 
 // Lista todas las películas con detalles sobre sus funciones
 //console.log(await listarPeliculas())
+
+/**
+ * ObjetoId de la película específica que se usará para buscar detalles.
+ * @type {ObjectId}
+ */
+//let peliculaId = new ObjectId('66a597b03d45ef35a8b018ac')
 
 // Obtiene los detalles de una película específica por ID
 //console.log(await detallesPelicula(peliculaId))
@@ -213,9 +214,14 @@ import { createUsuarioYInsertCliente, findOneCliente, listarClientes } from "./m
  * @type {String} Tipo de usuario
  */
 //let clientesBuscar = "VIP"
+
 //Llama a la funcion para pasar el parametro del tipo de usuario y espera respuesta
 //console.log(await listarClientes(clientesBuscar))
 
+/**
+ * Usuario a buscar
+ * @type {String} Uuario
+ */
 //let clienteNick = "juanMGQ"
 
 //Llama a la funcion para pasar el parametro del usuario que se quiere buscar

@@ -1,4 +1,4 @@
-import { Sala } from "../../clasesColecciones/sala.js";
+import { Sala } from "./sala.js";
 
 /**
  * Inserta una nueva sala en la base de datos.

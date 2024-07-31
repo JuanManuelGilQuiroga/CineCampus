@@ -1,8 +1,8 @@
 import { ObjectId } from "mongodb"
-import { Boleta } from "../../clasesColecciones/boleta.js"
-import { Cliente } from "../../clasesColecciones/cliente.js"
-import { Funcion } from "../../clasesColecciones/funcion.js"
-import { insertMovimiento } from "../gestionMovimiento/movimientoController.js"
+import { Boleta } from "./boleta.js"
+import { Cliente } from "../gestionUsuarioYCliente/cliente.js"
+import { Funcion } from "../gestionFuncion/funcion.js"
+import { insertMovimiento } from "../gestionMovimiento/movimientoLogica.js"
 
 /**
  * Inserta una nueva boleta en la base de datos.
@@ -12,7 +12,7 @@ import { insertMovimiento } from "../gestionMovimiento/movimientoController.js"
  * @property {string} asiento - El asiento reservado.
  * @property {boolean} estado_pago - Estado del pago de la boleta.
  * @property {number} monto_COP - Monto en COP de la boleta.
- *
+ 
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la inserción.
  */
 export const insertBoleta = async (boletaParametro) => {

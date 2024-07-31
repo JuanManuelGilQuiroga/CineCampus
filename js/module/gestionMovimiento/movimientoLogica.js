@@ -1,7 +1,7 @@
-import { Boleta } from "../../clasesColecciones/boleta.js";
-import { Cliente } from "../../clasesColecciones/cliente.js";
-import { Funcion } from "../../clasesColecciones/funcion.js";
-import { Movimiento } from "../../clasesColecciones/movimiento.js";
+import { Boleta } from "../gestionBoleta/boleta.js";
+import { Cliente } from "../gestionUsuarioYCliente/cliente.js";
+import { Funcion } from "../gestionFuncion/funcion.js";
+import { Movimiento } from "./movimiento.js";
 
 /**
  * Inserta un movimiento de pago en la base de datos.

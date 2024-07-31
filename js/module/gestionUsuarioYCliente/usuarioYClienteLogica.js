@@ -1,5 +1,5 @@
-import { Cliente } from "../../clasesColecciones/cliente.js";
-import { insertTarjeta } from "../gestionTarjeta/tarjetaController.js";
+import { Cliente } from "./cliente.js";
+import { insertTarjeta } from "../gestionTarjeta/tarjetaLogica.js";
 
 /**
  * Crea un nuevo usuario en la base de datos y lo inserta en la colección de clientes.

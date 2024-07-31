@@ -1,5 +1,5 @@
-import { Tarjeta } from "../../clasesColecciones/tarjeta.js"
-import { Cliente } from "../../clasesColecciones/cliente.js"
+import { Tarjeta } from "./tarjeta.js"
+import { Cliente } from "../gestionUsuarioYCliente/cliente.js"
 
 /**
  * Inserta una nueva tarjeta para un cliente en la colección de tarjetas.
