@@ -1,8 +1,11 @@
-import { Sala } from "../../clasesColecciones/sala.js";
+import { Sala } from "./sala.js";
 
 /**
  * Inserta una nueva sala en la base de datos.
  * @param {Object} peliculaParametro - El objeto que contiene los detalles de la sala a insertar.
+ * @property {string} nombre - El nombre de la sala.
+ * @property {array} asientos - Los asientos que tiene la sala.
+ *
  * @returns {Promise<Object>} - Una promesa que resuelve con el resultado de la inserción o un error si la sala ya existe.
  */
 export const insertSala = async (salaParametro) => {

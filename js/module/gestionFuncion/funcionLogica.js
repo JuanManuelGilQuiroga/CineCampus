@@ -1,11 +1,17 @@
 import { ObjectId } from "mongodb"
-import {Funcion} from "../../clasesColecciones/funcion.js"
-import { Pelicula } from "../../clasesColecciones/pelicula.js"
-import { Sala } from "../../clasesColecciones/sala.js"
+import { Funcion } from "./funcion.js"
+import { Pelicula } from "../gestionPelicula/pelicula.js"
+import { Sala } from "../gestionSala/sala.js"
 
 /**
  * Inserta una nueva función en la base de datos.
  * @param {Object} funcionParametro - El objeto que contiene los detalles de la funcion a insertar.
+ * @property {ObjectId} pelicula_id - El ID de la película asociada a la función.
+ * @property {ObjectId} sala_id - El ID de la sala donde se proyectará la película.
+ * @property {Date} fecha_hora_inicio - La fecha y hora de inicio de la función.
+ * @property {Date} fecha_hora_final - La fecha y hora de finalización de la función.
+ * @property {number} precio_COP - El precio en COP de la función.
+ *
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la inserción o un error si se encuentra alguno.
  */
 export const insertFuncion = async (funcionParametro) => {

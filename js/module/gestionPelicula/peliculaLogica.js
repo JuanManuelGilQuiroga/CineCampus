@@ -1,8 +1,15 @@
-import { Pelicula } from "../../clasesColecciones/pelicula.js";
+import { Pelicula } from "./pelicula.js";
 
 /**
  * Inserta una nueva película en la base de datos.
  * @param {Object} peliculaParametro - El objeto que contiene los detalles de la película a insertar.
+ * @property {string} titulo - El título de la película.
+ * @property {string} genero - El género de la película.
+ * @property {number} duracion_m - La duración de la película en minutos.
+ * @property {string} sinopsis - La sinopsis de la película.
+ * @property {Date} estreno - La fecha de estreno de la película en cartelera.
+ * @property {Date} retiro - La fecha de retiro de la película de cartelera.
+ *
  * @returns {Promise<Object>} - Una promesa que resuelve con el resultado de la inserción o un error si la película ya existe.
  */
 export const insertPelicula = async (peliculaParametro) => {
