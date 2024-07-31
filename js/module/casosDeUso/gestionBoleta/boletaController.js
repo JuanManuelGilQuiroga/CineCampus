@@ -55,6 +55,53 @@ export const insertBoleta = async (boletaParametro) => {
     })
     console.log(findBoleta)
 
+    let aggregateBoletaInfo = await boletaInstance.aggregateBoleta([
+        {
+            $lookup: {
+            from: "funcion",
+            localField: "funcion_id",
+            foreignField: "_id",
+            as: "funcion_info",
+            },
+        },
+        {
+            $unwind: "$funcion_info",
+        },
+        {
+            $lookup: {
+            from: "pelicula",
+            localField: "funcion_info.pelicula_id",
+            foreignField: "_id",
+            as: "pelicula_info",
+            },
+        },
+        {
+            $unwind: "$pelicula_info",
+        },
+        {
+            $lookup: {
+            from: "sala",
+            localField: "funcion_info.sala_id",
+            foreignField: "_id",
+            as: "sala_info",
+            },
+        },
+        {
+            $unwind: "$sala_info",
+        },
+        {
+            $project: {
+            asiento: 1,
+            funcion: "$funcion_info.fecha_hora_inicio",
+            pelicula: "$pelicula_info.titulo",
+            sala: "$sala_info.nombre",
+            },
+        }
+    ])
+
+    let fechaFuncion = aggregateBoletaInfo.funcion.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })
+
+
     // Actualizar la función para remover el asiento reservado
     let updateFuncionAsientos = await funcionInstance.updateFuncion(
         {_id: boletaParametro.funcion_id},
@@ -75,7 +122,8 @@ export const insertBoleta = async (boletaParametro) => {
         }
         console.log(insertMovimientoInmediato)
     } else if(boletaParametro.estado_pago == false) {
-        console.log(`Acabas de reservar el asiento ${boletaParametro.asiento}, recuerda pagar la boleta antes de ingresar a la función.`)
+        res.mensaje = `Acabas de reservar el asiento ${boletaParametro.asiento} de la funcion de "${aggregateBoletaInfo.pelicula}" en la ${aggregateBoletaInfo.sala} a las ${fechaFuncion}, recuerda pagar la boleta antes de ingresar a la función.`
+        return res
     }
     return res
 }
@@ -86,6 +134,7 @@ export const insertBoleta = async (boletaParametro) => {
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la eliminación.
  */
 export const deleteReserva = async (boletaParametro) => {
+    let funcionInstance = new Funcion()
     let boletaInstance = new Boleta()
     let clienteInstance = new Cliente()
     let findReserva = await boletaInstance.findOneBoleta({
@@ -110,10 +159,68 @@ export const deleteReserva = async (boletaParametro) => {
         return { error: "Sus credenciales no son validas para cancelar una reserva a nombre de este cliente." }
     }
 
+    let aggregateBoletaInfo = await boletaInstance.aggregateBoleta([
+        {
+            $match: {
+                asiento: findReserva.asiento
+            }
+        },
+        {
+            $lookup: {
+            from: "funcion",
+            localField: "funcion_id",
+            foreignField: "_id",
+            as: "funcion_info",
+            },
+        },
+        {
+            $unwind: "$funcion_info",
+        },
+        {
+            $lookup: {
+            from: "pelicula",
+            localField: "funcion_info.pelicula_id",
+            foreignField: "_id",
+            as: "pelicula_info",
+            },
+        },
+        {
+            $unwind: "$pelicula_info",
+        },
+        {
+            $lookup: {
+            from: "sala",
+            localField: "funcion_info.sala_id",
+            foreignField: "_id",
+            as: "sala_info",
+            },
+        },
+        {
+            $unwind: "$sala_info",
+        },
+        {
+            $project: {
+            asiento: 1,
+            funcion: "$funcion_info.fecha_hora_inicio",
+            pelicula: "$pelicula_info.titulo",
+            sala: "$sala_info.nombre",
+            },
+        }
+    ])
+    console.log(aggregateBoletaInfo)
+
+    let fechaFuncion = aggregateBoletaInfo.funcion.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })
+
     //Eliminar la boleta si no estaba pagada
     let res = await boletaInstance.deleteBoleta({
         _id: boletaParametro
     })
-    console.log(`Se ha cancelado la reserva para el asiento ${findReserva.asiento}`)
+
+    let updateAsientoFuncion = await funcionInstance.updateFuncion(
+        {_id: findReserva.funcion_id},
+        {$push: {asientos: findReserva.asiento}}
+    )
+    res.id = findReserva._id
+    res.mensaje = `Se ha cancelado la reserva para el asiento ${findReserva.asiento} de la funcion de "${aggregateBoletaInfo.pelicula}" en la ${aggregateBoletaInfo.sala} a las ${fechaFuncion}.`
     return res
 }

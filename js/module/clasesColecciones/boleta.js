@@ -57,4 +57,9 @@ export class Boleta extends Connect {
         let res = await this.collection.deleteOne(boletaParametro)
         return res
     }
+
+    async aggregateBoleta(boletaParametro) {
+        let [res] = await this.collection.aggregate(boletaParametro).toArray()
+        return res
+    }
 }
