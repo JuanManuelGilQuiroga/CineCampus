@@ -7,6 +7,12 @@ import { insertMovimiento } from "../gestionMovimiento/movimientoController.js"
 /**
  * Inserta una nueva boleta en la base de datos.
  * @param {Object} boletaParametro - El objeto que contiene los detalles de la boleta a insertar
+ * @property {ObjectId} cliente_id - El ID del cliente.
+ * @property {ObjectId} funcion_id - El ID de la función.
+ * @property {string} asiento - El asiento reservado.
+ * @property {boolean} estado_pago - Estado del pago de la boleta.
+ * @property {number} monto_COP - Monto en COP de la boleta.
+ *
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la inserción.
  */
 export const insertBoleta = async (boletaParametro) => {

@@ -33,4 +33,4 @@ let peliculaId = new ObjectId('66a597b03d45ef35a8b018ac')
 //console.log(await listarPeliculas())
 
 // Obtiene los detalles de una película específica por ID
-console.log(await detallesPelicula(peliculaId))
+//console.log(await detallesPelicula(peliculaId))

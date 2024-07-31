@@ -34,6 +34,10 @@ let clientesBuscar = "VIP"
 //Llama a la funcion para pasar el parametro del tipo de usuario y espera respuesta
 //console.log(await listarClientes(clientesBuscar))
 
+/**
+ * Usuario a buscar
+ * @type {String} Usuario
+ */
 let clienteNick = "juanMGQ"
 
 //Llama a la funcion para pasar el parametro del usuario que se quiere buscar

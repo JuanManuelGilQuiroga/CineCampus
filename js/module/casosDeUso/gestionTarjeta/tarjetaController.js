@@ -4,6 +4,9 @@ import { Cliente } from "../../clasesColecciones/cliente.js"
 /**
  * Inserta una nueva tarjeta para un cliente en la colección de tarjetas.
  * @param {Object} tarjetaParametro - El objeto que contiene los detalles de la tarjeta a insertar
+ * @property {ObjectId} cliente_id - El id del cliente.
+ * @property {string} numero - El numero de tarjeta VIP del cliente.
+ *
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la inserción de la tarjeta.
  */
 export const insertTarjeta = async (tarjetaParametro) => {

@@ -6,6 +6,9 @@ import { Movimiento } from "../../clasesColecciones/movimiento.js";
 /**
  * Inserta un movimiento de pago en la base de datos.
  * @param {Object} movimientoParametro - Objeto que contiene los detalles del movimiento a insertar.
+ * @property {ObjectId} boleta_id - El ID de la boleta asociada al movimiento.
+ * @property {int} monto_COP - El monto a pagar
+ *
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la inserción.
  */
 export const insertMovimiento = async (movimientoParametro) => {

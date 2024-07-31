@@ -5,6 +5,15 @@ import { insertTarjeta } from "../gestionTarjeta/tarjetaController.js";
  * Crea un nuevo usuario en la base de datos y lo inserta en la colección de clientes.
  * 
  * @param {Object} usuarioParametro - El objeto que contiene los detalles del usuario a crear.
+ * @property {string} nombre - El nombre del usuario.
+ * @property {string} apellido - El apellido del usuario.
+ * @property {string} nick - El nick del usuario. 
+ * @property {string} pwd - La contraseña del usuario.
+ * @property {string} email -El e-mail del usuario.
+ * @property {string} telefono - El telefono del usuario.
+ * @property {string} tipo - El tipo del usuario.
+ * @property {string} numero_tarjeta - El numero de tarjeta VIP del usuario.
+ *
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la creación del usuario y la insercion del cliente o un mensaje de error si se identifica alguno.
  */
 export const createUsuarioYInsertCliente = async (usuarioParametro) => {
@@ -90,6 +99,11 @@ export const listarClientes = async (clienteParametro) => {
     return findClientes
 }
 
+/**
+ * Busca un usuario en la base de datos
+ * @param {String} clienteNick - String que contiene el usuario
+ * @returns {Promise<Array>} Una promesa que resuelve con el resultado de la busqueda
+ */
 export const findOneCliente = async (clienteNick) => {
     let clienteInstance = new Cliente()
     let findCliente = await clienteInstance.findOneCliente({
