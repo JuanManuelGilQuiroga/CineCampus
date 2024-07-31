@@ -82,5 +82,9 @@ export const verificarDisponibilidadAsientos = async (funcionParametro) => {
     if(findFuncion.asientos.length == 0) {
         return { error: "La función no tiene asientos disponibles." }
     }
-    return findFuncion
+    
+    return {
+        nota: "Array de asientos disponibles",
+        asientos: findFuncion.asientos.sort()
+    }
 }
