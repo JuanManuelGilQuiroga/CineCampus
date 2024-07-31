@@ -4,15 +4,53 @@
 
 ### Indice:
 
+[Descripción del proyecto](#descripción-del-proyecto)
 
+[Instalación](#instalación)
 
-------
+[Configuración](#configuración)
+
+[Estructura de Archivos y Carpetas](#estructura-de-archivos-y-carpetas)
+
+[Justificación de la Estructura](#justificación-de-la-estructura)
+
+[Ejecución del Proyecto](#ejecución-del-proyecto)
+
+[Clases de las Colecciones](#clases-de-las-colecciones)
+
+[API para Crear Peliculas](#1-api-para-crear-peliculas)
+
+[API para Listar Películas](#2-api-para-listar-películas)
+
+[API para Obtener Detalles de Película](#3-api-para-obtener-detalles-de-película)
+
+[API para Crear Salas](#4-api-para-crear-salas)
+
+[API para Crear Funciones](#5-api-para-crear-funciones)
+
+[API para Verificar Disponibilidad de Asientos](#6-api-para-verificar-disponibilidad-de-asientos)
+
+[API para Crear Usuario](#7-api-para-crear-usuario)
+
+[API para Obtener Detalles de Usuario](#8-api-para-obtener-detalles-de-usuario)
+
+[API para Listar Usuarios](#9-api-para-listar-usuarios)
+
+[API para Actualizar Rol de Usuario](#10-api-para-actualizar-rol-de-usuario)
+
+[API para Comprar Boletos - API para Reservar Asientos](#11. API para Comprar Boletos - API para Reservar Asientos)
+
+[API para Cancelar Reserva de Asientos](#12. API para Cancelar Reserva de Asientos)
+
+[API para Procesar Pagos](#13. API para Procesar Pagos)
 
 
 
 ### Descripción del proyecto.
 
-Este proyecto es una aplicación de gestión de una liga de fútbol llamada Liga BetPlay. Está diseñada para ayudar a los administradores de la liga a gestionar equipos, jugadores, y sus rendimientos, proporcionando funcionalidades completas para la administración y generación de reportes detallados. La aplicación utiliza Node.js y MongoDB para el backend, siguiendo patrones de diseño como Singleton para la gestión de conexiones a la base de datos.
+CineCampus es una empresa de entretenimiento que se especializa en ofrecer una experiencia de cine completa y personalizada. La empresa desea desarrollar una aplicación web que permita a los usuarios seleccionar películas, comprar boletos y asignar asientos de manera eficiente y cómoda. La aplicación también ofrecerá opciones de descuento para usuarios con tarjeta VIP y permitirá realizar compras en línea.
+
+El objetivo es desarrollar una serie de APIs para la aplicación web de CineCampus utilizando MongoDB como base de datos. Las APIs deberán gestionar la selección de películas, la compra de boletos, la asignación de asientos, y la implementación de descuentos para tarjetas VIP, con soporte para diferentes roles de usuario.
 
 
 
@@ -53,7 +91,8 @@ MONGO_CLUSTER=[CLUSTER O SERVIDOR AL DONDE ESTA ALOJADA LA BASE DE DATOS]
 MONGO_DB=[NOMBRE DE LA BASE DE DATOS]
 ```
 
-
+**Cadena de conexion(Admin)**:
+mongodb://admin:adminCineCampus@monorail.proxy.rlwy.net:46681
 
 ## Estructura de Archivos y Carpetas
 
@@ -255,7 +294,7 @@ Permitir la creación de peliculas con detalles como titulo, genero, duracion en
 
 #### Documentación del Código
 
-El codigo usado para crear peliculas es el siguiente:
+El código usado para crear peliculas es el siguiente:
 
 - **Función insertPelicula:** Esta función es la encargada de realizar todas las validaciones y manipular los datos para la obtención de una respuesta adecuada.
   - **variable findPelicula**: Verifica por medio del titulo si la pelicula ya esta registrada en la base de datos.
@@ -284,7 +323,7 @@ Permitir la consulta de todas las películas disponibles en el catálogo, con de
 
 #### Documentación del Código
 
-El codigo usado para crear peliculas es el siguiente:
+El código usado para listar peliculas es el siguiente:
 
 - **Función listarPeliculas:** Esta función es la encargada de realizar las validaciones y manipular los datos para la obtencion de una respuesta adecuada.
   - **variable res**: Es un aggregate que valida si las peliculas estan en cartelera todavia y si estan las retorna.
@@ -303,7 +342,7 @@ Permitir la consulta de información detallada sobre una película específica, 
 
 #### Documentación del Código
 
-El codigo usado para crear peliculas es el siguiente:
+El código usado para obtener detalles de una pelicula es el siguiente:
 
 - **Función detallesPelicula:** Esta función es la encargada de realizar las validaciones y manipular los datos para la obtencion de una respuesta adecuada.
   - **variable res**: Es un find que valida si las peliculas existen, y si estan, las retorna.
@@ -314,5 +353,324 @@ El codigo usado para crear peliculas es el siguiente:
 let peliculaId = new ObjectId('[El objectId de la pelicula ingresada]')
 
 console.log(await detallesPelicula(peliculaId))
+```
+
+
+
+## 4. API para Crear Salas
+
+Permitir la creación de salas con detalles como nombre y asientos, este ultimo se trata de un array de strings, los cuales se componen de una letra mayúscula de la A a la G seguido de un numero del 1 al 10.
+
+#### Documentación del Código
+
+El código usado para crear salas es el siguiente:
+
+- **Función insertSala:** Esta función es la encargada de realizar las validaciones y manipular los datos para la obtencion de una respuesta adecuada.
+  - **Variable findSala**: Valida si la sala ya existe por medio del nombre.
+  - **Variable res**: Inserta la sala a la colección.
+
+#### Ejecución: 
+
+```javascript
+let salaInsertar = {
+     nombre: "Sala 1",
+     asientos: [
+         "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
+         "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10",
+         "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10",
+         "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10",
+         "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10",
+         "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10",
+         "G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8", "G9", "G10"
+     ]
+}
+
+console.log(await insertSala(salaInsertar))
+```
+
+
+
+## 5. API para Crear Funciones
+
+Permitir la creación de funciones con detalles como pelicula_id, sala_id, hora de inicio, hora de finalización, asientos (los cuales coinciden perfectamente con los de la sala asignada) y precio de la boleta en pesos Colombianos.
+
+#### Documentación del Código
+
+El código usado para crear funciones es el siguiente:
+
+- **Función insertFuncion:** Esta función es la encargada de realizar las validaciones y manipular los datos para la obtencion de una respuesta adecuada.
+  - **Variable findPelicula**: Valida si la pelicula ya existe por medio del id.
+  - **Variable findSala**:  Valida si la sala ya existe por medio del id.
+  - **Variable findFuncionPorSalaYFecha**:  Valida si la sala esta ocupada para la fecha deseada.
+  - **if findPelicula.estreno > funcionParametro.fecha_hora_inicio**:  Valida si la pelicula esta en cartelera.
+  - **if diferenciaInicioYFinalInt != findPelicula.duracion_m**: Valida que la diferencia entre la hora de inicio y de finalización de la función coincida con la cantidad de minutos que dura la pelicula.
+  - **Variable res**: Inserta la función a la colección.
+
+#### Ejecución: 
+
+```javascript
+let funcionInsertar = {
+     pelicula_id: new ObjectId('[El objectId de la pelicula ingresada]'),
+     sala_id: new ObjectId('[El objectId de la sala ingresada]'),
+     fecha_hora_inicio: new Date('2024-07-25T21:30:00.000+00:00'),
+     fecha_hora_final: new Date('2024-07-25T23:17:00.000+00:00'),
+     precio_COP: 7000
+ }
+
+console.log(await insertFuncion(funcionInsertar))
+```
+
+
+
+## 6. API para Verificar Disponibilidad de Asientos
+
+Permitir la consulta de la disponibilidad de asientos en una sala para una proyección específica.
+
+#### Documentación del Código
+
+El código usado para verificar los asientos disponibles en una función es el siguiente:
+
+- **Función verificarDisponibilidadAsientos:** Esta función es la encargada de realizar las validaciones y manipular los datos para la obtención de una respuesta adecuada.
+  - **Variable findFuncion**: Valida si la función ya existe por medio del id.
+  - **if findFuncion.asientos.length == 0**:  Valida si existen asientos disponibles para la función.
+
+#### Ejecución: 
+
+```javascript
+let funcionId = new ObjectId('[El objectId de la función ingresada]')
+
+console.log(await verificarDisponibilidadAsientos(funcionId))
+```
+
+
+
+## 7. API para Crear Usuario
+
+Permitir la creación de nuevos usuarios en el sistema, asignando roles y privilegios específicos (usuario estándar, usuario VIP o administrador).
+
+#### Documentación del Código
+
+El código usado para crear usuarios es el siguiente:
+
+- **Función createUsuarioYInsertCliente:** Esta función es la encargada de realizar las validaciones y manipular los datos para la obtencion de una respuesta adecuada.
+  - **Variable findCliente**: Valida si el cliente ya existe por medio del nick.
+  - **Variable userRoleTipo**: Define el rol a asignar al usuario.
+  - **Variable createUsuario**:  Crea el usuario en la base datos, asignándole los roles necesarios.
+  - **Variable res**:  Inserta el documento del usuario en la colección cliente
+  - **Variable insertTarjetaForCliente**: Valida si el usuario fue creado como VIP o Estándar, en caso de ser VIP llama a la función **insertTarjeta** para asignarle una tarjeta VIP.
+
+#### Ejecución: 
+
+```javascript
+ let usuarioInsert = {
+     nombre: "Juan",
+     apellido: "Gil",
+     nick: "juanMGQ",
+     pwd: "jmgqEstandar",
+     email: "jmgq2007@gmail.com",
+     telefono: "315 6431235",
+     tipo: "Estandar",
+     numero_tarjeta: "1234 5678 9012 3456"
+ }
+ 
+ console.log(await createUsuarioYInsertCliente(usuarioInsert))
+```
+
+
+
+## 8. API para Obtener Detalles de Usuario
+
+ Permitir la consulta de información detallada sobre un usuario, incluyendo su rol y estado de tarjeta VIP.
+
+#### Documentación del Código
+
+El código usado para obtener la información completa de un usuario especifico es el siguiente:
+
+- **Función findOneCliente:** Esta función es la encargada de realizar las validaciones y manipular los datos para la obtención de una respuesta adecuada.
+  - **Variable findCliente**: Valida si el cliente ya existe por medio del nick.
+  - **If process.env.MONGO_USER != clienteNick && process.env.MONGO_USER != "admin"**: Valida si el usuario con el que esta conectado a la base de datos tiene permiso de obtener estos detalles.
+  - **Variable detallesCliente**:  Obtiene todos los detalles del usuario incluyendo su numero de tarjeta.
+
+#### Ejecución: 
+
+```javascript
+let clienteNick = "juanMGQ"
+
+console.log(await findOneCliente(clienteNick))
+```
+
+
+
+## 9. API para Listar Usuarios
+
+Permitir la consulta de todos los usuarios del sistema, con la posibilidad de filtrar por rol (VIP, estándar o administrador).
+
+#### Documentación del Código
+
+El código usado para listar los usuarios dependiendo de su tipo es el siguiente:
+
+- **Función listarClientes:** Esta función es la encargada de realizar las validaciones y manipular los datos para la obtencion de una respuesta adecuada.
+  - **Variable findClientes**: Busca los clientes teniendo en cuenta el tipo.
+  - **If clienteParametro != "Admin" && clienteParametro != "Estandar" && clienteParametro != "VIP"**: Valida si el tipo de usuario para el filtro es correcto.
+
+#### Ejecución: 
+
+```javascript
+let clientesBuscar = "VIP"
+
+console.log(await listarClientes(clientesBuscar))
+```
+
+
+
+## 10. API para Actualizar Rol de Usuario
+
+Permitir la actualización del rol de un usuario (por ejemplo, cambiar de usuario estándar a VIP, o viceversa).
+
+#### Documentación del Código
+
+#### *Usuario Estandar a Usuario VIP:*
+
+El código usado para asignar a un usuario Estándar el tipo VIP es el siguiente:
+
+- **Función insertTarjeta:** Esta función es la encargada de realizar las validaciones y manipular los datos para la obtención de una respuesta adecuada.
+  - **Variable findTarjeta**: Valida si la tarjeta ya existe por medio del numero.
+  - **Variable findCliente**: Valida si el cliente existe por medio del id.
+  - **If process.env.MONGO_USER != findCliente.nick**:  Valida si el usuario con el que esta conectado a la base de datos tiene permiso de asignar una tarjeta VIP en nombre del usuario deseado.
+  - **Variable revokeRolesFromUsuario**:  Quita el rol de usuarioEstandar al usuario.
+  - **Variable grantRolesToUsuario**: Asigna el rol de usuarioVIP al usuario.
+  - **Variable res**: Inserta la tarjeta en la colección.
+  - **Variable updateClienteTipo**: Actualiza el campo tipo en el documento del cliente al que se acaba de asignar la tarjeta.
+
+#### Ejecución: 
+
+```javascript
+ let tarjetaInsertar = {
+     cliente_id: new ObjectId('[ObjectId del cliente que previamente se inserto]'),
+     numero: "1234 5678 9012 3456"
+ }
+ 
+ console.log(await insertTarjeta(tarjetaInsertar))
+```
+
+
+
+#### *Usuario VIP a Usuario Estandar:*
+
+El código usado para asignar a un usuario Vip el tipo Estándar es el siguiente:
+
+- **Función deleteTarjeta:** Esta función es la encargada de realizar las validaciones y manipular los datos para la obtención de una respuesta adecuada.
+  - **Variable findTarjeta**: Valida si la tarjeta ya existe por medio del numero.
+  - **Variable findCliente**: Valida si el cliente existe por medio del id.
+  - **If process.env.MONGO_USER != findCliente.nick**:  Valida si el usuario con el que esta conectado a la base de datos tiene permiso de eliminar la tarjeta VIP del usuario deseado.
+  - **Variable revokeRolesFromUsuario**:  Quita el rol de usuarioVIP al usuario.
+  - **Variable grantRolesToUsuario**: Asigna el rol de usuarioEstandar al usuario.
+  - **Variable res**: Elimina la tarjeta de la colección.
+  - **Variable updateClienteTipo**: Actualiza el campo tipo en el documento del cliente al que se acaba de eliminar la tarjeta.
+
+#### Ejecución:
+
+```javascript
+let tarjetaEliminar = "1234 5678 9012 3456"
+
+console.log(await deleteTarjeta(tarjetaEliminar))
+```
+
+
+
+## 11. API para Comprar Boletos - API para Reservar Asientos
+
+Permitir la compra de boletos para una película específica, incluyendo la selección de la fecha y la hora de la proyección. - Permitir la selección y reserva de asientos para una proyección específica.
+
+Esta función cubre ambos casos de uso debido a que se identifica una boleta pagada como la compra y una boleta no pagada como una reserva, el documento boleta tiene un ampo llamado "estado_pago", si este es true significa que se quiere pagar la boleta instantaneamente, fuera de la ejecución significaria que ya esta paga la boleta. En caso contrario, si es false significa que la boleta no esta paga por lo tanto es una reserva y es posible cancelarla.
+
+#### Documentación del Código
+
+El código usado para comprar una boleta o reservar un asiento es el siguiente:
+
+- **Función insertBoleta:** Esta función es la encargada de realizar las validaciones y manipular los datos para la obtencion de una respuesta adecuada.
+  - **Variable findCliente**: Valida si el cliente existe.
+  - **Variable findFuncion**: Valida si la función existe.
+  - **Variable disponibilityAsiento**: Valida si el asiento esta disponible.
+  - **If process.env.MONGO_USER != findCliente.nick**: Valida si el usuario con el que esta conectado a la base de datos tiene permiso de comprar una boleta o reservar un asiento a nombre del usuario deseado.
+  - **Variable res**: Inserta la boleta en la colección.
+  - **Variable aggregateBoletaInfo**: Aggregate para extraer función importante de diferentes documentos, para hacer mas entendible el codigo a la hora de la ejecución.
+  - **Variable updateFuncionAsientos**: Actualiza la función para eliminar del array de asientos, el asiento que ha sido apartado.
+  - **Variable insertMovimientoInmediato**: Si el documento de la boleta se inserto con estado_pago == true entonces llama a la funcion insertMovimiento para realizar el pago.
+  - **Variable cambiarEstadoPago**: Si el documento de la boleta se inserto con estado_pago == true pero al pagar el monto ingresado no era el correcto, va a devolver error, sin embargo la boleta ya estara ingresada, asi que esta variable lleva a cabo un update que actualiza estado_pago pasandolo a false. 
+    *En caso de error al ingresar el movimiento, debera dirigirse a ingresarlo por medio de la función especifica para esta tarea.*
+
+#### Ejecución: 
+
+```javascript
+  let boletaDetalle = {
+      cliente_id: new ObjectId('[ObjectId del cliente previamente insertado]'),
+      funcion_id: new ObjectId('[ObjectId de la funcion previamente insertado]'),
+      asiento: "A2",
+      estado_pago: false,
+      monto_COP: 7000
+ }
+  
+  console.log(await insertBoleta(boletaDetalle))
+```
+
+
+
+## 12. API para Cancelar Reserva de Asientos
+
+PPermitir la cancelación de una reserva de asiento ya realizada.
+
+El documento boleta tiene un ampo llamado "estado_pago", si es false significa que la boleta no esta paga, por lo tanto califica como una reserva y se puede cancelar.
+
+#### Documentación del Código
+
+El código usado para cancelar una reserva es el siguiente:
+
+- **Función deleteReserva:** Esta función es la encargada de realizar las validaciones y manipular los datos para la obtencion de una respuesta adecuada.
+  - **Variable findReserva**: Valida si la reserva existe.
+  - **If findReserva.estado_pago != false**: Valida si la reserva ya esta paga.
+  - **Variable findCliente**: Valida si el cliente si hizo esa reserva.
+  - **If process.env.MONGO_USER != findCliente.nick**: Valida si el usuario con el que esta conectado a la base de datos tiene permiso de eliminar una reserva de un asiento a nombre del usuario deseado.
+  - **Variable res**: Elimina la boleta de la colección.
+  - **Variable aggregateBoletaInfo**: Aggregate para extraer función importante de diferentes documentos, para hacer mas entendible el codigo a la hora de la ejecución.
+  - **Variable updateAsientoFuncion**: Actualiza la función para agregar nuevamente al array de asientos, el asiento que habia sido apartado.
+
+#### Ejecución: 
+
+```javascript
+let boletaId = new ObjectId('[ObjectId de la boleta insertada]')
+
+console.log(await deleteReserva(boletaId))
+```
+
+
+
+
+
+## 13. API para Procesar Pagos
+
+Permitir el procesamiento de pagos en línea para la compra de boletos.
+
+#### Documentación del Código
+
+El código usado para pagar una boleta es el siguiente:
+
+- **Función insertMovimiento:** Esta función es la encargada de realizar las validaciones y manipular los datos para la obtencion de una respuesta adecuada.
+  - **Variable findMovimiento**: Valida si ya existe un pago asociado a la boleta.
+  - **Variable findBoleta**: Busca la boleta.
+  - **Variable findCliente**: Valida si el cliente si hizo esa reserva.
+  - **If findCliente.tipo == "VIP" && movimientoParametro.monto_COP != precioBoletaVIP**: Valida que el monto del movimiento coincida con el precio esperado para clientes VIP
+  - **Variable res**: Inserta el movimiento en la colección.
+  - **Variable updateBoletaEstadoPago**: Actualiza el estado_pago de la boleta a true.
+
+#### Ejecución: 
+
+```javascript
+ let movimientoInsertar = {
+     boleta_id: new ObjectId('[ObjectId de la boleta insertada]'),
+     monto_COP: 5600
+ }
+ 
+ console.log(await insertMovimiento(movimientoInsertar))
 ```
 
