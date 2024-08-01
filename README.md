@@ -90,9 +90,11 @@ MONGO_HOST=[HOS DE LA BASE DE DATOS]
 MONGO_CLUSTER=[CLUSTER O SERVIDOR AL DONDE ESTA ALOJADA LA BASE DE DATOS]
 MONGO_DB=[NOMBRE DE LA BASE DE DATOS]
 ```
+**Cadena de conexion(superAdmin)**:
+mongodb://mongo:VljkCKrxozLMDcJAfREVOpguXgTHgYwm@monorail.proxy.rlwy.net:40728
 
 **Cadena de conexion(Admin)**:
-mongodb://admin:adminCineCampus@monorail.proxy.rlwy.net:46681
+mongodb://admin:adminCineCampus@monorail.proxy.rlwy.net:40728/cineCampus
 
 ## Estructura de Archivos y Carpetas
 

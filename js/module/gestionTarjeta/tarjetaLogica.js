@@ -31,8 +31,12 @@ export const insertTarjeta = async (tarjetaParametro) => {
         return { error: "La tarjeta ya existe." }
     }
 
+    let findUsuario = await clienteInstance.findOneCliente({
+        nick: process.env.MONGO_USER
+    })
+
     // Manejo de credenciales y roles
-    if(process.env.MONGO_USER != "admin") {
+    if(findUsuario.tipo != "Admin") {
         if(process.env.MONGO_USER != findCliente.nick) {
             return { error: "Sus credenciales no son validas para adquirir una tarjeta VIP a nombre de este cliente." }
         }
@@ -58,7 +62,7 @@ export const insertTarjeta = async (tarjetaParametro) => {
         }
     }
 
-    if(process.env.MONGO_USER == "admin" && findCliente.tipo == "Estandar") {
+    if(findUsuario.tipo == "Admin" && findCliente.tipo == "Estandar") {
         // Revocar rol de usuario estándar
         let revokeRolesFromUsuario = await clienteInstance.commandUsuario({
             revokeRolesFromUser: findCliente.nick,
@@ -74,6 +78,8 @@ export const insertTarjeta = async (tarjetaParametro) => {
                 { role: 'usuarioVIP', db: process.env.MONGO_DB }
             ]
         })
+    } else if(findCliente.tipo == "VIP") {
+        return { error: "Usted ya cuenta con una tarjeta VIP." }
     }
 
     // Insertar la tarjeta en la colección
@@ -116,8 +122,12 @@ export const deleteTarjeta = async (numeroTarjeta) => {
         _id: findTarjeta.cliente_id
     })
 
+    let findUsuario = await clienteInstance.findOneCliente({
+        nick: process.env.MONGO_USER
+    })
+
      // Manejo de credenciales y roles
-    if(process.env.MONGO_USER != "admin") {
+    if(findUsuario.tipo != "Admin") {
         if(process.env.MONGO_USER != findCliente.nick) {
             return { error: "Sus credenciales no son validas para eliminar una tarjeta VIP a nombre de este cliente." }
         }
@@ -138,10 +148,12 @@ export const deleteTarjeta = async (numeroTarjeta) => {
                     { role: 'usuarioEstandar', db: process.env.MONGO_DB }
                 ]
             })
+        } else if(findCliente.tipo != "VIP") {
+            return { error: "Usted no cuenta con una tarjeta VIP." }
         }
     }
 
-    if(process.env.MONGO_USER == "admin" && findCliente.tipo == "VIP") {
+    if(findUsuario.tipo == "Admin" && findCliente.tipo == "VIP") {
         // Revocar rol de usuario VIP
         let revokeRolesFromUsuario = await clienteInstance.commandUsuario({
             revokeRolesFromUser: findCliente.nick,
@@ -157,7 +169,10 @@ export const deleteTarjeta = async (numeroTarjeta) => {
                 { role: 'usuarioEstandar', db: process.env.MONGO_DB }
             ]
         })
+    } else if(findCliente.tipo != "VIP") {
+        return { error: "Usted no cuenta con una tarjeta VIP." }
     }
+
 
     // Eliminar la tarjeta de la colección
     let res = await tarjetaInstance.deleteTarjeta({
@@ -169,5 +184,6 @@ export const deleteTarjeta = async (numeroTarjeta) => {
         { _id: findTarjeta.cliente_id },
         {$set: {tipo: "Estandar"}}
     )
+    res.mensaje = `La tarjeta con numero ${numeroTarjeta} ha sido borrada de la base de datos.`
     return res
 }
