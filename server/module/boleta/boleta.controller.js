@@ -1,8 +1,8 @@
 import { ObjectId } from "mongodb"
-import { Boleta } from "./boleta.js"
-import { Cliente } from "../gestionUsuarioYCliente/cliente.js"
-import { Funcion } from "../gestionFuncion/funcion.js"
-import { insertMovimiento } from "../gestionMovimiento/movimientoLogica.js"
+import { Funcion } from "../funcion/funcion.model.js"
+import { insertMovimiento } from "../movimiento/movimiento.controller.js"
+import { Cliente } from "../usuario/usuario.model.js"
+import { Boleta } from "./boleta.model.js"
 
 /**
  * Inserta una nueva boleta en la base de datos.

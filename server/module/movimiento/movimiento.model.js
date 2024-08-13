@@ -1,4 +1,4 @@
-import { Connect } from '../../../helpers/db/connect.js';
+import { Connect } from '../../helpers/db/connect.js';
 
 /**
  * Clase `Movimiento` para gestionar operaciones relacionadas con la colección de Movimientos en la base de datos.

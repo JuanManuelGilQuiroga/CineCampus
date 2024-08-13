@@ -1,4 +1,4 @@
-import { Sala } from "./sala.js";
+import { Sala } from "./sala.model.js";
 
 /**
  * Inserta una nueva sala en la base de datos.

@@ -1,4 +1,4 @@
-import { Connect } from '../../../helpers/db/connect.js';
+import { Connect } from '../../helpers/db/connect.js';
 
 /**
  * Clase `Funcion` para gestionar operaciones relacionadas con la colección de Funciones en la base de datos.

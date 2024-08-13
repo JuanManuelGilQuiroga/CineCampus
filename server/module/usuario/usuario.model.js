@@ -1,4 +1,4 @@
-import { Connect } from '../../../helpers/db/connect.js';
+import { Connect } from '../../db/connect.js';
 
 /**
  * Clase `Cliente` para gestionar operaciones relacionadas con la colección de Clientes en la base de datos.

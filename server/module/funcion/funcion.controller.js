@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb"
-import { Funcion } from "./funcion.js"
-import { Pelicula } from "../gestionPelicula/pelicula.js"
-import { Sala } from "../gestionSala/sala.js"
+import { Pelicula } from "../pelicula/pelicula.model.js"
+import { Sala } from "../sala/sala.model.js"
+import { Funcion } from "./funcion.model.js"
 
 /**
  * Inserta una nueva función en la base de datos.
