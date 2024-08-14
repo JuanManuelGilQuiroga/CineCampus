@@ -1,7 +1,7 @@
-import { Boleta } from "../boleta/boleta.model.js";
-import { Funcion } from "../funcion/funcion.model.js";
-import { Cliente } from "../usuario/usuario.model.js";
-import { Movimiento } from "./movimiento.model.js";
+const { Boleta } = require('../boleta/boleta.model');
+const { Funcion } = require('../funcion/funcion.model');
+const { Cliente } = require('../usuario/usuario.model');
+const { Movimiento } = require('./movimiento.model');
 
 /**
  * Inserta un movimiento de pago en la base de datos.
@@ -11,7 +11,7 @@ import { Movimiento } from "./movimiento.model.js";
  *
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la inserción.
  */
-export const insertMovimiento = async (movimientoParametro) => {
+const insertMovimiento = async (movimientoParametro) => {
     let movimientoInstance = new Movimiento()
     let boletaInstance = new Boleta()
     let clienteInstance = new Cliente()
@@ -62,3 +62,5 @@ export const insertMovimiento = async (movimientoParametro) => {
 
     return res
 }
+
+module.exports = insertMovimiento

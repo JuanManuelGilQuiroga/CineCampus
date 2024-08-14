@@ -1,7 +1,7 @@
-import { ObjectId } from "mongodb"
-import { Pelicula } from "../pelicula/pelicula.model.js"
-import { Sala } from "../sala/sala.model.js"
-import { Funcion } from "./funcion.model.js"
+const { ObjectId } = require('mongodb');
+const { Pelicula } = require('../pelicula/pelicula.model');
+const { Sala } = require('../sala/sala.model');
+const { Funcion } = require('./funcion.model');
 
 /**
  * Inserta una nueva función en la base de datos.
@@ -14,7 +14,7 @@ import { Funcion } from "./funcion.model.js"
  *
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la inserción o un error si se encuentra alguno.
  */
-export const insertFuncion = async (funcionParametro) => {
+const insertFuncion = async (funcionParametro) => {
     let funcionInstance = new Funcion()
     let peliculaInstance = new Pelicula()
     let salaInstance = new Sala()
@@ -79,7 +79,7 @@ export const insertFuncion = async (funcionParametro) => {
  * @param {Object} funcionParametro - El objeto que contiene el id de la funcion a buscar.
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la busqueda o un error si se encuentra alguno.
  */
-export const verificarDisponibilidadAsientos = async (funcionParametro) => {
+const verificarDisponibilidadAsientos = async (funcionParametro) => {
     let funcionInstance = new Funcion()
     let findFuncion = await funcionInstance.findFuncionById({_id: funcionParametro})
     if(!findFuncion) {
@@ -93,4 +93,9 @@ export const verificarDisponibilidadAsientos = async (funcionParametro) => {
         nota: "Array de asientos disponibles",
         asientos: findFuncion.asientos.sort()
     }
+}
+
+module.exports = {
+    insertFuncion,
+    verificarDisponibilidadAsientos
 }

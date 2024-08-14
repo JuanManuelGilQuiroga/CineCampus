@@ -1,10 +1,10 @@
-import { Connect } from '../../db/connect.js';
+const Connect = require("../../db/connect");
 
 /**
  * Clase `Cliente` para gestionar operaciones relacionadas con la colección de Clientes en la base de datos.
  * Hereda de la clase `Connect`, que maneja la conexión a la base de datos.
  */
-export class Cliente extends Connect {
+module.exports = class Cliente extends Connect {
     static instanceCliente; // Instancia Singleton de la clase Cliente
     
     /**

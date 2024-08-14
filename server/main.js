@@ -1,8 +1,8 @@
-import { ObjectId } from "mongodb";
-import { insertBoleta, deleteReserva } from "./module/boleta/boleta.controller.js";
-import { insertFuncion, verificarDisponibilidadAsientos } from "./module/funcion/funcion.controller.js";
-import { insertMovimiento } from "./module/movimiento/movimiento.controller.js";
-import { insertPelicula, listarPeliculas, detallesPelicula } from "./module/pelicula/pelicula.controller.js";
-import { insertSala } from "./module/sala/sala.controller.js";
-import { insertTarjeta, deleteTarjeta } from "./module/tarjeta/tarjeta.controller.js";
-import { createUsuarioYInsertCliente, findOneCliente, listarClientes } from "./module/usuario/usuario.controller.js";
+const { ObjectId } = require('mongodb');
+const { insertBoleta, deleteReserva } = require('./module/boleta/boleta.controller');
+const { insertFuncion, verificarDisponibilidadAsientos } = require('./module/funcion/funcion.controller');
+const { insertMovimiento } = require('./module/movimiento/movimiento.controller');
+const { insertPelicula, listarPeliculas, detallesPelicula } = require('./module/pelicula/pelicula.controller');
+const { insertSala } = require('./module/sala/sala.controller');
+const { insertTarjeta, deleteTarjeta } = require('./module/tarjeta/tarjeta.controller');
+const { createUsuarioYInsertCliente, findOneCliente, listarClientes } = require('./module/usuario/usuario.controller');

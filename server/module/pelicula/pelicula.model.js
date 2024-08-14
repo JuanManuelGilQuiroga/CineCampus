@@ -1,10 +1,10 @@
-import { Connect } from '../../helpers/db/connect.js';
+const Connect = require("../../db/connect");
 
 /**
  * Clase `Pelicula` para gestionar operaciones relacionadas con la colección de peliculas en la base de datos.
  * Hereda de la clase `Connect`, que maneja la conexión a la base de datos.
  */
-export class Pelicula extends Connect {
+module.exports = class Pelicula extends Connect {
     static instancePelicula; // Instancia Singleton de la clase jugador
     
     /**

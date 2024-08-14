@@ -1,10 +1,10 @@
-import { Connect } from '../../helpers/db/connect.js';
+const Connect = require("../../db/connect");
 
 /**
  * Clase `Movimiento` para gestionar operaciones relacionadas con la colección de Movimientos en la base de datos.
  * Hereda de la clase `Connect`, que maneja la conexión a la base de datos.
  */
-export class Movimiento extends Connect {
+module.exports = class Movimiento extends Connect {
     static instanceMovimiento; // Instancia Singleton de la clase Movimiento
     
     /**
