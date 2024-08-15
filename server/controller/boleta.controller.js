@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb');
 const { Funcion } = require('../funcion/funcion.model');
-const { insertMovimiento } = require('../movimiento/movimiento.controller');
+const { insertMovimiento } = require('./movimiento.controller');
 const { Cliente } = require('../usuario/usuario.model');
 const { Boleta } = require('./boleta.model');
 

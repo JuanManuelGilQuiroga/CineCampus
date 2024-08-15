@@ -1,4 +1,4 @@
-const Connect = require("../../db/connect");
+const Connect = require("../helpers/db/connect");
 
 /**
  * Clase `Boleta` para gestionar operaciones relacionadas con la colección de Boletas en la base de datos.

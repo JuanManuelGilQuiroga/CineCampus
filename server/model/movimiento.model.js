@@ -1,4 +1,4 @@
-const Connect = require("../../db/connect");
+const Connect = require("../helpers/db/connect");
 
 /**
  * Clase `Movimiento` para gestionar operaciones relacionadas con la colección de Movimientos en la base de datos.

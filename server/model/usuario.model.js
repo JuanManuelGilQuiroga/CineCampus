@@ -1,4 +1,4 @@
-const Connect = require("../../db/connect");
+const Connect = require("../helpers/db/connect");
 
 /**
  * Clase `Cliente` para gestionar operaciones relacionadas con la colección de Clientes en la base de datos.
