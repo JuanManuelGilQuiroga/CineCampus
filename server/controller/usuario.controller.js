@@ -1,5 +1,7 @@
-const { insertTarjeta } = require('../tarjeta/tarjeta.controller');
-const { Cliente } = require('./usuario.model');
+const { validationResult } = require('express-validator');
+const { insertTarjeta } = require('./tarjeta.controller');
+const Usuario = require('../model/usuario.model');
+const UsuarioDTO = require('../dto/usuario.dto');
 
 /**
  * Crea un nuevo usuario en la base de datos y lo inserta en la colección de clientes.
@@ -17,7 +19,7 @@ const { Cliente } = require('./usuario.model');
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la creación del usuario y la insercion del cliente o un mensaje de error si se identifica alguno.
  */
 const createUsuarioYInsertCliente = async (usuarioParametro) => {
-    let clienteInstance = new Cliente()
+    let clienteInstance = new Usuario()
 
     // Verificar si el usuario ya existe
     let findCliente = await clienteInstance.findOneCliente({
@@ -97,7 +99,7 @@ const createUsuarioYInsertCliente = async (usuarioParametro) => {
  * @returns {Promise<Array>} Una promesa que resuelve con el resultado de la busqueda
  */
 const listarClientes = async (clienteParametro) => {
-    let clienteInstance = new Cliente()
+    let clienteInstance = new Usuario()
 
     //Busca los usuarios que coincidan con el tipo de usuario
     let findClientes = await clienteInstance.findCliente({
@@ -122,7 +124,7 @@ const listarClientes = async (clienteParametro) => {
  * @returns {Promise<Array>} Una promesa que resuelve con el resultado de la busqueda
  */
 const findOneCliente = async (clienteNick) => {
-    let clienteInstance = new Cliente()
+    let clienteInstance = new Usuario()
     let findCliente = await clienteInstance.findOneCliente({
         nick: clienteNick
     })
@@ -150,8 +152,22 @@ const findOneCliente = async (clienteNick) => {
     return detallesCliente
 }
 
+
+//-----------------------------------------------------------------------------------------------------------------------------------
+
+const listarUsuarios = async(req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors: errors.array() });
+    const usuarioDTO = new UsuarioDTO();
+    const obj = new Usuario();
+    let resModel = await obj.findClientes();
+    let data = (resModel.length) ? usuarioDTO.templateListUsers(resModel) : usuarioDTO.templateNotUsers(resModel);
+    res.status(data.status).json(data);
+}
+
 module.exports = {
     createUsuarioYInsertCliente,
     listarClientes,
-    findOneCliente
+    findOneCliente,
+    listarUsuarios
 }
