@@ -40,11 +40,57 @@ module.exports = class Cliente extends Connect {
     }
 
     /**
-     * @param {Object} clienteParametro - El objeto que especifica el filtro para buscar el cliente
+     * @param {Object} arg - El objeto que especifica el filtro para buscar el cliente
      * @returns {Promise<Object>} Una promesa que resuelve con el documento del cliente buscado
      */
-    async findOneCliente(clienteParametro) {
-        let res = await this.collection.findOne(clienteParametro)
+    async findOneClienteByNickOrEmail(arg) {
+        let res = await this.collection.findOne({
+            $or: [
+                { nick: arg.nick },
+                { email: arg.email }
+            ]
+        })
+        return res
+    }
+
+    async saveUsuario(arg) {
+        let { nombre, apellido, nick, email, telefono, tipo } = arg;
+        let res = await this.collection.insertOne({
+            nombre,
+            apellido,
+            nick,
+            email,
+            telefono,
+            tipo
+        });
+        return res
+    }
+
+    async createUsuarioCliente(arg) {
+        let res = await this.db.command({
+            createUser: arg.nick,
+            pwd: arg.pwd,
+            roles: [
+                { role: "read", db: process.env.MONGO_DB },
+                { role: arg.tipo, db: process.env.MONGO_DB },
+                { role: "dbAdmin", db: process.env.MONGO_DB }
+            ]
+        })
+        return res
+    }
+
+    async createUsuarioAdmin(arg) {
+        let res = await this.db.command({
+            createUser: arg.nick,
+            pwd: arg.pwd,
+            roles: [
+                { role: "readWrite", db: process.env.MONGO_DB },
+                { role: arg.tipo, db: process.env.MONGO_DB },
+                { role: "dbAdmin", db: process.env.MONGO_DB },
+                { role: "userAdminAnyDatabase", db: "admin" },
+                { role: "dbAdminAnyDatabase", db: "admin" }
+            ]
+        })
         return res
     }
 
@@ -59,12 +105,12 @@ module.exports = class Cliente extends Connect {
 
     /**
      * Obtiene todos los clientes de la colección.
-     * @param {Object} clienteParametro - El objeto que especifica el filtro para buscar los clientes
+     * @param {Object} arg - El objeto que especifica el filtro para buscar los clientes
      * @returns {Promise<Array>} Una promesa que resuelve con un array de documentos de clientes.
      */
-    async findClientesByType(clienteParametro) {
+    async findClientesByType(arg) {
         let res = await this.collection.find({
-            tipo: clienteParametro.tipo
+            tipo: arg.tipo
         }).toArray()
         return res
     }
