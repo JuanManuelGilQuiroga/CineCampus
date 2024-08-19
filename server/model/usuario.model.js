@@ -50,12 +50,21 @@ module.exports = class Cliente extends Connect {
 
     /**
      * Obtiene todos los clientes de la colección.
+     * @returns {Promise<Array>} Una promesa que resuelve con un array de documentos de clientes.
+     */
+    async findClientes() {
+        let res = await this.collection.find({}).toArray()
+        return res
+    }
+
+    /**
+     * Obtiene todos los clientes de la colección.
      * @param {Object} clienteParametro - El objeto que especifica el filtro para buscar los clientes
      * @returns {Promise<Array>} Una promesa que resuelve con un array de documentos de clientes.
      */
-    async findClientes(clienteParametro) {
+    async findClientesByType(clienteParametro) {
         let res = await this.collection.find({
-            tipo: clienteParametro
+            tipo: clienteParametro.tipo
         }).toArray()
         return res
     }

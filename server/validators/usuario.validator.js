@@ -20,7 +20,7 @@ exports.usuarioValidationRulesCreation = () => {
 
 exports.usuarioValidationRulesFindType = () => {
     return [
-        body('tipo').notEmpty().exists().custom((value) => {
+        body('tipo', 'El tipo no se envio').notEmpty().custom((value) => {
             if(value && !['Estandar', 'VIP', 'Admin'].includes(value)) {
                 throw new Error(`Solo hay tres roles disponibles 'Estandar', 'VIP' y 'Admin'`);
             }
