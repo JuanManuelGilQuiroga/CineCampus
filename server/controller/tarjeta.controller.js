@@ -1,5 +1,5 @@
-const { Tarjeta } = require('./tarjeta.model');
-const { Cliente } = require('../usuario/usuario.model')
+const Tarjeta = require('../model/tarjeta.model');
+const Cliente = require('../model/usuario.model')
 
 /**
  * Inserta una nueva tarjeta para un cliente en la colección de tarjetas.

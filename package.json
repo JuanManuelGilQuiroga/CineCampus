@@ -9,7 +9,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch --env-file=.env server/main.js",
+    "dev": "node --watch --env-file=.env app.js",
     "pelicula": "node --watch --env-file=.env js/module/casosDeUso/gestionPelicula/peliculaRun.js",
     "funcion": "node --watch --env-file=.env js/module/casosDeUso/gestionFuncion/funcionRun.js",
     "sala": "node --watch --env-file=.env js/module/casosDeUso/gestionSala/salaRun.js",
