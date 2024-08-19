@@ -155,12 +155,30 @@ const findOneCliente = async (clienteNick) => {
 
 //-----------------------------------------------------------------------------------------------------------------------------------
 
+const crearUsuario = async (req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors: errors.array() });
+    const usuarioDTO = new UsuarioDTO();
+    const obj = new Usuario();
+    let resModel = await obj.findOneClienteByNickOrEmail(req.body);
+    let data = (resModel) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateNotUsers();
+    if(data.status == 200) res.status(data.status).json(data);
+    if(data.status == 404) resModel = await obj.saveUsuario(req.body);
+    data = (resModel.acknowledged) ? usuarioDTO.templateUserSaved(req.body) : usuarioDTO.templateUserError(resModel);
+    if(data.status == 500) res.status(data.status).json(data);
+    if(data.status == 201) data = usuarioDTO.typeToRole(req.body);
+    if(data.tipo == "Administrador"){resModel = await obj.createUsuarioAdmin(data)} else{resModel = await obj.createUsuarioCliente(data)};
+    data = (resModel.ok) ? usuarioDTO.templateUserSaved(req.body) : usuarioDTO.templateUserError(resModel);
+    if(data.status == 500) res.status(data.status).json(data);
+    res.status(data.status).json(data);
+}
+
 const listarUsuariosPorTipo = async(req, res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()) return res.status(400).json({errors: errors.array() });
     const usuarioDTO = new UsuarioDTO();
     const obj = new Usuario();
-    let resModel = await obj.findClientesByType(req);
+    let resModel = await obj.findClientesByType(req.body);
     let data = (resModel.length) ? usuarioDTO.templateListUsers(resModel) : usuarioDTO.templateNotUsers(resModel);
     res.status(data.status).json(data);
 }
@@ -178,6 +196,7 @@ module.exports = {
     createUsuarioYInsertCliente,
     listarClientes,
     findOneCliente,
+    crearUsuario,
     listarUsuariosPorTipo,
     listarTodosLosUsuarios
 }
