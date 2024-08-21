@@ -20,7 +20,7 @@ exports.usuarioValidationRulesCreation = () => {
 
 exports.usuarioValidationRulesFindType = () => {
     return [
-        body('tipo', 'El tipo no se envio').notEmpty().custom((value) => {
+        query('tipo', 'El tipo no se envio').notEmpty().custom((value) => {
             if(value && !['Estandar', 'VIP', 'Admin'].includes(value)) {
                 throw new Error(`Solo hay tres roles disponibles 'Estandar', 'VIP' y 'Admin'`);
             }
@@ -32,13 +32,13 @@ exports.usuarioValidationRulesFindType = () => {
 exports.usuarioValidationEmpty = () => {
     return [
         body().custom((value, { req }) => {
-            if (Object.keys(req.body).length === 0) {
+            if (!(Object.keys(req.body).length === 0)) {
                 throw new Error('No envíe nada en el cuerpo');
             }
             return true;
         }),
         query().custom((value, { req }) => {
-            if (Object.keys(req.query).length === 0) {
+            if (!(Object.keys(req.query).length === 0)) {
                 throw new Error('No envíe nada en la url');
             }
             return true;
