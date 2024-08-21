@@ -53,6 +53,13 @@ module.exports = class Cliente extends Connect {
         return res
     }
 
+    async findOneClienteById(arg){
+        let res = await this.collection.findOne({
+            _id: arg._id
+        })
+        return res
+    }
+
     async saveUsuario(arg) {
         let { nombre, apellido, nick, email, telefono, tipo } = arg;
         let res = await this.collection.insertOne({
@@ -110,7 +117,7 @@ module.exports = class Cliente extends Connect {
      */
     async findClientesByType(arg) {
         let res = await this.collection.find({
-            tipo: arg.tipo
+            tipo: arg
         }).toArray()
         return res
     }

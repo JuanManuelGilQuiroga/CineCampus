@@ -24,8 +24,10 @@ module.exports = class Tarjeta extends Connect {
      * @param {Object} tarjetaParametro - El objeto que especifica el filtro para buscar la tarjeta
      * @returns {Promise<Object>} Una promesa que resuelve con el documento de la tarjeta buscada
      */
-    async findOneTarjeta(tarjetaParametro) {
-        let res = await this.collection.findOne(tarjetaParametro)
+    async findOneTarjetaByNumber(arg) {
+        let res = await this.collection.findOne({
+            numero: arg.numero
+        })
         return res
     }
 

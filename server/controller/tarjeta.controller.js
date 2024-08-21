@@ -1,3 +1,6 @@
+const { validationResult } = require('express-validator');
+const TarjetaDTO = require('../dto/tarjeta.dto')
+const UsuarioDTO = require('../dto/usuario.dto')
 const Tarjeta = require('../model/tarjeta.model');
 const Cliente = require('../model/usuario.model')
 
@@ -186,6 +189,25 @@ const deleteTarjeta = async (numeroTarjeta) => {
     )
     res.mensaje = `La tarjeta con numero ${numeroTarjeta} ha sido borrada de la base de datos.`
     return res
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+const crearTarjeta = async(req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty) return res.status(400).json({errors: errors.array()});
+    const tarjetaDTO = new TarjetaDTO();
+    const usuarioDTO = new UsuarioDTO();
+    const objTarjeta = new Tarjeta();
+    const objCliente = new Cliente();
+    let resModel = await objCliente.findOneClienteById(req.body);
+    let data = (resModel) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateNotUsers();
+    if(data.status == 200) res.status(data.status).json(data);
+    if(data.status == 404) resModel = await objTarjeta.findOneTarjetaByNumber(req.body);
+    data = (resModel) ? tarjetaDTO.templateExistCard(resModel) : tarjetaDTO.templateNotCards();
+    if(data.status == 200) res.status(data.status).json(data);
+    if(data.status == 404) resModel =
+
 }
 
 module.exports = {

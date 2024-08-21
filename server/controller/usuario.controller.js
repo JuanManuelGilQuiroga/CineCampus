@@ -178,7 +178,7 @@ const listarUsuariosPorTipo = async(req, res) => {
     if(!errors.isEmpty()) return res.status(400).json({errors: errors.array() });
     const usuarioDTO = new UsuarioDTO();
     const obj = new Usuario();
-    let resModel = await obj.findClientesByType(req.body);
+    let resModel = await obj.findClientesByType(req.query.tipo);
     let data = (resModel.length) ? usuarioDTO.templateListUsers(resModel) : usuarioDTO.templateNotUsers(resModel);
     res.status(data.status).json(data);
 }
