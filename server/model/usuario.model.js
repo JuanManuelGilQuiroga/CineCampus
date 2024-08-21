@@ -44,12 +44,19 @@ module.exports = class Cliente extends Connect {
      * @returns {Promise<Object>} Una promesa que resuelve con el documento del cliente buscado
      */
     async findOneClienteByNickOrEmail(arg) {
-        let res = await this.collection.findOne({
+        let [res] = await this.collection.find({
             $or: [
                 { nick: arg.nick },
                 { email: arg.email }
             ]
-        })
+        }).toArray()
+        return res
+    }
+
+    async findOneClienteById(arg){
+        let [res] = await this.collection.find({
+            _id: arg._id
+        }).toArray()
         return res
     }
 
@@ -94,6 +101,26 @@ module.exports = class Cliente extends Connect {
         return res
     }
 
+    async revokeRolesFromUsuario(arg) {
+        let res = await this.db.command({
+            revokeRolesFromUser: arg.nick,
+            roles: [
+                { role: arg.tipo, db: process.env.MONGO_DB }
+            ]
+        })
+        return res
+    }
+
+    async grantRolesToUsuario(arg) {
+        let res = await this.db.command({
+            grantRolesToUser: arg.nick,
+            roles: [
+                { role: arg.tipo, db: process.env.MONGO_DB }
+            ]
+        })
+        return res
+    }
+
     /**
      * Obtiene todos los clientes de la colección.
      * @returns {Promise<Array>} Una promesa que resuelve con un array de documentos de clientes.
@@ -110,18 +137,20 @@ module.exports = class Cliente extends Connect {
      */
     async findClientesByType(arg) {
         let res = await this.collection.find({
-            tipo: arg.tipo
+            tipo: arg
         }).toArray()
         return res
     }
 
     /**
-     * @param {Object} clienteFilter - El objeto que especifica el filtro para buscar el documento que se desea actualizar
-     * @param {Object} clienteParametro - El objeto que especifica el documento de lo que se desea actualizar en el documento
+     * @param {Object} arg - El objeto que especifica el documento de lo que se desea actualizar en el documento
      * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la actualizacion del cliente
      */
-    async updateCliente(clienteFilter, clienteParametro) {
-        let res = await this.collection.updateOne(clienteFilter, clienteParametro)
+    async updateCliente(arg) {
+        let res = await this.collection.updateOne(
+            { nick: arg.nick},
+            {$set: {tipo: arg.tipo}}
+        )
         return res
     }
 
