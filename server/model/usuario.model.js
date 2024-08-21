@@ -101,6 +101,26 @@ module.exports = class Cliente extends Connect {
         return res
     }
 
+    async revokeRolesFromUsuario(arg) {
+        let res = await this.db.command({
+            revokeRolesFromUser: arg.nick,
+            roles: [
+                { role: arg.tipo, db: arg.nick }
+            ]
+        })
+        return res
+    }
+
+    async grantRolesToUsuario(arg) {
+        let res = await this.db.command({
+            grantRolesToUser: arg.nick,
+            roles: [
+                { role: arg.tipo, db: arg.nick }
+            ]
+        })
+        return res
+    }
+
     /**
      * Obtiene todos los clientes de la colección.
      * @returns {Promise<Array>} Una promesa que resuelve con un array de documentos de clientes.

@@ -12,4 +12,18 @@ module.exports = class TarjetaDTO {
             data: arg
         }
     }
+
+    templateBadCredentials(){
+        return {
+            status: 401,
+            message: "Sus credenciales no son validas para realizar este proceso"
+        }
+    }
+
+    templateContinue(){
+        return {
+            status: 100,
+            message: "Todo va bien, continue con el proceso"
+        }
+    }
 }

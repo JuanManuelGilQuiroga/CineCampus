@@ -203,10 +203,17 @@ const crearTarjeta = async(req, res) => {
     let resModel = await objCliente.findOneClienteById(req.body);
     let data = (resModel) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateNotUsers();
     if(data.status == 200) res.status(data.status).json(data);
+    let usuario = resModel
     if(data.status == 404) resModel = await objTarjeta.findOneTarjetaByNumber(req.body);
     data = (resModel) ? tarjetaDTO.templateExistCard(resModel) : tarjetaDTO.templateNotCards();
     if(data.status == 200) res.status(data.status).json(data);
-    if(data.status == 404) resModel =
+    if(data.status == 404) resModel = await objCliente.findOneClienteByNickOrEmail(req.body);
+    if(resModel.tipo != "Admin"){
+        data = (process.env.MONGO_USER != usuario.nick) ? tarjetaDTO.templateBadCredentials() : tarjetaDTO.templateContinue();
+        if(data.status == 401) res.status(data.status).json(data);
+        if(usuario.nick == "Estandar") resModel = await objCliente.
+        //debo usar el usuarioDTO para pasar el tipo encontrado ("Admin" a "Administrador") y poder pasarlos a revokeRolesFromUsuario y el otro
+    }
 
 }
 
