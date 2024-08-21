@@ -4,7 +4,6 @@ const router = require('./server/router');
 const app = express();
 
 app.use(express.json());
-app.use(router);
 app.use('/css', express.static(path.join(__dirname, process.env.EXPRESS_STATIC, 'css')));
 app.use('/js', express.static(path.join(__dirname, process.env.EXPRESS_STATIC, 'js')));
 app.use('/storage', express.static(path.join(__dirname, process.env.EXPRESS_STATIC, 'storage')));
@@ -16,7 +15,10 @@ app.get("/service", (req, res)=>{
     res.sendFile(path.join(__dirname, process.env.EXPRESS_STATIC, 'views/service.html'));
 })
 
-
+app.use((req, res, next) => {
+    req.__dirname = __dirname;
+    next();
+}, router);
 app.use((req, res)=>{
     res.status(403).json({message: "No tiene autorizacion"})
 })

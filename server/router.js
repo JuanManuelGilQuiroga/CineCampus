@@ -1,5 +1,4 @@
 const router = require('express').Router();
-//const path = require('path');
 const { listarTodosLosUsuarios, listarUsuariosPorTipo, crearUsuario } = require('./controller/usuario.controller');
 const { usuarioValidationRulesCreation, usuarioValidationRulesFindType, usuarioValidationEmpty } = require('./validators/usuario.validator');
 const { crearTarjeta } = require('./controller/tarjeta.controller');

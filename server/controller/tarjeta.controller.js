@@ -195,16 +195,18 @@ const deleteTarjeta = async (numeroTarjeta) => {
 
 const crearTarjeta = async(req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty) return res.status(400).json({errors: errors.array()});
+    if (!errors.isEmpty()) return res.status(400).json({errors: errors.array()});
     const tarjetaDTO = new TarjetaDTO();
     const usuarioDTO = new UsuarioDTO();
     const objTarjeta = new Tarjeta();
     const objCliente = new Cliente();
-    let resModel = await objCliente.findOneClienteById(req.body);
-    let data = (resModel) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateNotUsers();
-    if(data.status == 200) res.status(data.status).json(data);
+    let data = tarjetaDTO.usuarioIdToIdKey(req.body);
+    let resModel = await objCliente.findOneClienteById(data);
+    data = (resModel) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateNotUsers();
+    console.log(data)
+    if(data.status == 404) res.status(data.status).json(data);
     let usuario = resModel
-    if(data.status == 404) resModel = await objTarjeta.findOneTarjetaByNumber(req.body);
+    if(data.status == 200) resModel = await objTarjeta.findOneTarjetaByNumber(req.body);
     data = (resModel) ? tarjetaDTO.templateExistCard(resModel) : tarjetaDTO.templateNotCards();
     if(data.status == 200) res.status(data.status).json(data);
     if(data.status == 404) {var mongoUser = usuarioDTO.mongoUserToObject(process.env.MONGO_USER);}
@@ -212,7 +214,8 @@ const crearTarjeta = async(req, res) => {
     if(resModel.tipo != "Admin"){
         data = (process.env.MONGO_USER != usuario.nick) ? tarjetaDTO.templateBadCredentials() : tarjetaDTO.templateContinue();
         if(data.status == 401) res.status(data.status).json(data);
-    data = (usuario.nick == "Estandar") ? tarjetaDTO.templateContinue() : usuarioDTO.templateBadRequest();
+    }
+    data = (usuario.tipo == "Estandar") ? tarjetaDTO.templateContinue() : usuarioDTO.templateBadRequest();
     if(data.status == 400) res.status(data.status).json(data);
     if(data.status == 100) {
         usuario = usuarioDTO.typeToRole(usuario);
@@ -232,9 +235,10 @@ const crearTarjeta = async(req, res) => {
     data = (resModel.acknowledged) ? tarjetaDTO.templateTarjetaSaved(req.body) : tarjetaDTO.templateTarjetaError(resModel);
     if(data.status == 500) res.status(data.status).json(data);
     res.status(data.status).json(data);
-    }
-
 }
+
+
+
 
 module.exports = {
     insertTarjeta,

@@ -1,4 +1,10 @@
 module.exports = class TarjetaDTO {
+    usuarioIdToIdKey(arg){
+        arg._id = arg.cliente_id
+        delete arg.cliente_id
+        return arg;
+    }
+
     templateNotCards(){
         return {
             status: 404,

@@ -44,19 +44,19 @@ module.exports = class Cliente extends Connect {
      * @returns {Promise<Object>} Una promesa que resuelve con el documento del cliente buscado
      */
     async findOneClienteByNickOrEmail(arg) {
-        let res = await this.collection.findOne({
+        let [res] = await this.collection.find({
             $or: [
                 { nick: arg.nick },
                 { email: arg.email }
             ]
-        })
+        }).toArray()
         return res
     }
 
     async findOneClienteById(arg){
-        let res = await this.collection.findOne({
+        let [res] = await this.collection.find({
             _id: arg._id
-        })
+        }).toArray()
         return res
     }
 

@@ -25,9 +25,9 @@ module.exports = class Tarjeta extends Connect {
      * @returns {Promise<Object>} Una promesa que resuelve con el documento de la tarjeta buscada
      */
     async findOneTarjetaByNumber(arg) {
-        let res = await this.collection.findOne({
+        let [res] = await this.collection.find({
             numero: arg.numero
-        })
+        }).toArray()
         return res
     }
 
