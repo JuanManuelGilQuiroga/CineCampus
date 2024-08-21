@@ -13,6 +13,38 @@ module.exports = class UsuarioDTO {
         }
     }
 
+    roleToType(arg){
+        if(arg.tipo == "Administrador"){
+            arg.tipo = "Admin"
+        } else if(arg.tipo == "usuarioEstandar"){
+            arg.tipo = "Estandar"
+        } else if(arg.tipo == "usuarioVIP"){
+            arg.tipo = "VIP"
+        }
+        return {
+            ...arg,
+            tipo: arg.tipo
+        }
+    }
+
+    mongoUserToObject(arg){
+        return {
+            nick: arg
+        }
+    }
+
+    changeRole(arg){
+        if(arg.tipo == "usuarioEstandar"){
+            arg.tipo = "usuarioVIP"
+        } else if(arg.tipo == "usuarioVIP"){
+            arg.tipo = "usuarioEstandar"
+        }
+        return {
+            ...arg,
+            tipo: arg.tipo
+        }
+    }
+
     templateNotUsers(){
         return {
             status: 404,
@@ -46,6 +78,13 @@ module.exports = class UsuarioDTO {
         return {
             status: 200,
             data: arg
+        }
+    }
+
+    templateBadRequest(){
+        return {
+            status: 400,
+            message: "La consulta esta mal diseñada"
         }
     }
 }

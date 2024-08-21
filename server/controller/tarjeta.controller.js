@@ -207,17 +207,37 @@ const crearTarjeta = async(req, res) => {
     if(data.status == 404) resModel = await objTarjeta.findOneTarjetaByNumber(req.body);
     data = (resModel) ? tarjetaDTO.templateExistCard(resModel) : tarjetaDTO.templateNotCards();
     if(data.status == 200) res.status(data.status).json(data);
-    if(data.status == 404) resModel = await objCliente.findOneClienteByNickOrEmail(req.body);
+    if(data.status == 404) {var mongoUser = usuarioDTO.mongoUserToObject(process.env.MONGO_USER);}
+    resModel = await objCliente.findOneClienteByNickOrEmail(mongoUser);
     if(resModel.tipo != "Admin"){
         data = (process.env.MONGO_USER != usuario.nick) ? tarjetaDTO.templateBadCredentials() : tarjetaDTO.templateContinue();
         if(data.status == 401) res.status(data.status).json(data);
-        if(usuario.nick == "Estandar") resModel = await objCliente.
-        //debo usar el usuarioDTO para pasar el tipo encontrado ("Admin" a "Administrador") y poder pasarlos a revokeRolesFromUsuario y el otro
+    data = (usuario.nick == "Estandar") ? tarjetaDTO.templateContinue() : usuarioDTO.templateBadRequest();
+    if(data.status == 400) res.status(data.status).json(data);
+    if(data.status == 100) {
+        usuario = usuarioDTO.typeToRole(usuario);
+        var newUsuario = usuarioDTO.changeRole(usuario);
+    }
+    resModel = await objCliente.revokeRolesFromUsuario(usuario);
+    data = (resModel.ok) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateUserError(resModel);
+    if(data.status == 500) res.status(data.status).json(data);
+    if(data.status == 200) resModel = await objCliente.grantRolesToUsuario(newUsuario)
+    data = (resModel.ok) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateUserError(resModel)
+    if(data.status == 500) res.status(data.status).json(data);
+    if(data.status == 200) newUsuario = usuarioDTO.roleToType(newUsuario);
+    resModel = await objCliente.updateCliente(newUsuario);
+    data = (resModel.modifiedCount) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateUserError(resModel);
+    if(data.status == 500) res.status(data.status).json(data);
+    if(data.status == 200) resModel = await objTarjeta.insertTarjeta(req.body);
+    data = (resModel.acknowledged) ? tarjetaDTO.templateTarjetaSaved(req.body) : tarjetaDTO.templateTarjetaError(resModel);
+    if(data.status == 500) res.status(data.status).json(data);
+    res.status(data.status).json(data);
     }
 
 }
 
 module.exports = {
     insertTarjeta,
-    deleteTarjeta
+    deleteTarjeta,
+    crearTarjeta
 }

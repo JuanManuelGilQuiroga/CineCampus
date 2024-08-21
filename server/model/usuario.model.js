@@ -143,12 +143,14 @@ module.exports = class Cliente extends Connect {
     }
 
     /**
-     * @param {Object} clienteFilter - El objeto que especifica el filtro para buscar el documento que se desea actualizar
-     * @param {Object} clienteParametro - El objeto que especifica el documento de lo que se desea actualizar en el documento
+     * @param {Object} arg - El objeto que especifica el documento de lo que se desea actualizar en el documento
      * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la actualizacion del cliente
      */
-    async updateCliente(clienteFilter, clienteParametro) {
-        let res = await this.collection.updateOne(clienteFilter, clienteParametro)
+    async updateCliente(arg) {
+        let res = await this.collection.updateOne(
+            { nick: arg.nick},
+            {$set: {tipo: arg.tipo}}
+        )
         return res
     }
 

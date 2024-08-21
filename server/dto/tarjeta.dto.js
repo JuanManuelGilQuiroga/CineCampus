@@ -13,6 +13,21 @@ module.exports = class TarjetaDTO {
         }
     }
 
+    templateTarjetaSaved(arg){
+        return {
+            status: 201,
+            data: arg
+        }
+    }
+
+    templateTarjetaError(arg){
+        return {
+            status: 500,
+            message: "Ocurrio un error",
+            data: arg
+        }
+    }
+
     templateBadCredentials(){
         return {
             status: 401,
