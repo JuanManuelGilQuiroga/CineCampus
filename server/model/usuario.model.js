@@ -105,7 +105,7 @@ module.exports = class Cliente extends Connect {
         let res = await this.db.command({
             revokeRolesFromUser: arg.nick,
             roles: [
-                { role: arg.tipo, db: arg.nick }
+                { role: arg.tipo, db: process.env.MONGO_DB }
             ]
         })
         return res
@@ -115,7 +115,7 @@ module.exports = class Cliente extends Connect {
         let res = await this.db.command({
             grantRolesToUser: arg.nick,
             roles: [
-                { role: arg.tipo, db: arg.nick }
+                { role: arg.tipo, db: process.env.MONGO_DB }
             ]
         })
         return res

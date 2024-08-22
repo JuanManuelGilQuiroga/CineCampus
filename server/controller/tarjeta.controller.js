@@ -200,16 +200,16 @@ const crearTarjeta = async(req, res) => {
     const usuarioDTO = new UsuarioDTO();
     const objTarjeta = new Tarjeta();
     const objCliente = new Cliente();
-    let data = tarjetaDTO.usuarioIdToIdKey(req.body);
+    let reqObjectId = tarjetaDTO.fromHexStringToObjectId(req.body)
+    let data = tarjetaDTO.usuarioIdToIdKey({...reqObjectId});
     let resModel = await objCliente.findOneClienteById(data);
     data = (resModel) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateNotUsers();
-    console.log(data)
     if(data.status == 404) res.status(data.status).json(data);
     let usuario = resModel
     if(data.status == 200) resModel = await objTarjeta.findOneTarjetaByNumber(req.body);
-    data = (resModel) ? tarjetaDTO.templateExistCard(resModel) : tarjetaDTO.templateNotCards();
-    if(data.status == 200) res.status(data.status).json(data);
-    if(data.status == 404) {var mongoUser = usuarioDTO.mongoUserToObject(process.env.MONGO_USER);}
+    data = (resModel) ? tarjetaDTO.templareTarjetaDuplicated(resModel) : tarjetaDTO.templateNotCards();
+    if(data.status == 409) res.status(data.status).json(data);
+    let mongoUser = usuarioDTO.mongoUserToObject(process.env.MONGO_USER);
     resModel = await objCliente.findOneClienteByNickOrEmail(mongoUser);
     if(resModel.tipo != "Admin"){
         data = (process.env.MONGO_USER != usuario.nick) ? tarjetaDTO.templateBadCredentials() : tarjetaDTO.templateContinue();
@@ -217,10 +217,10 @@ const crearTarjeta = async(req, res) => {
     }
     data = (usuario.tipo == "Estandar") ? tarjetaDTO.templateContinue() : usuarioDTO.templateBadRequest();
     if(data.status == 400) res.status(data.status).json(data);
-    if(data.status == 100) {
-        usuario = usuarioDTO.typeToRole(usuario);
-        var newUsuario = usuarioDTO.changeRole(usuario);
-    }
+    usuario = usuarioDTO.typeToRole(usuario);
+    let newUsuario = usuarioDTO.changeRole({...usuario});
+    console.log("usuario", usuario)
+    console.log("newUsuario", newUsuario)
     resModel = await objCliente.revokeRolesFromUsuario(usuario);
     data = (resModel.ok) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateUserError(resModel);
     if(data.status == 500) res.status(data.status).json(data);
@@ -231,8 +231,8 @@ const crearTarjeta = async(req, res) => {
     resModel = await objCliente.updateCliente(newUsuario);
     data = (resModel.modifiedCount) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateUserError(resModel);
     if(data.status == 500) res.status(data.status).json(data);
-    if(data.status == 200) resModel = await objTarjeta.insertTarjeta(req.body);
-    data = (resModel.acknowledged) ? tarjetaDTO.templateTarjetaSaved(req.body) : tarjetaDTO.templateTarjetaError(resModel);
+    if(data.status == 200) resModel = await objTarjeta.insertTarjeta(reqObjectId);
+    data = (resModel.acknowledged) ? tarjetaDTO.templateTarjetaSaved(reqObjectId) : tarjetaDTO.templateTarjetaError(resModel);
     if(data.status == 500) res.status(data.status).json(data);
     res.status(data.status).json(data);
 }

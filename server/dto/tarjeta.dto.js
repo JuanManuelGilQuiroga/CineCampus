@@ -1,8 +1,15 @@
+const {ObjectId} = require('mongodb')
+
 module.exports = class TarjetaDTO {
     usuarioIdToIdKey(arg){
         arg._id = arg.cliente_id
         delete arg.cliente_id
         return arg;
+    }
+
+    fromHexStringToObjectId(arg){
+        arg.cliente_id = ObjectId.createFromHexString(arg.cliente_id)
+        return arg
     }
 
     templateNotCards(){
@@ -23,6 +30,13 @@ module.exports = class TarjetaDTO {
         return {
             status: 201,
             data: arg
+        }
+    }
+
+    templareTarjetaDuplicated(){
+        return {
+            status: 409,
+            message: "Ya existe una tarjeta con este numero"
         }
     }
 
