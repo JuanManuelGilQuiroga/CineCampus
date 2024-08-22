@@ -1,4 +1,6 @@
-const { Pelicula } = require("./pelicula.model")
+const { validationResult } = require("express-validator")
+const Pelicula = require("../model/pelicula.model")
+const PeliculaDTO = require("../dto/pelicula.dto")
 
 /**
  * Inserta una nueva película en la base de datos.
@@ -33,7 +35,7 @@ const insertPelicula = async (peliculaParametro) => {
  * Lista todas las películas con detalles sobre sus funciones.
  * @returns {Promise<Array|Object>} - Una promesa que resuelve con una lista de películas con sus detalles o un error si no se encontraron películas.
  */
-const listarPeliculas = async () => {
+const listarPeliculasAntiguo = async () => {
     let peliculaInstance = new Pelicula()
     let res = await peliculaInstance.aggregatePelicula([
         {$lookup: {from: "funcion", localField: "_id", foreignField: "pelicula_id", as: "funciones"}},
@@ -61,8 +63,22 @@ const detallesPelicula = async (peliculaParametro) => {
     return res
 }
 
+//------------------------------------------------------------------------------------------------------------------
+
+const listarPeliculas = async(req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors: errors.array()})
+    let peliculaDTO = new PeliculaDTO();
+    let obj = new Pelicula();
+    let resModel = await obj.listarPeliculas();
+    let data = (resModel.length > 0) ? peliculaDTO.templateMoviesExist(resModel) : peliculaDTO.templateNotMovies();
+    if(data.status == 404) return res.status(data.status).json(data);
+    return res.status(data.status).json(data);
+}
+
 module.exports = {
     insertPelicula,
-    listarPeliculas,
-    detallesPelicula
+    listarPeliculasAntiguo,
+    detallesPelicula,
+    listarPeliculas
 }

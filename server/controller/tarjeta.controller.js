@@ -219,8 +219,6 @@ const crearTarjeta = async(req, res) => {
     if(data.status == 400) return res.status(data.status).json(data);
     usuario = usuarioDTO.typeToRole(usuario);
     let newUsuario = usuarioDTO.changeRole({...usuario});
-    console.log("usuario", usuario)
-    console.log("newUsuario", newUsuario)
     resModel = await objCliente.revokeRolesFromUsuario(usuario);
     data = (resModel.ok) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateUserError(resModel);
     if(data.status == 500) return res.status(data.status).json(data);
