@@ -22,20 +22,26 @@ module.exports = class Movimiento extends Connect {
     }
 
     /**
-     * @param {Object} movimientoParametro - El objeto que especifica el filtro para buscar el movimiento
+     * @param {Object} arg - El objeto que especifica el filtro para buscar el movimiento
      * @returns {Promise<Object>} Una promesa que resuelve con el documento del movimiento buscada
      */
-    async findOneMovimiento(movimientoParametro) {
-        let res = await this.collection.findOne(movimientoParametro)
+    async findOneMovimiento(arg) {
+        let [res] = await this.collection.find({
+            _id: arg._id
+        }).toArray()
         return res
     }
 
     /**
-     * @param {Object} movimientoParametro - El objeto que especifica el documento a insertar en la colección
+     * @param {Object} arg - El objeto que especifica el documento a insertar en la colección
      * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la insercion del movimiento
      */
-    async insertMovimiento(movimientoParametro) {
-        let res = await this.collection.insertOne(movimientoParametro)
+    async insertMovimiento(arg) {
+        let { cliente_id, monto_COP } = arg
+        let res = await this.collection.insertOne({
+            cliente_id,
+            monto_COP
+        })
         return res
     }
 }
