@@ -32,11 +32,11 @@ module.exports = class Funcion extends Connect {
     }
 
     /**
-     * @param {Object} funcionParametro - El objeto que especifica el filtro para buscar la funcion
+     * @param {Object} arg - El objeto que especifica el filtro para buscar la funcion
      * @returns {Promise<Object>} Una promesa que resuelve con el documento de la funcion buscada
      */
-    async findFuncionById(funcionParametro) {
-        let res = await this.collection.findOne(funcionParametro)
+    async findFuncionById(arg) {
+        let [res] = await this.collection.find({_id: arg._id}).toArray()
         return res
     }
 

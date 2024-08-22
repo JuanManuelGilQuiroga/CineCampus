@@ -3,10 +3,13 @@ const { listarTodosLosUsuarios, listarUsuariosPorTipo, crearUsuario } = require(
 const { usuarioValidationRulesCreation, usuarioValidationRulesFindType, usuarioValidationEmpty } = require('./validators/usuario.validator');
 const { crearTarjeta } = require('./controller/tarjeta.controller');
 const { tarjetaValidationRulesCreation } = require('./validators/tarjeta.validator');
+const { verificarAsientos } = require('./controller/funcion.controller')
+const { funcionValidationRulesAsientos } = require('./validators/funcion.validator');
 
 router.post("/users/v1", usuarioValidationRulesCreation(), crearUsuario);
 router.get("/users/v2", usuarioValidationRulesFindType(), listarUsuariosPorTipo);
 router.get("/users/v3", usuarioValidationEmpty(), listarTodosLosUsuarios);
 router.post("/cards/v1", tarjetaValidationRulesCreation(), crearTarjeta);
+router.get("/functions/v1", funcionValidationRulesAsientos(), verificarAsientos)
 
 module.exports = router;
