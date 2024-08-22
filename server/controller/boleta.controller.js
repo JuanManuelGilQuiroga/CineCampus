@@ -245,11 +245,22 @@ const crearBoleta = async(req, res) => {
     let usuarioDTO = new UsuarioDTO()
     let objBoleta = new Boleta();
     let objUsuario = new Cliente();
+    let objFuncion = new Funcion();
     let reqUsuarioId = boletaDTO.usuarioIdToIdKey(req.body);
-    reqUsuarioId = funcionDTO.fromHexStringToObjectId(req.body);
+    reqUsuarioId = funcionDTO.fromHexStringToObjectId(reqUsuarioId);
+    let reqFuncionId = funcionDTO.funcionIdToIdKey(req.body);
+    reqFuncionId = funcionDTO.fromHexStringToObjectId(reqFuncionId);
     let resModel = await objUsuario.findOneClienteById(reqUsuarioId);
     let data = (resModel) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateNotUsers();
-    
+    if(data.status == 404) return res.status(data.status).json(data);
+    data = (resModel.nick != process.env.MONGO_USER) ? usuarioDTO.templateBadCredentials() : usuarioDTO.templateContinue();
+    if(data.status == 401) return res.status(data.status).json(data);
+    if(data.status == 100) resModel = await objFuncion.findFuncionById(reqFuncionId);
+    data = (resModel) ? funcionDTO.templateExistFunction(resModel) : funcionDTO.templateNotFunctions();
+    if(data.status == 404) return res.status(data.status).json(data);
+    data = (resModel.asientos.includes(req.body.asiento)) ? funcionDTO.templateSeating(resModel) : funcionDTO.templateNotSeating();
+    if(data.status == 404) return res.status(data.status).json(data);
+    if(data.status == 200) 
 }
 
 module.exports = { insertBoleta, deleteReserva, crearBoleta }
