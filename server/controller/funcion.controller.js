@@ -1,7 +1,10 @@
+const { validationResult } = require('express-validator');
 const { ObjectId } = require('mongodb');
-const { Pelicula } = require('../pelicula/pelicula.model');
-const { Sala } = require('../sala/sala.model');
-const { Funcion } = require('./funcion.model');
+const Pelicula = require('../model/pelicula.model');
+const Sala = require('../model/sala.model');
+const Funcion = require('../model/funcion.model');
+const FuncionDTO = require('../dto/funcion.dto');
+
 
 /**
  * Inserta una nueva función en la base de datos.
@@ -95,7 +98,24 @@ const verificarDisponibilidadAsientos = async (funcionParametro) => {
     }
 }
 
+//--------------------------------------------------------------------------------------------------------------------------------
+
+const verificarAsientos = async(req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors: errors.array()});
+    let funcionDTO = new FuncionDTO();
+    let obj = new Funcion();
+    let reqObjectId = funcionDTO.fromHexStringToObjectId(req.query);
+    let resModel = await obj.findFuncionById(reqObjectId);
+    let data = (resModel) ? funcionDTO.templateExistFunction(resModel) : funcionDTO.templateNotFunctions();
+    if(data.status == 404) return res.status(data.status).json(data);
+    if(resModel.asientos.length == 0) funcionDTO.templateNotSeating();
+    funcionDTO.templateSeating(resModel.asientos.sort());
+    return res.status(data.status).json(data);
+}
+
 module.exports = {
     insertFuncion,
-    verificarDisponibilidadAsientos
+    verificarDisponibilidadAsientos,
+    verificarAsientos
 }
