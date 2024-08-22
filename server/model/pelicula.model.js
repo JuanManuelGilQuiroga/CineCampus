@@ -50,11 +50,15 @@ module.exports = class Pelicula extends Connect {
     }
 
     /**
-     * @param {Object} peliculaParametro - El objeto que especifica el filtro para buscar las peliculas
      * @returns {Promise<Object>} Una promesa que resuelve con el documento de las peliculas buscadas junto con la informacion extra de otros documentos
      */
-    async aggregatePelicula(peliculaParametro) {
-        let res = await this.collection.aggregate(peliculaParametro).toArray()
+    async listarPeliculas() {
+        let res = await this.collection.aggregate([
+            {$lookup: {from: "funcion", localField: "_id", foreignField: "pelicula_id", as: "funciones"}},
+            {$match: {$and: [{estreno: {$lte: new Date()}},{retiro: {$gte: new Date()}}]}},
+            {$unwind: "$funciones"},
+            {$project: {sinopsis: 0, estreno: 0, retiro: 0, "funciones.pelicula_id": 0, "funciones.sala_id": 0}}
+        ]).toArray()
         return res
     }
 }
