@@ -1,8 +1,12 @@
 const { ObjectId } = require('mongodb');
-const { Funcion } = require('../funcion/funcion.model');
+const Funcion = require('../model/funcion.model');
 const { insertMovimiento } = require('./movimiento.controller');
-const { Cliente } = require('../usuario/usuario.model');
-const { Boleta } = require('./boleta.model');
+const Cliente = require('../model/usuario.model');
+const Boleta = require('../model/boleta.model');
+const { validationResult } = require('express-validator');
+const BoletaDTO = require('../dto/boleta.dto');
+const FuncionDTO = require('../dto/funcion.dto');
+const UsuarioDTO = require('../dto/usuario.dto');
 
 /**
  * Inserta una nueva boleta en la base de datos.
@@ -12,7 +16,7 @@ const { Boleta } = require('./boleta.model');
  * @property {string} asiento - El asiento reservado.
  * @property {boolean} estado_pago - Estado del pago de la boleta.
  * @property {number} monto_COP - Monto en COP de la boleta.
- 
+
  * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la inserción.
  */
 const insertBoleta = async (boletaParametro) => {
@@ -231,4 +235,21 @@ const deleteReserva = async (boletaParametro) => {
     return res
 }
 
-module.exports = { insertBoleta, deleteReserva }
+//--------------------------------------------------------------------------------------------------------------
+
+const crearBoleta = async(req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors: errors.array()});
+    let boletaDTO = new BoletaDTO();
+    let funcionDTO = new FuncionDTO()
+    let usuarioDTO = new UsuarioDTO()
+    let objBoleta = new Boleta();
+    let objUsuario = new Cliente();
+    let reqUsuarioId = boletaDTO.usuarioIdToIdKey(req.body);
+    reqUsuarioId = funcionDTO.fromHexStringToObjectId(req.body);
+    let resModel = await objUsuario.findOneClienteById(reqUsuarioId);
+    let data = (resModel) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateNotUsers();
+    
+}
+
+module.exports = { insertBoleta, deleteReserva, crearBoleta }
