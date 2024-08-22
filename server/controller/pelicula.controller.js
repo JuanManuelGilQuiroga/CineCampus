@@ -54,7 +54,7 @@ const listarPeliculasAntiguo = async () => {
  * @param {ObjectId} peliculaParametro - El ID de la película a buscar.
  * @returns {Promise<Object>} - Una promesa que resuelve con los detalles de la película o un error si no se encontró la película.
  */
-const detallesPelicula = async (peliculaParametro) => {
+const detallesPeliculaAntiguo = async (peliculaParametro) => {
     let peliculaInstance = new Pelicula()
     let res = await peliculaInstance.findPeliculaById({_id: peliculaParametro})
     if(!res) {
@@ -67,7 +67,7 @@ const detallesPelicula = async (peliculaParametro) => {
 
 const listarPeliculas = async(req, res) => {
     const errors = validationResult(req);
-    if(!errors.isEmpty()) return res.status(400).json({errors: errors.array()})
+    if(!errors.isEmpty()) return res.status(400).json({errors: errors.array()});
     let peliculaDTO = new PeliculaDTO();
     let obj = new Pelicula();
     let resModel = await obj.listarPeliculas();
@@ -76,9 +76,22 @@ const listarPeliculas = async(req, res) => {
     return res.status(data.status).json(data);
 }
 
+const detallesPelicula = async(req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors: errors.array()});
+    let peliculaDTO = new PeliculaDTO();
+    let obj = new Pelicula();
+    let reqObjectId = peliculaDTO.fromHexStringToObjectId(req.query)
+    let resModel = await obj.detallesPelicula(reqObjectId);
+    let data = (resModel.length > 0) ? peliculaDTO.templateMoviesExist(resModel) : peliculaDTO.templateNotMovie();
+    if(data.status == 404) return res.status(data.status).json(data);
+    return res.status(data.status).json(data);
+}
+
 module.exports = {
     insertPelicula,
     listarPeliculasAntiguo,
-    detallesPelicula,
-    listarPeliculas
+    detallesPeliculaAntiguo,
+    listarPeliculas,
+    detallesPelicula
 }

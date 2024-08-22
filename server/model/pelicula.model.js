@@ -61,4 +61,18 @@ module.exports = class Pelicula extends Connect {
         ]).toArray()
         return res
     }
+
+    /**
+     * @param {Object} arg - El objeto que especifica el documento a buscar en la colección
+     * @returns {Promise<Object>} Una promesa que resuelve con el documento de las peliculas buscadas junto con la informacion extra de otros documentos
+     */
+    async detallesPelicula(arg) {
+        let res = await this.collection.aggregate([
+            {$match: {_id: arg._id}},
+            {$lookup: {from: "funcion", localField: "_id", foreignField: "pelicula_id", as: "funciones"}},
+            {$match: {$and: [{estreno: {$lte: new Date()}},{retiro: {$gte: new Date()}}]}},
+            {$unwind: "$funciones"}
+        ]).toArray()
+        return res
+    }
 }
