@@ -16,3 +16,9 @@ exports.peliculaValidationEmpty = () => {
         })
     ];
 }
+
+exports.peliculaValidationRulesDetalles = () => {
+    return [
+        query('_id', 'El id de la pelicula no se envio').notEmpty().isMongoId().withMessage('El id tiene que ser un hexadecimal')
+    ]
+}
