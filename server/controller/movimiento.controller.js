@@ -1,7 +1,11 @@
-const { Boleta } = require('../boleta/boleta.model');
-const { Funcion } = require('../funcion/funcion.model');
-const { Cliente } = require('../usuario/usuario.model');
-const { Movimiento } = require('./movimiento.model');
+const { validationResult } = require('express-validator');
+const Boleta = require('../model/boleta.model');
+const Funcion = require('../model/funcion.model');
+const Cliente = require('../model/usuario.model');
+const Movimiento = require('../model/movimiento.model');
+const MovimientoDTO = require('../dto/movimiento.dto');
+const UsuarioDTO = require('../dto/usuario.dto');
+const FuncionDTO = require('../dto/funcion.dto');
 
 /**
  * Inserta un movimiento de pago en la base de datos.
@@ -63,4 +67,26 @@ const insertMovimiento = async (movimientoParametro) => {
     return res
 }
 
-module.exports = insertMovimiento
+//--------------------------------------------------------------------------------------------------------
+
+const crearMovimiento = async(req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors: errors.array()});
+    let movimientoDTO = new MovimientoDTO();
+    let usuarioDTO = new UsuarioDTO();
+    let funcionDTO = new FuncionDTO();
+    let objMovimiento = new Movimiento();
+    let objUsuario = new Cliente();
+    let objFuncion = new Funcion();
+
+    let reqUsuarioId = usuarioDTO.usuarioIdToIdKey(req.body);
+    reqUsuarioId = funcionDTO.fromHexStringToObjectId(reqUsuarioId);
+
+    let reqFuncionId = funcionDTO.funcionIdToIdKey(req.body);
+    reqFuncionId = funcionDTO.fromHexStringToObjectId(reqUsuarioId);
+    //let montoAPagar = await verificarPrecioAsiento("hola")
+    //Necesito llamar al otro endpoint para que se ejecute en medio de la ejecucion de este, eso va a devolver el monto a pagar por el asiento
+    //y con esto se identifica si el cliente pago el monto correcto
+}
+
+module.exports = {insertMovimiento, crearMovimiento}

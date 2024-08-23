@@ -7,6 +7,7 @@ const { validationResult } = require('express-validator');
 const BoletaDTO = require('../dto/boleta.dto');
 const FuncionDTO = require('../dto/funcion.dto');
 const UsuarioDTO = require('../dto/usuario.dto');
+const MovimientoDTO = require('../dto/movimiento.dto');
 
 /**
  * Inserta una nueva boleta en la base de datos.
@@ -243,24 +244,32 @@ const crearBoleta = async(req, res) => {
     let boletaDTO = new BoletaDTO();
     let funcionDTO = new FuncionDTO()
     let usuarioDTO = new UsuarioDTO()
+    let movimientoDTO = new MovimientoDTO();
     let objBoleta = new Boleta();
     let objUsuario = new Cliente();
     let objFuncion = new Funcion();
+
     let reqUsuarioId = boletaDTO.usuarioIdToIdKey(req.body);
     reqUsuarioId = funcionDTO.fromHexStringToObjectId(reqUsuarioId);
     let reqFuncionId = funcionDTO.funcionIdToIdKey(req.body);
     reqFuncionId = funcionDTO.fromHexStringToObjectId(reqFuncionId);
+    let reqMovimientoId = movimientoDTO.movimientoIdToIdKey(req.body);
+    reqMovimientoId = funcionDTO.fromHexStringToObjectId(reqMovimientoId);
+
     let resModel = await objUsuario.findOneClienteById(reqUsuarioId);
     let data = (resModel) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateNotUsers();
     if(data.status == 404) return res.status(data.status).json(data);
+
     data = (resModel.nick != process.env.MONGO_USER) ? usuarioDTO.templateBadCredentials() : usuarioDTO.templateContinue();
     if(data.status == 401) return res.status(data.status).json(data);
+
     if(data.status == 100) resModel = await objFuncion.findFuncionById(reqFuncionId);
     data = (resModel) ? funcionDTO.templateExistFunction(resModel) : funcionDTO.templateNotFunctions();
     if(data.status == 404) return res.status(data.status).json(data);
+
     data = (resModel.asientos.includes(req.body.asiento)) ? funcionDTO.templateSeating(resModel) : funcionDTO.templateNotSeating();
     if(data.status == 404) return res.status(data.status).json(data);
-    if(data.status == 200) 
+    
 }
 
 module.exports = { insertBoleta, deleteReserva, crearBoleta }
