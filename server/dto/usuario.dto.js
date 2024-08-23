@@ -51,6 +51,12 @@ module.exports = class UsuarioDTO {
         return arg;
     }
 
+    idKeyToUsuarioId(arg){
+        arg.cliente_id = arg._id
+        delete arg._id
+        return arg;
+    }
+
     templateNotUsers(){
         return {
             status: 404,

@@ -6,6 +6,7 @@ const Movimiento = require('../model/movimiento.model');
 const MovimientoDTO = require('../dto/movimiento.dto');
 const UsuarioDTO = require('../dto/usuario.dto');
 const FuncionDTO = require('../dto/funcion.dto');
+const { verificarPrecioAsiento } = require('./funcion.controller');
 
 /**
  * Inserta un movimiento de pago en la base de datos.
@@ -77,16 +78,44 @@ const crearMovimiento = async(req, res) => {
     let funcionDTO = new FuncionDTO();
     let objMovimiento = new Movimiento();
     let objUsuario = new Cliente();
-    let objFuncion = new Funcion();
-
+    
     let reqUsuarioId = usuarioDTO.usuarioIdToIdKey(req.body);
     reqUsuarioId = funcionDTO.fromHexStringToObjectId(reqUsuarioId);
 
+    let resModel = await objUsuario.findOneClienteById({...reqUsuarioId});
+    let data = (resModel) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateNotUsers();
+    if(data.status == 404) return res.status(data.status).json(data);
+
+    data = (resModel.nick != process.env.MONGO_USER) ? usuarioDTO.templateBadCredentials() : usuarioDTO.templateContinue();
+    if(data.status == 401) return res.status(data.status).json(data);
+
     let reqFuncionId = funcionDTO.funcionIdToIdKey(req.body);
-    reqFuncionId = funcionDTO.fromHexStringToObjectId(reqUsuarioId);
-    //let montoAPagar = await verificarPrecioAsiento("hola")
-    //Necesito llamar al otro endpoint para que se ejecute en medio de la ejecucion de este, eso va a devolver el monto a pagar por el asiento
-    //y con esto se identifica si el cliente pago el monto correcto
+    let simulatedReq = {
+        body: {
+            _id: reqFuncionId._id,
+            asiento: req.body.asiento
+        }
+    };
+    let reqAsiento = req.body.asiento;
+    let simulatedRes = {
+        status: function(code) {
+            this.statusCode = code;
+            return this;
+        },
+        json: function(data) {
+            this.data = data;
+            return this;
+        }
+    };
+    await verificarPrecioAsiento(simulatedReq, simulatedRes);
+    let precioPagar = simulatedRes
+    data = (req.body.monto_COP != precioPagar.data.precio) ? funcionDTO.templateIncorrectPaymente() : funcionDTO.templateContinue();
+    if(data.status == 400) return res.status(data.status).json(data);
+    reqUsuarioId = usuarioDTO.idKeyToUsuarioId(reqUsuarioId);
+    resModel = await objMovimiento.insertMovimiento({reqUsuarioId, reqAsiento});
+    data = (resModel.acknowledged) ? movimientoDTO.templateMovimientoSaved({reqUsuarioId, reqAsiento}) : movimientoDTO.templateMovimientoError(resModel);
+    if(data.status == 500) return res.status(data.status).json(data);
+    return res.status(data.status).json(data);
 }
 
 module.exports = {insertMovimiento, crearMovimiento}

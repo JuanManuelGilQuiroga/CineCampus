@@ -31,11 +31,15 @@ module.exports = class Movimiento extends Connect {
     }
 
     /**
-     * @param {Object} movimientoParametro - El objeto que especifica el documento a insertar en la colección
+     * @param {Object} arg - El objeto que especifica el documento a insertar en la colección
      * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la insercion del movimiento
      */
-    async insertMovimiento(movimientoParametro) {
-        let res = await this.collection.insertOne(movimientoParametro)
+    async insertMovimiento(arg) {
+        let { cliente_id, monto_COP } = arg
+        let res = await this.collection.insertOne({
+            cliente_id,
+            monto_COP
+        })
         return res
     }
 }

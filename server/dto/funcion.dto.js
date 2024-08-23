@@ -17,8 +17,14 @@ module.exports = class FuncionDTO {
         return arg;
     }
 
+    idKeyToFuncionId(arg){
+        arg.funcion_id = arg._id
+        delete arg._id
+        return arg;
+    }
+
     fromHexStringToObjectId(arg){
-        arg._id = ObjectId.createFromHexString(arg._id)
+        arg._id = new ObjectId(arg._id)
         return arg
     }
 
@@ -65,7 +71,14 @@ module.exports = class FuncionDTO {
         return {
             status: 200,
             message: "El valor del asiento solicitado es el siguiente",
-            data: arg
+            precio: arg
+        }
+    }
+
+    templateIncorrectPaymente(){
+        return {
+            status: 400,
+            message: "El monto enviado no es el correcto, intentelo denuevo e ingrese el monto correctamente"
         }
     }
 

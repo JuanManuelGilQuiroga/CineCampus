@@ -4,4 +4,19 @@ module.exports = class MovimientoDTO {
         delete arg.movimiento_id
         return arg;
     }  
+
+    templateMovimientoSaved(arg){
+        return {
+            status: 201,
+            data: arg
+        }
+    }
+
+    templateMovimientoError(arg){
+        return {
+            status: 500,
+            message: "Ocurrio un error",
+            data: arg
+        }
+    }
 }
