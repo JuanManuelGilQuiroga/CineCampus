@@ -58,4 +58,43 @@ module.exports = class Funcion extends Connect {
         let res = await this.collection.updateOne(funcionFilter, funcionParametro)
         return res
     }
+
+    async aggregateFuncion(arg){
+        let [res] = await this.collection.aggregate([
+            {
+                $match: {
+                    _id: arg._id
+                }
+            },
+            {
+                $lookup: {
+                    from: "sala",
+                    localField: "sala_id",
+                    foreignField: "_id",
+                    as: "sala_info"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$sala_info",
+                    preserveNullAndEmptyArrays: false
+                }
+            },
+            {
+                $addFields: {
+                    sala_nombre: "$sala_info.nombre",
+                    sala_asientos: "$sala_info.asientos",
+                    precio: "$sala_info.precio",
+                    sala_tipo: "$sala_info.tipo",
+                    preferencial: "$sala_info.preferencial"
+                }
+            },
+            {
+                $project: {
+                    sala_info: 0
+                }
+            }
+        ]).toArray();
+        return res
+    }
 }

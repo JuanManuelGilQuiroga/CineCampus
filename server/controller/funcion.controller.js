@@ -4,6 +4,8 @@ const Pelicula = require('../model/pelicula.model');
 const Sala = require('../model/sala.model');
 const Funcion = require('../model/funcion.model');
 const FuncionDTO = require('../dto/funcion.dto');
+const Cliente = require('../model/usuario.model');
+const UsuarioDTO = require('../dto/usuario.dto');
 
 
 /**
@@ -109,13 +111,39 @@ const verificarAsientos = async(req, res) => {
     let resModel = await obj.findFuncionById(reqObjectId);
     let data = (resModel) ? funcionDTO.templateExistFunction(resModel) : funcionDTO.templateNotFunctions();
     if(data.status == 404) return res.status(data.status).json(data);
-    if(resModel.asientos.length == 0) funcionDTO.templateNotSeating();
+    data = (resModel.asientos.length == 0) ? funcionDTO.templateNotSeating() : funcionDTO.templateSeating(resModel);
+    if(data.status == 404) return res.status(data.status).json(data);
     funcionDTO.templateSeating(resModel.asientos.sort());
     return res.status(data.status).json(data);
+}
+
+const verificarPrecioAsiento = async(req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors: errors.array()});
+    let funcionDTO = new FuncionDTO();
+    let usuarioDTO = new UsuarioDTO();
+    let objFuncion = new Funcion();
+    let objUsuario = new Cliente();
+    let reqFuncionId = funcionDTO.fromHexStringToObjectId(req.body);
+    let resModel = await objFuncion.aggregateFuncion(reqFuncionId);
+    let data = (resModel) ? funcionDTO.templateExistFunction(resModel) : funcionDTO.templateNotFunctions();
+    if(data.status == 404) return res.status(data.status).json(data);
+    data = (resModel.asientos.length == 0) ? funcionDTO.templateNotSeating() : funcionDTO.templateSeating(resModel);
+    if(data.status == 404) return res.status(data.status).json(data);
+    data = (resModel.asientos.includes(req.body.asiento)) ? funcionDTO.templateSeating(resModel) : funcionDTO.templateNotSeating();
+    if(data.status == 404) return res.status(data.status).json(data);
+    resModel = (req.body.asiento.includes(resModel.preferencial)) ? funcionDTO.precioPreferencial(resModel) : funcionDTO.templateContinueWithSameObj(resModel);
+    let mongoUser = usuarioDTO.mongoUserToObject(process.env.MONGO_USER);
+    mongoUser = await objUsuario.findOneClienteByNickOrEmail(mongoUser);
+    resModel = (mongoUser.tipo == "VIP") ? funcionDTO.precioVip(resModel) : funcionDTO.templateContinueWithSameObj(resModel);
+    data = (resModel) ? funcionDTO.templateAsientoPrice(resModel.precio) : funcionDTO.templateFuncionError(resModel);
+    if(data.status == 500) return res.status(data.status).json(data);
+    res.status(data.status).json(data);
 }
 
 module.exports = {
     insertFuncion,
     verificarDisponibilidadAsientos,
-    verificarAsientos
+    verificarAsientos,
+    verificarPrecioAsiento
 }
