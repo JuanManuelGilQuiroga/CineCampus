@@ -8,7 +8,7 @@ module.exports = class TarjetaDTO {
     }
 
     fromHexStringToObjectId(arg){
-        arg.cliente_id = ObjectId.createFromHexString(arg.cliente_id)
+        arg.cliente_id = new ObjectId(arg.cliente_id)
         return arg
     }
 

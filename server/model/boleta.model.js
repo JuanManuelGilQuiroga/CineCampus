@@ -31,11 +31,16 @@ module.exports = class Boleta extends Connect {
     }
 
     /**
-     * @param {Object} boletaParametro - El objeto que especifica el documento a insertar en la colección
+     * @param {Object} arg - El objeto que especifica el documento a insertar en la colección
      * @returns {Promise<Object>} Una promesa que resuelve con el resultado de la insercion de la boleta
      */
-    async insertBoleta(boletaParametro) {
-        let res = await this.collection.insertOne(boletaParametro)
+    async insertBoleta(arg) {
+        let {movimiento_id, funcion_id, asiento} = arg
+        let res = await this.collection.insertOne({
+            movimiento_id,
+            funcion_id,
+            asiento
+        })
         return res
     }
 

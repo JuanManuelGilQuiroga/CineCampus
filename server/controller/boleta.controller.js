@@ -8,6 +8,7 @@ const BoletaDTO = require('../dto/boleta.dto');
 const FuncionDTO = require('../dto/funcion.dto');
 const UsuarioDTO = require('../dto/usuario.dto');
 const MovimientoDTO = require('../dto/movimiento.dto');
+const Movimiento = require('../model/movimiento.model');
 
 /**
  * Inserta una nueva boleta en la base de datos.
@@ -245,31 +246,24 @@ const crearBoleta = async(req, res) => {
     let funcionDTO = new FuncionDTO()
     let usuarioDTO = new UsuarioDTO()
     let movimientoDTO = new MovimientoDTO();
+    let objMovimiento = new Movimiento()
     let objBoleta = new Boleta();
     let objUsuario = new Cliente();
     let objFuncion = new Funcion();
 
-    let reqUsuarioId = boletaDTO.usuarioIdToIdKey(req.body);
-    reqUsuarioId = funcionDTO.fromHexStringToObjectId(reqUsuarioId);
-    let reqFuncionId = funcionDTO.funcionIdToIdKey(req.body);
-    reqFuncionId = funcionDTO.fromHexStringToObjectId(reqFuncionId);
-    let reqMovimientoId = movimientoDTO.movimientoIdToIdKey(req.body);
-    reqMovimientoId = funcionDTO.fromHexStringToObjectId(reqMovimientoId);
+    let reqFuncionId = funcionDTO.fromHexStringToObjectIdFuncion(req.body);
+    let reqMovimientoId = movimientoDTO.fromHexStringToObjectIdMovimiento(req.body);
+    let reqBoleta = {movimiento_id: reqMovimientoId.movimiento_id, funcion_id: reqFuncionId.funcion_id, asiento: req.body.asiento};
 
-    let resModel = await objUsuario.findOneClienteById(reqUsuarioId);
-    let data = (resModel) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateNotUsers();
+    let resModel = await objFuncion.findFuncionById(reqFuncionId);
+    let data = (resModel) ? funcionDTO.templateExistFunction(resModel) : funcionDTO.templateNotFunctions();
     if(data.status == 404) return res.status(data.status).json(data);
-
-    data = (resModel.nick != process.env.MONGO_USER) ? usuarioDTO.templateBadCredentials() : usuarioDTO.templateContinue();
-    if(data.status == 401) return res.status(data.status).json(data);
-
-    if(data.status == 100) resModel = await objFuncion.findFuncionById(reqFuncionId);
-    data = (resModel) ? funcionDTO.templateExistFunction(resModel) : funcionDTO.templateNotFunctions();
+    if(data.status == 200) resModel = await objMovimiento.findOneMovimiento(reqMovimientoId._id);
+    data = (resModel) ? movimientoDTO.templateExistMovimiento(resModel) : movimientoDTO.templateNotMovimiento();
     if(data.status == 404) return res.status(data.status).json(data);
-
-    data = (resModel.asientos.includes(req.body.asiento)) ? funcionDTO.templateSeating(resModel) : funcionDTO.templateNotSeating();
-    if(data.status == 404) return res.status(data.status).json(data);
-    
+    if(data.status == 200) resModel = await objBoleta.insertBoleta(reqBoleta)
+    data = (resModel.acknowledged) ? boletaDTO.templateTicketSaved({_id: resModel.insertedId, ...reqBoleta}) : boletaDTO.templateTicketError(resModel);
+    return res.status(data.status).json(data);
 }
 
 module.exports = { insertBoleta, deleteReserva, crearBoleta }

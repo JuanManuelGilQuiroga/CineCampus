@@ -81,7 +81,7 @@ const crearMovimiento = async(req, res) => {
     
     let reqUsuarioId = usuarioDTO.usuarioIdToIdKey(req.body);
     reqUsuarioId = funcionDTO.fromHexStringToObjectId(reqUsuarioId);
-
+    console.log(reqUsuarioId)
     let resModel = await objUsuario.findOneClienteById({...reqUsuarioId});
     let data = (resModel) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateNotUsers();
     if(data.status == 404) return res.status(data.status).json(data);
@@ -112,8 +112,10 @@ const crearMovimiento = async(req, res) => {
     data = (req.body.monto_COP != precioPagar.data.precio) ? funcionDTO.templateIncorrectPaymente() : funcionDTO.templateContinue();
     if(data.status == 400) return res.status(data.status).json(data);
     reqUsuarioId = usuarioDTO.idKeyToUsuarioId(reqUsuarioId);
-    resModel = await objMovimiento.insertMovimiento({reqUsuarioId, reqAsiento});
-    data = (resModel.acknowledged) ? movimientoDTO.templateMovimientoSaved({reqUsuarioId, reqAsiento}) : movimientoDTO.templateMovimientoError(resModel);
+    reqUsuarioId = movimientoDTO.fromHexStringToObjectId(reqUsuarioId)
+    console.log(reqUsuarioId)
+    resModel = await objMovimiento.insertMovimiento({cliente_id: reqUsuarioId.cliente_id, monto_COP: req.body.monto_COP});
+    data = (resModel.acknowledged) ? movimientoDTO.templateMovimientoSaved({_id: resModel.insertedId, cliente_id: reqUsuarioId.cliente_id, monto_COP: req.body.monto_COP}) : movimientoDTO.templateMovimientoError(resModel);
     if(data.status == 500) return res.status(data.status).json(data);
     return res.status(data.status).json(data);
 }

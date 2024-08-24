@@ -7,5 +7,18 @@ module.exports = class BoletaDTO {
         return arg;
     }
 
-    
+    templateTicketSaved(arg){
+        return {
+            status: 201,
+            data: arg
+        }
+    }
+
+    templateTicketError(arg){
+        return {
+            status: 500,
+            message: "Ocurrio un error",
+            data: arg
+        }
+    }
 }

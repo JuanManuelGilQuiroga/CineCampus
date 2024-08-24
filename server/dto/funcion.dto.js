@@ -28,6 +28,11 @@ module.exports = class FuncionDTO {
         return arg
     }
 
+    fromHexStringToObjectIdFuncion(arg){
+        arg.funcion_id = new ObjectId(arg.funcion_id)
+        return arg
+    }
+
     templateExistFunction(arg){
         return {
             status: 200,
