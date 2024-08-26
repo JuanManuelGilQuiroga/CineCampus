@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const router = require('./server/router');
+const router = require('./router');
 const app = express();
 
 app.use(express.json());
