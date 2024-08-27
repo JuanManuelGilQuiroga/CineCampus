@@ -6,6 +6,18 @@ module.exports = class PeliculaDTO {
         return arg
     }
 
+    fromObjectIdToHexString(arg){
+        return arg.data.map(obj => {
+            const newObj = { ...obj };
+            Object.keys(newObj).forEach(key => {
+                if (key.includes('_id') && newObj[key] instanceof ObjectId) {
+                    newObj[key] = newObj[key].toString();
+                }
+            });
+            return newObj;
+        });
+    }
+
     templateMoviesExist(arg){
         return {
             status: 200,

@@ -5,7 +5,7 @@ const { crearTarjeta } = require('./controller/tarjeta.controller');
 const { tarjetaValidationRulesCreation } = require('./validators/tarjeta.validator');
 const { verificarAsientos, verificarPrecioAsiento } = require('./controller/funcion.controller')
 const { funcionValidationRulesAsientos, funcionValidationRulesAsientoPrice } = require('./validators/funcion.validator');
-const { listarPeliculas, detallesPelicula } = require('./controller/pelicula.controller');
+const { listarPeliculas, detallesPelicula, listarPeliculasSinDetalles } = require('./controller/pelicula.controller');
 const { peliculaValidationEmpty, peliculaValidationRulesDetalles } = require('./validators/pelicula.validator');
 const { crearBoleta } = require('./controller/boleta.controller');
 const { boletaValidatorRulesCreation } = require('./validators/boleta.validator');
@@ -20,6 +20,7 @@ router.get("/functions/v1", funcionValidationRulesAsientos(), verificarAsientos)
 router.get("/functions/v2", funcionValidationRulesAsientoPrice(), verificarPrecioAsiento)
 router.get("/movies/v1", peliculaValidationEmpty(), listarPeliculas);
 router.get("/movies/v2", peliculaValidationRulesDetalles(), detallesPelicula);
+router.get("/movies/v3", peliculaValidationEmpty(), listarPeliculasSinDetalles);
 router.post("/tickets/v1", boletaValidatorRulesCreation(), crearBoleta);
 router.post("/payments/v1", movimientoValidationRulesCreation(), crearMovimiento);
 
