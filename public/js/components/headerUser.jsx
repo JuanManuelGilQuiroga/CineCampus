@@ -7,7 +7,7 @@ export function HeaderUser () {
             </aside>
             <div className="flex flex-col justify-evenly h-[80%] p-2">
                 <p className="text-white">Hi, {import.meta.env.VITE_MONGO_USER}!</p>
-                <strong className="text-white">Let's watch a movie together!</strong>
+                <strong className="text-white">Lets watch a movie together!</strong>
             </div>
         </div>
     )
