@@ -1,7 +1,11 @@
 const { ObjectId } = require('mongodb');
-const { Pelicula } = require('../pelicula/pelicula.model');
-const { Sala } = require('../sala/sala.model');
-const { Funcion } = require('./funcion.model');
+const Pelicula = require('../model/pelicula.model.cjs');
+const Sala = require('../model/sala.model.cjs');
+const Funcion = require('../model/funcion.model.cjs');
+const FuncionDTO = require('../dto/funcion.dto.cjs');
+const Cliente = require('../model/usuario.model.cjs');
+const UsuarioDTO = require('../dto/usuario.dto.cjs');
+
 
 /**
  * Inserta una nueva función en la base de datos.

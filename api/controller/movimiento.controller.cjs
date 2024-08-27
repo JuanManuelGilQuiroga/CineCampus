@@ -1,7 +1,12 @@
-const { Boleta } = require('../boleta/boleta.model');
-const { Funcion } = require('../funcion/funcion.model');
-const { Cliente } = require('../usuario/usuario.model');
-const { Movimiento } = require('./movimiento.model');
+const { validationResult } = require('express-validator');
+const Boleta = require('../model/boleta.model.cjs');
+const Funcion = require('../model/funcion.model.cjs');
+const Cliente = require('../model/usuario.model');
+const Movimiento = require('../model/movimiento.model.cjs');
+const MovimientoDTO = require('../dto/movimiento.dto.cjs');
+const UsuarioDTO = require('../dto/usuario.dto.cjs');
+const FuncionDTO = require('../dto/funcion.dto.cjs');
+const { verificarPrecioAsiento } = require('./funcion.controller.cjs');
 
 /**
  * Inserta un movimiento de pago en la base de datos.

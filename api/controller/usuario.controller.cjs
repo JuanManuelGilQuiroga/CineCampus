@@ -1,5 +1,7 @@
-const { insertTarjeta } = require('../tarjeta/tarjeta.controller');
-const { Cliente } = require('./usuario.model');
+const { validationResult } = require('express-validator');
+const { insertTarjeta } = require('./tarjeta.controller');
+const Usuario = require('../model/usuario.model.cjs');
+const UsuarioDTO = require('../dto/usuario.dto.cjs');
 
 /**
  * Crea un nuevo usuario en la base de datos y lo inserta en la colección de clientes.

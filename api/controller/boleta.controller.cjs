@@ -1,8 +1,14 @@
 const { ObjectId } = require('mongodb');
-const { Funcion } = require('../funcion/funcion.model');
-const { insertMovimiento } = require('./movimiento.controller');
-const { Cliente } = require('../usuario/usuario.model');
-const { Boleta } = require('./boleta.model');
+const Funcion = require('../model/funcion.model.cjs');
+const { insertMovimiento } = require('./movimiento.controller.cjs');
+const Cliente = require('../model/usuario.model');
+const Boleta = require('../model/boleta.model.cjs');
+const { validationResult } = require('express-validator');
+const BoletaDTO = require('../dto/boleta.dto.cjs');
+const FuncionDTO = require('../dto/funcion.dto.cjs');
+const UsuarioDTO = require('../dto/usuario.dto.cjs');
+const MovimientoDTO = require('../dto/movimiento.dto.cjs');
+const Movimiento = require('../model/movimiento.model.cjs');
 
 /**
  * Inserta una nueva boleta en la base de datos.

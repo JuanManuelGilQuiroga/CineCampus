@@ -11,12 +11,12 @@ module.exports = class Connect {
     conexion
     db
     constructor(){
-        this.user = process.env.MONGO_USER;
-        this.port = process.env.MONGO_PORT;
-        this.setPass = process.env.MONGO_PWD;
-        this.setHost = process.env.MONGO_HOST;
-        this.setCluster = process.env.MONGO_CLUSTER;
-        this.setDbName = process.env.MONGO_DB;
+        this.user = process.env.VITE_MONGO_USER;
+        this.port = process.env.VITE_MONGO_PORT;
+        this.setPass = process.env.VITE_MONGO_PWD;
+        this.setHost = process.env.VITE_MONGO_HOST;
+        this.setCluster = process.env.VITE_MONGO_CLUSTER;
+        this.setDbName = process.env.VITE_MONGO_DB;
         this.#open();
         this.db = this.conexion.db(this.getDbName);
     }

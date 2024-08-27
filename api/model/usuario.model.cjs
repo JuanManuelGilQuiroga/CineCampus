@@ -1,4 +1,4 @@
-const Connect = require("../helpers/db/connect");
+const Connect = require("../helpers/db/connect.cjs");
 
 /**
  * Clase `Cliente` para gestionar operaciones relacionadas con la colección de Clientes en la base de datos.

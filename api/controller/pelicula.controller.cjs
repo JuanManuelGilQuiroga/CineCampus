@@ -1,4 +1,6 @@
-const { Pelicula } = require("./pelicula.model")
+const { validationResult } = require("express-validator")
+const Pelicula = require("../model/pelicula.model.cjs")
+const PeliculaDTO = require("../dto/pelicula.dto.cjs")
 
 /**
  * Inserta una nueva película en la base de datos.
