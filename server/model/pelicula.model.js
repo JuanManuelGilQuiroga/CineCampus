@@ -23,11 +23,10 @@ module.exports = class Pelicula extends Connect {
 
     /**
      * Obtiene todas las peliculas de la colección.
-     * @param {Object} peliculaParametro - El objeto que especifica el filtro para buscar las peliculas
      * @returns {Promise<Array>} Una promesa que resuelve con un array de documentos de peliculas.
      */
-    async findPelicula(peliculaParametro) {
-        let res = await this.collection.find(peliculaParametro).toArray()
+    async findPeliculas() {
+        let res = await this.collection.find({}).toArray()
         return res
     }
 
