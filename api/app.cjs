@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors')
-const router = require('./router');
+const router = require('./router.cjs');
 const app = express();
 
 app.use(cors())

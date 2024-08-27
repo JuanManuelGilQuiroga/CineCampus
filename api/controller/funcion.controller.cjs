@@ -1,11 +1,11 @@
 const { validationResult } = require('express-validator');
 const { ObjectId } = require('mongodb');
-const Pelicula = require('../model/pelicula.model');
-const Sala = require('../model/sala.model');
-const Funcion = require('../model/funcion.model');
-const FuncionDTO = require('../dto/funcion.dto');
-const Cliente = require('../model/usuario.model');
-const UsuarioDTO = require('../dto/usuario.dto');
+const Pelicula = require('../model/pelicula.model.cjs');
+const Sala = require('../model/sala.model.cjs');
+const Funcion = require('../model/funcion.model.cjs');
+const FuncionDTO = require('../dto/funcion.dto.cjs');
+const Cliente = require('../model/usuario.model.cjs');
+const UsuarioDTO = require('../dto/usuario.dto.cjs');
 
 
 /**

@@ -1,8 +1,8 @@
 const { validationResult } = require('express-validator');
-const TarjetaDTO = require('../dto/tarjeta.dto')
-const UsuarioDTO = require('../dto/usuario.dto')
-const Tarjeta = require('../model/tarjeta.model');
-const Cliente = require('../model/usuario.model')
+const TarjetaDTO = require('../dto/tarjeta.dto.cjs')
+const UsuarioDTO = require('../dto/usuario.dto.cjs')
+const Tarjeta = require('../model/tarjeta.model.cjs');
+const Cliente = require('../model/usuario.model.cjs')
 
 /**
  * Inserta una nueva tarjeta para un cliente en la colección de tarjetas.

@@ -1,4 +1,4 @@
-const Connect = require("../helpers/db/connect");
+const Connect = require("../helpers/db/connect.cjs");
 
 /**
  * Clase `Sala` para gestionar operaciones relacionadas con la colección de Salas en la base de datos.
