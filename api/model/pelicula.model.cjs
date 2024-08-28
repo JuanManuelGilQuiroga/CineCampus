@@ -81,8 +81,15 @@ module.exports = class Pelicula extends Connect {
             {$match: {$and: [{estreno: {$lte: new Date()}},{retiro: {$gte: new Date()}}]}},
             {$unwind: "$funciones"},
             {$addFields: {"funciones.funcion_id": "$funciones._id"}},
+            { $project: { "funciones._id": 0 }},
             {$replaceRoot: {newRoot: {$mergeObjects: ["$$ROOT", "$funciones"]}}},
-            {$project: {"funciones": 0}}
+            {$lookup: {from: "sala", localField: "sala_id", foreignField: "_id", as: "salas"}},
+            {$unwind: "$salas"},
+            {$addFields: {"salas.sala_id": "$salas._id"}},
+            {$addFields: {"salas.sala_asientos": "$salas.asientos"}},
+            { $project: { "salas._id": 0 }},
+            {$replaceRoot: {newRoot: {$mergeObjects: ["$$ROOT", "$salas"]}}},
+            {$project: {"funciones": 0, "salas": 0 }}
         ]).toArray()
         return res
     }
