@@ -1,5 +1,6 @@
 import { HeaderIndex } from "../headerIndex";
 import { NowPlaying } from "../nowPlaying";
+import { CoomingSoon } from "../coomingSoon";
 
 export function Index () {
     return (
@@ -12,6 +13,7 @@ export function Index () {
                 </div>
             </div>
             <NowPlaying />
+            <CoomingSoon />
         </>
     )
 }
