@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');
-const { insertTarjeta } = require('./tarjeta.controller');
+const { insertTarjeta } = require('./tarjeta.controller.cjs');
 const Usuario = require('../model/usuario.model.cjs');
 const UsuarioDTO = require('../dto/usuario.dto.cjs');
 

@@ -1,7 +1,7 @@
 const { ObjectId } = require('mongodb');
 const Funcion = require('../model/funcion.model.cjs');
 const { insertMovimiento } = require('./movimiento.controller.cjs');
-const Cliente = require('../model/usuario.model');
+const Cliente = require('../model/usuario.model.cjs');
 const Boleta = require('../model/boleta.model.cjs');
 const { validationResult } = require('express-validator');
 const BoletaDTO = require('../dto/boleta.dto.cjs');
