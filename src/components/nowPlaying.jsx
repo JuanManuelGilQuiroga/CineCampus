@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
 import "../../css/style.css"
 
-export function NowPlaying () {
+export const consulta = async () => {
+    let listarPeliculas = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/movies/v3`).then(res=> res.json());
+    let data = await listarPeliculas;
+    console.log(data)
+    return data
+}
 
-    const [movies, setMovies] = useState([]);
+export function NowPlaying () {
+    
+    const [data, setData] = useState([])
 
     useEffect(() => {
-        fetch(`http://${import.meta.env.VITE_EXPRESS_HOST}:${import.meta.env.VITE_EXPRESS_PORT}/movies/v3`)
-            .then((res) => res.json())
-            .then((data) => {console.table(data), setMovies(data)})
-            .catch(error => console.error(error))
-    }, []);
-
+            consulta().then(res => setData(res.data))
+        }, [])
+    console.log("hola",data)
     return (
         <React.Fragment>
             <div className="flex justify-between w-[80vw] pt-8">
@@ -20,8 +24,8 @@ export function NowPlaying () {
             </div>
             <div>
                 {
-                    movies.data.map((movie) => {
-                        <div key={movie.id}>
+                    data.map((movie) => {
+                        return <div key={movie._id}>
                             <img src={movie.imagen} alt="" />
                         </div>
                     })
