@@ -111,6 +111,7 @@ const detallesPelicula = async(req, res) => {
     let resModel = await obj.detallesPelicula(reqObjectId);
     let data = (resModel.length > 0) ? peliculaDTO.templateMoviesExist(resModel) : peliculaDTO.templateNotMovie();
     if(data.status == 404) return res.status(data.status).json(data);
+    if(data.status == 200) data.data = peliculaDTO.fromObjectIdToHexString(data)
     return res.status(data.status).json(data);
 }
 
