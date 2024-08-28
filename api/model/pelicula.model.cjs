@@ -26,7 +26,7 @@ module.exports = class Pelicula extends Connect {
      * @returns {Promise<Array>} Una promesa que resuelve con un array de documentos de peliculas.
      */
     async findPeliculas() {
-        let res = await this.collection.find({}).toArray()
+        let res = await this.collection.find({},{projection: { titulo: 1, genero: 1, imagen: 1 }  }).toArray()
         return res
     }
 

@@ -1,16 +1,16 @@
 const router = require('express').Router();
-const { listarTodosLosUsuarios, listarUsuariosPorTipo, crearUsuario } = require('./controller/usuario.controller');
-const { usuarioValidationRulesCreation, usuarioValidationRulesFindType, usuarioValidationEmpty } = require('./validators/usuario.validator');
-const { crearTarjeta } = require('./controller/tarjeta.controller');
-const { tarjetaValidationRulesCreation } = require('./validators/tarjeta.validator');
-const { verificarAsientos, verificarPrecioAsiento } = require('./controller/funcion.controller')
-const { funcionValidationRulesAsientos, funcionValidationRulesAsientoPrice } = require('./validators/funcion.validator');
-const { listarPeliculas, detallesPelicula, listarPeliculasSinDetalles } = require('./controller/pelicula.controller');
-const { peliculaValidationEmpty, peliculaValidationRulesDetalles } = require('./validators/pelicula.validator');
-const { crearBoleta } = require('./controller/boleta.controller');
-const { boletaValidatorRulesCreation } = require('./validators/boleta.validator');
-const { crearMovimiento } = require('./controller/movimiento.controller');
-const { movimientoValidationRulesCreation } = require('./validators/movimiento.validator');
+const { listarTodosLosUsuarios, listarUsuariosPorTipo, crearUsuario } = require('./controller/usuario.controller.cjs');
+const { usuarioValidationRulesCreation, usuarioValidationRulesFindType, usuarioValidationEmpty } = require('./validators/usuario.validator.cjs');
+const { crearTarjeta } = require('./controller/tarjeta.controller.cjs');
+const { tarjetaValidationRulesCreation } = require('./validators/tarjeta.validator.cjs');
+const { verificarAsientos, verificarPrecioAsiento } = require('./controller/funcion.controller.cjs')
+const { funcionValidationRulesAsientos, funcionValidationRulesAsientoPrice } = require('./validators/funcion.validator.cjs');
+const { listarPeliculas, detallesPelicula, listarPeliculasSinDetalles } = require('./controller/pelicula.controller.cjs');
+const { peliculaValidationEmpty, peliculaValidationRulesDetalles } = require('./validators/pelicula.validator.cjs');
+const { crearBoleta } = require('./controller/boleta.controller.cjs');
+const { boletaValidatorRulesCreation } = require('./validators/boleta.validator.cjs');
+const { crearMovimiento } = require('./controller/movimiento.controller.cjs');
+const { movimientoValidationRulesCreation } = require('./validators/movimiento.validator.cjs');
 
 router.post("/users/v1", usuarioValidationRulesCreation(), crearUsuario);
 router.get("/users/v2", usuarioValidationRulesFindType(), listarUsuariosPorTipo);
