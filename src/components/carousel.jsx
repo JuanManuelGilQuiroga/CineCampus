@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export const query = async () => {
     let listarPeliculas = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/movies/v3`);
@@ -51,7 +52,7 @@ export function Carousel () {
                 onTouchEnd={handleTouchEnd}
             >
                 {data.map((movie, index) => (
-                    <div key={movie._id} className="min-w-full h-[80%] flex flex-col items-center">
+                    <Link to={`/movie/${movie._id}`} key={movie._id} className="min-w-full h-[80%] flex flex-col items-center">
                         <img
                             src={movie.imagen}
                             alt={movie.titulo}
@@ -63,14 +64,14 @@ export function Carousel () {
                                 <p className="text-sm">{movie.genero}</p>
                             </div>
                         )}
-                    </div>
+                    </Link>
                 ))}
             </div>
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
                 {data.map((_, index) => (
                     <div
                         key={index}
-                        className={`h-2 w-2 rounded-full ${currentIndex === index ? 'bg-red-500' : 'bg-white'}`}
+                        className={`h-2 rounded-full ${currentIndex === index ? 'bg-custom-red w-4'  : 'bg-white w-2'}`}
                     ></div>
                 ))}
             </div>
