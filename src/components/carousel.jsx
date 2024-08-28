@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export const consulta = async () => {
+export const query = async () => {
     let listarPeliculas = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/movies/v3`);
     let data = await listarPeliculas.json();
     console.log(data)
@@ -12,7 +12,7 @@ export function Carousel () {
     const [data, setData] = useState([])
 
     useEffect(() => {
-        consulta().then(res => setData(res.data))
+        query().then(res => setData(res.data))
     }, [])
 
     const [currentIndex, setCurrentIndex] = useState(0);
