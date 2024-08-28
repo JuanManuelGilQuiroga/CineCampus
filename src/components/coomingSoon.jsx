@@ -1,5 +1,5 @@
-import "../../css/style.css"
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import "../../css/style.css";
 
 export const query = async () => {
     let listarPeliculas = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/movies/v4`);
@@ -20,7 +20,7 @@ export function CoomingSoon () {
         <div className="flex flex-col gap-4">
             <div className="flex justify-between w-[80vw] pt-8">
                 <strong className="text-white text-lg">Cooming soon</strong>
-                <strong className="text-red-600 text-lg">See all</strong>
+                <strong className="text-custom-red text-lg">See all</strong>
             </div>
             <div className="w-[100%] ">
                 {data.map((movie) => {
