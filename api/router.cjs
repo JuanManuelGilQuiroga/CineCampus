@@ -5,7 +5,7 @@ const { crearTarjeta } = require('./controller/tarjeta.controller.cjs');
 const { tarjetaValidationRulesCreation } = require('./validators/tarjeta.validator.cjs');
 const { verificarAsientos, verificarPrecioAsiento } = require('./controller/funcion.controller.cjs')
 const { funcionValidationRulesAsientos, funcionValidationRulesAsientoPrice } = require('./validators/funcion.validator.cjs');
-const { listarPeliculas, detallesPelicula, listarPeliculasSinDetalles } = require('./controller/pelicula.controller.cjs');
+const { listarPeliculas, detallesPelicula, listarPeliculasSinDetalles, listarPeliculasCoomingSoon } = require('./controller/pelicula.controller.cjs');
 const { peliculaValidationEmpty, peliculaValidationRulesDetalles } = require('./validators/pelicula.validator.cjs');
 const { crearBoleta } = require('./controller/boleta.controller.cjs');
 const { boletaValidatorRulesCreation } = require('./validators/boleta.validator.cjs');
@@ -21,6 +21,7 @@ router.get("/functions/v2", funcionValidationRulesAsientoPrice(), verificarPreci
 router.get("/movies/v1", peliculaValidationEmpty(), listarPeliculas);
 router.get("/movies/v2", peliculaValidationRulesDetalles(), detallesPelicula);
 router.get("/movies/v3", peliculaValidationEmpty(), listarPeliculasSinDetalles);
+router.get("/movies/v4", peliculaValidationEmpty(), listarPeliculasCoomingSoon )
 router.post("/tickets/v1", boletaValidatorRulesCreation(), crearBoleta);
 router.post("/payments/v1", movimientoValidationRulesCreation(), crearMovimiento);
 
