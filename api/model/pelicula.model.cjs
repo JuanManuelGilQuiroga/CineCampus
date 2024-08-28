@@ -79,7 +79,10 @@ module.exports = class Pelicula extends Connect {
             {$match: {_id: arg._id}},
             {$lookup: {from: "funcion", localField: "_id", foreignField: "pelicula_id", as: "funciones"}},
             {$match: {$and: [{estreno: {$lte: new Date()}},{retiro: {$gte: new Date()}}]}},
-            {$unwind: "$funciones"}
+            {$unwind: "$funciones"},
+            {$addFields: {"funciones.funcion_id": "$funciones._id"}},
+            {$replaceRoot: {newRoot: {$mergeObjects: ["$$ROOT", "$funciones"]}}},
+            {$project: {"funciones": 0}}
         ]).toArray()
         return res
     }
