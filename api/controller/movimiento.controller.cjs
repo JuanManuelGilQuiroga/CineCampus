@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator');
 const Boleta = require('../model/boleta.model.cjs');
 const Funcion = require('../model/funcion.model.cjs');
-const Cliente = require('../model/usuario.model');
+const Cliente = require('../model/usuario.model.cjs');
 const Movimiento = require('../model/movimiento.model.cjs');
 const MovimientoDTO = require('../dto/movimiento.dto.cjs');
 const UsuarioDTO = require('../dto/usuario.dto.cjs');

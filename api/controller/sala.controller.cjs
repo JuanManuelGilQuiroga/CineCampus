@@ -1,4 +1,4 @@
-const { Sala } = require("./sala.model");
+const { Sala } = require("./sala.model.cjs");
 
 /**
  * Inserta una nueva sala en la base de datos.
