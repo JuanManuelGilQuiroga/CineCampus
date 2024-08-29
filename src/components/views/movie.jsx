@@ -1,5 +1,6 @@
 import { useLoaderData } from "react-router";
 import { Link } from 'react-router-dom';
+import { Header } from "../header";
 import "../../../css/style.css";
 
 export const movieLoader = async ({params}) => {
@@ -9,18 +10,16 @@ export const movieLoader = async ({params}) => {
     return data
 }
 
+
+
 export const MovieDetails = () => {
     const data = useLoaderData()
 
+    
+
     return (
         <>
-            <div className="flex items-center justify-around w-full h-[8vh]">
-                <Link to={-1}>
-                    <i className='bx bxs-chevron-left' style={{color: "white"}}></i>
-                </Link>
-                <strong className="text-white">Cinema Selection</strong>
-                <i className='bx bx-dots-vertical-rounded' style={{color: "white"}}></i>
-            </div>
+            <Header titulo="Cinema Selection"/>
             <iframe src={data.data[0].trailer} className="rounded-2xl w-[95vw] h-[25vh]"></iframe>
             <div className="flex justify-between w-[80vw] pt-4">
                 <div className="flex flex-col">
@@ -61,7 +60,7 @@ export const MovieDetails = () => {
                     <img src="../../../public/campusCineLogo.jpg" alt="" className="object-cover h-[80%] rounded-lg"/>
                 </div>
             </div>
-            <Link to={`/movie/${data.data[0]._id}`} className="bg-custom-red w-[80vw] h-[5vh] rounded-xl flex justify-center items-center">
+            <Link to={`/function/${data.data[0]._id}`} className="bg-custom-red w-[80vw] h-[5vh] rounded-xl flex justify-center items-center">
                 <strong className="bg-transparent text-white">Book Now</strong>
             </Link>
         </>
