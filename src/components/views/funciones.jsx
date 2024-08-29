@@ -1,7 +1,10 @@
 import { useLoaderData } from "react-router";
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import "../../../css/style.css";
 import { Header } from "../header";
+import { FunctionDayCard } from "../functionDayCard";
+import { FunctionCard } from "../functionCart";
 
 export const functionLoader = async ({params}) => {
     let detallesPelicula = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/movies/v2?_id=${params.id}`);
@@ -11,8 +14,15 @@ export const functionLoader = async ({params}) => {
 
 export const Function = () => {
     const data = useLoaderData()
+
+    const [posicionFuncion, setPosicion] = useState(0);
+
+    const cambiarEstado = (index) => {
+        setPosicion(index)
+    }
+    console.log(posicionFuncion)
     
-    let funcionesRepetidas = data.data.map(obj => {
+    let funciones = data.data.map(obj => {
         const fecha = new Date(obj.fecha_hora_inicio);
         return {
             funcion_id: obj.funcion_id,
@@ -25,11 +35,18 @@ export const Function = () => {
             dia_semana: fecha.getDay()
         }
     })
-    console.log(funcionesRepetidas)
+    console.log(funciones)
 
-    let fechasFunciones = Array.from(new Set(funcionesRepetidas.map(obj => obj.fecha_completa)))
+    let fechasFunciones = Array.from(new Set(funciones.map(obj => obj.fecha_completa.split('T')[0])))
 
-    console.log(fechasFunciones)
+    let resultFunciones = fechasFunciones.map((fecha, index) => {
+        return {
+            fecha: fecha, 
+            funciones: funciones.filter(obj => obj.fecha_completa.includes(fecha))
+        };
+    });
+
+    console.log(resultFunciones)
 
     return (
         <>
@@ -71,8 +88,24 @@ export const Function = () => {
                     <span className="text-[0.7rem] text-white">Selected</span>
                 </div>
             </div>
-            <div>
-
+            <div className="flex mt-8 h-[10vh]">
+                {fechasFunciones.map((i, index) => {
+                    return <FunctionDayCard fecha={i} onClick={() => cambiarEstado(index)}/>
+                })}
+            </div>
+            <div className="flex overflow-scroll mt-8 h-[7vh] w-[80vw] gap-4">
+                {resultFunciones[posicionFuncion].funciones.map((obj => {
+                    return <FunctionCard fecha={obj.fecha_completa} precio={obj.precio} tipo={obj.tipo}/>
+                }))}
+            </div>
+            <div className="flex justify-between w-[80vw] mt-8">
+                <div>
+                    <p className="text-white">Price</p>
+                    <strong className="text-white">$25.00</strong>
+                </div>
+                <Link to={`/`} className="bg-custom-red w-[50vw] h-[5vh] rounded-xl flex justify-center items-center">
+                    <strong className="bg-transparent text-white">Buy Ticket</strong>
+                </Link>
             </div>
         </>
     )
