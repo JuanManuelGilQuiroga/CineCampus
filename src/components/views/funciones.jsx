@@ -17,12 +17,12 @@ export const Function = () => {
     const data = useLoaderData()
 
     const [posicionDia, setPosicionDia] = useState(0);
+    const [posicionFuncion, setPosicionFuncion] = useState(0);
+    const [selectedSeats, setSelectedSeats] = useState([]);
 
     const cambiarEstadoDia = (index) => {
         setPosicionDia(index)
     }
-
-    const [posicionFuncion, setPosicionFuncion] = useState(0);
 
     const cambiarEstadoFuncion = (index) => {
         setPosicionFuncion(index)
@@ -45,7 +45,7 @@ export const Function = () => {
 
     let fechasFunciones = Array.from(new Set(funciones.map(obj => obj.fecha_completa.split('T')[0])))
 
-    let resultFunciones = fechasFunciones.map((fecha, index) => {
+    let resultFunciones = fechasFunciones.map((fecha) => {
         return {
             fecha: fecha, 
             funciones: funciones.filter(obj => obj.fecha_completa.includes(fecha))
@@ -53,6 +53,15 @@ export const Function = () => {
     });
 
     console.log(resultFunciones)
+
+    const handleSeatClick = (seat) => {
+        if(selectedSeats.includes(seat)){
+            setSelectedSeats(selectedSeats.filter(id => id !== seat));
+        } else{
+            setSelectedSeats([...selectedSeats, seat])
+        }
+    }
+    console.log(selectedSeats)
 
     return (
         <>
@@ -77,13 +86,13 @@ export const Function = () => {
                 </defs>
                 </svg>
             </div>
-            <div className="flex flex-col justify-between h-[35vh] w-[90vw] mt-10">
-                <Seating resFunc={resultFunciones} row="A" day={posicionDia} func={posicionFuncion}/>
-                <Seating resFunc={resultFunciones} row="B" day={posicionDia} func={posicionFuncion}/>
-                <Seating resFunc={resultFunciones} row="C" day={posicionDia} func={posicionFuncion}/>
-                <Seating resFunc={resultFunciones} row="D" day={posicionDia} func={posicionFuncion}/>
-                <Seating resFunc={resultFunciones} row="E" day={posicionDia} func={posicionFuncion}/>
-                <Seating resFunc={resultFunciones} row="F" day={posicionDia} func={posicionFuncion}/>
+            <div className="w-[90vw] mt-10 gap-1">
+                <Seating resFunc={resultFunciones} row="A" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats}/>
+                <Seating resFunc={resultFunciones} row="B" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats}/>
+                <Seating resFunc={resultFunciones} row="C" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats}/>
+                <Seating resFunc={resultFunciones} row="D" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats}/>
+                <Seating resFunc={resultFunciones} row="E" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats}/>
+                <Seating resFunc={resultFunciones} row="F" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats}/>
             </div>
             <div className="w-[80vw] flex justify-around mt-6">
                 <div className="flex justify-evenly items-center w-[25%]">
@@ -100,13 +109,13 @@ export const Function = () => {
                 </div>
             </div>
             <div className="flex mt-8 h-[10vh]">
-                {fechasFunciones.map((i, index) => {
-                    return <FunctionDayCard fecha={i} onClick={() => cambiarEstadoDia(index)}/>
+                {fechasFunciones.map((i) => {
+                    return <FunctionDayCard key={i} fecha={i} onClick={() => cambiarEstadoDia(i)}/>
                 })}
             </div>
             <div className="flex overflow-scroll mt-8 h-[7vh] w-[80vw] gap-4">
-                {resultFunciones[posicionDia].funciones.map(((obj, index) => {
-                    return <FunctionCard fecha={obj.fecha_completa} precio={obj.precio} tipo={obj.tipo} onClick={() => cambiarEstadoFuncion(index)}/>
+                {resultFunciones[posicionDia].funciones.map(((obj) => {
+                    return <FunctionCard key={obj} fecha={obj.fecha_completa} precio={obj.precio} tipo={obj.tipo} onClick={() => cambiarEstadoFuncion(obj)}/>
                 }))}
             </div>
             <div className="flex justify-between w-[80vw] mt-8">
