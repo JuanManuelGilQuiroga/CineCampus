@@ -5,6 +5,7 @@ import "../../../css/style.css";
 import { Header } from "../header";
 import { FunctionDayCard } from "../functionDayCard";
 import { FunctionCard } from "../functionCart";
+import { Seating } from "../seating";
 
 export const functionLoader = async ({params}) => {
     let detallesPelicula = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/movies/v2?_id=${params.id}`);
@@ -15,12 +16,17 @@ export const functionLoader = async ({params}) => {
 export const Function = () => {
     const data = useLoaderData()
 
-    const [posicionFuncion, setPosicion] = useState(0);
+    const [posicionDia, setPosicionDia] = useState(0);
 
-    const cambiarEstado = (index) => {
-        setPosicion(index)
+    const cambiarEstadoDia = (index) => {
+        setPosicionDia(index)
     }
-    console.log(posicionFuncion)
+
+    const [posicionFuncion, setPosicionFuncion] = useState(0);
+
+    const cambiarEstadoFuncion = (index) => {
+        setPosicionFuncion(index)
+    }
     
     let funciones = data.data.map(obj => {
         const fecha = new Date(obj.fecha_hora_inicio);
@@ -35,7 +41,7 @@ export const Function = () => {
             dia_semana: fecha.getDay()
         }
     })
-    console.log(funciones)
+    console.log(cambiarEstadoFuncion)
 
     let fechasFunciones = Array.from(new Set(funciones.map(obj => obj.fecha_completa.split('T')[0])))
 
@@ -71,8 +77,13 @@ export const Function = () => {
                 </defs>
                 </svg>
             </div>
-            <div className="bg-custom-red h-[35vh] w-[90vw] mt-10">
-                <p>{}</p>
+            <div className="flex flex-col justify-between h-[35vh] w-[90vw] mt-10">
+                <Seating resFunc={resultFunciones} row="A" day={posicionDia} func={posicionFuncion}/>
+                <Seating resFunc={resultFunciones} row="B" day={posicionDia} func={posicionFuncion}/>
+                <Seating resFunc={resultFunciones} row="C" day={posicionDia} func={posicionFuncion}/>
+                <Seating resFunc={resultFunciones} row="D" day={posicionDia} func={posicionFuncion}/>
+                <Seating resFunc={resultFunciones} row="E" day={posicionDia} func={posicionFuncion}/>
+                <Seating resFunc={resultFunciones} row="F" day={posicionDia} func={posicionFuncion}/>
             </div>
             <div className="w-[80vw] flex justify-around mt-6">
                 <div className="flex justify-evenly items-center w-[25%]">
@@ -90,12 +101,12 @@ export const Function = () => {
             </div>
             <div className="flex mt-8 h-[10vh]">
                 {fechasFunciones.map((i, index) => {
-                    return <FunctionDayCard fecha={i} onClick={() => cambiarEstado(index)}/>
+                    return <FunctionDayCard fecha={i} onClick={() => cambiarEstadoDia(index)}/>
                 })}
             </div>
             <div className="flex overflow-scroll mt-8 h-[7vh] w-[80vw] gap-4">
-                {resultFunciones[posicionFuncion].funciones.map((obj => {
-                    return <FunctionCard fecha={obj.fecha_completa} precio={obj.precio} tipo={obj.tipo}/>
+                {resultFunciones[posicionDia].funciones.map(((obj, index) => {
+                    return <FunctionCard fecha={obj.fecha_completa} precio={obj.precio} tipo={obj.tipo} onClick={() => cambiarEstadoFuncion(index)}/>
                 }))}
             </div>
             <div className="flex justify-between w-[80vw] mt-8">
