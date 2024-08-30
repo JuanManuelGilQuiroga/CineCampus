@@ -29,6 +29,12 @@ exports.usuarioValidationRulesFindType = () => {
     ]
 }
 
+exports.usuarioValidationRulesNick = () => {
+    return [
+        query('nick').notEmpty().isString().withMessage('El nick es obligatorio')
+    ]
+}
+
 exports.usuarioValidationEmpty = () => {
     return [
         body().custom((value, { req }) => {
