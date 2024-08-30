@@ -16,7 +16,7 @@ export const functionLoader = async ({params}) => {
 export const Function = () => {
     const data = useLoaderData()
 
-    const [posicionDia, setPosicionDia] = useState(0);
+    const [posicionDia, setPosicionDia] = useState(1);
     const [posicionFuncion, setPosicionFuncion] = useState(0);
     const [selectedSeats, setSelectedSeats] = useState([]);
 
@@ -61,7 +61,7 @@ export const Function = () => {
             setSelectedSeats([...selectedSeats, seat])
         }
     }
-    console.log(selectedSeats)
+    console.log(resultFunciones[posicionDia].funciones)
 
     return (
         <>
@@ -109,13 +109,14 @@ export const Function = () => {
                 </div>
             </div>
             <div className="flex mt-8 h-[10vh]">
-                {fechasFunciones.map((i) => {
-                    return <FunctionDayCard key={i} fecha={i} onClick={() => cambiarEstadoDia(i)}/>
+                {fechasFunciones.map((i, index) => {
+                    return <FunctionDayCard fecha={i} onDayClick={cambiarEstadoDia} index={index}/>
                 })}
             </div>
             <div className="flex overflow-scroll mt-8 h-[7vh] w-[80vw] gap-4">
-                {resultFunciones[posicionDia].funciones.map(((obj) => {
-                    return <FunctionCard key={obj} fecha={obj.fecha_completa} precio={obj.precio} tipo={obj.tipo} onClick={() => cambiarEstadoFuncion(obj)}/>
+                {resultFunciones[posicionDia].funciones.map(((obj, index) => {
+                    {console.log(obj.funcion_id)}
+                    return <FunctionCard fecha={obj.fecha_completa} precio={obj.precio} tipo={obj.tipo} onFunctionClick={cambiarEstadoFuncion} index={index}/>
                 }))}
             </div>
             <div className="flex justify-between w-[80vw] mt-8">
