@@ -193,6 +193,17 @@ const listarTodosLosUsuarios = async(req, res) => {
     return res.status(data.status).json(data);
 }
 
+const buscarUnUsuario = async(req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors: errors.array() });
+    const usuarioDTO = new UsuarioDTO();
+    const obj = new Usuario();
+    let resModel = await obj.findOneClienteByNickOrEmail(req.query);
+    let data = (resModel) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateNotUsers();
+    if(data.status == 404) return res.status(data.status).json(data);
+    return res.status(data.status).json(data);
+}
+
 
 module.exports = {
     createUsuarioYInsertCliente,
@@ -200,5 +211,6 @@ module.exports = {
     findOneCliente,
     crearUsuario,
     listarUsuariosPorTipo,
-    listarTodosLosUsuarios
+    listarTodosLosUsuarios,
+    buscarUnUsuario
 }
