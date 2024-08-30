@@ -41,7 +41,6 @@ export const Function = () => {
             dia_semana: fecha.getDay()
         }
     })
-    console.log(cambiarEstadoFuncion)
 
     let fechasFunciones = Array.from(new Set(funciones.map(obj => obj.fecha_completa.split('T')[0])))
 
@@ -52,7 +51,6 @@ export const Function = () => {
         };
     });
 
-    console.log(resultFunciones)
 
     const handleSeatClick = (seat) => {
         if(selectedSeats.includes(seat)){
@@ -61,7 +59,15 @@ export const Function = () => {
             setSelectedSeats([...selectedSeats, seat])
         }
     }
-    console.log(resultFunciones[posicionDia].funciones)
+
+    const setPrice = (selectedSeats, id, seat) => {
+        let price = 0
+        for(const i of selectedSeats) {
+            let res = fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/functions/v2?_id=${id}&asiento=${seat}`).then(res => res.json()).catch(error => console.error('Error:', error));
+            price+=res.precio
+        }
+        return price
+    }
 
     return (
         <>
@@ -87,12 +93,12 @@ export const Function = () => {
                 </svg>
             </div>
             <div className="w-[90vw] mt-10 gap-1">
-                <Seating resFunc={resultFunciones} row="A" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats}/>
-                <Seating resFunc={resultFunciones} row="B" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats}/>
-                <Seating resFunc={resultFunciones} row="C" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats}/>
-                <Seating resFunc={resultFunciones} row="D" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats}/>
-                <Seating resFunc={resultFunciones} row="E" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats}/>
-                <Seating resFunc={resultFunciones} row="F" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats}/>
+                <Seating resFunc={resultFunciones} row="A" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} setPriceClick={setPrice}/>
+                <Seating resFunc={resultFunciones} row="B" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} setPriceClick={setPrice}/>
+                <Seating resFunc={resultFunciones} row="C" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} setPriceClick={setPrice}/>
+                <Seating resFunc={resultFunciones} row="D" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} setPriceClick={setPrice}/>
+                <Seating resFunc={resultFunciones} row="E" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} setPriceClick={setPrice}/>
+                <Seating resFunc={resultFunciones} row="F" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} setPriceClick={setPrice}/>
             </div>
             <div className="w-[80vw] flex justify-around mt-6">
                 <div className="flex justify-evenly items-center w-[25%]">
@@ -122,7 +128,7 @@ export const Function = () => {
             <div className="flex justify-between w-[80vw] mt-8">
                 <div>
                     <p className="text-white">Price</p>
-                    <strong className="text-white">$25.00</strong>
+                    <strong className="text-white">${setPrice}</strong>
                 </div>
                 <Link to={`/`} className="bg-custom-red w-[50vw] h-[5vh] rounded-xl flex justify-center items-center">
                     <strong className="bg-transparent text-white">Buy Ticket</strong>
