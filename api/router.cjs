@@ -3,8 +3,8 @@ const { listarTodosLosUsuarios, listarUsuariosPorTipo, crearUsuario, buscarUnUsu
 const { usuarioValidationRulesCreation, usuarioValidationRulesFindType, usuarioValidationEmpty, usuarioValidationRulesNick } = require('./validators/usuario.validator.cjs');
 const { crearTarjeta } = require('./controller/tarjeta.controller.cjs');
 const { tarjetaValidationRulesCreation } = require('./validators/tarjeta.validator.cjs');
-const { verificarAsientos, verificarPrecioAsiento } = require('./controller/funcion.controller.cjs')
-const { funcionValidationRulesAsientos, funcionValidationRulesAsientoPrice } = require('./validators/funcion.validator.cjs');
+const { verificarAsientos, verificarPrecioAsiento, verificarPrecioAsientos } = require('./controller/funcion.controller.cjs')
+const { funcionValidationRulesAsientos, funcionValidationRulesAsientoPrice, funcionValidationRulesAsientosPrice } = require('./validators/funcion.validator.cjs');
 const { listarPeliculas, detallesPelicula, listarPeliculasSinDetalles, listarPeliculasCoomingSoon } = require('./controller/pelicula.controller.cjs');
 const { peliculaValidationEmpty, peliculaValidationRulesDetalles } = require('./validators/pelicula.validator.cjs');
 const { crearBoleta } = require('./controller/boleta.controller.cjs');
@@ -18,7 +18,8 @@ router.get("/users/v3", usuarioValidationEmpty(), listarTodosLosUsuarios);
 router.get("/users/v4", usuarioValidationRulesNick(), buscarUnUsuario)
 router.post("/cards/v1", tarjetaValidationRulesCreation(), crearTarjeta);
 router.get("/functions/v1", funcionValidationRulesAsientos(), verificarAsientos);
-router.get("/functions/v2", funcionValidationRulesAsientoPrice(), verificarPrecioAsiento)
+router.get("/functions/v2", funcionValidationRulesAsientoPrice(), verificarPrecioAsiento);
+router.post("/functions/v3", funcionValidationRulesAsientosPrice(), verificarPrecioAsientos)
 router.get("/movies/v1", peliculaValidationEmpty(), listarPeliculas);
 router.get("/movies/v2", peliculaValidationRulesDetalles(), detallesPelicula);
 router.get("/movies/v3", peliculaValidationEmpty(), listarPeliculasSinDetalles);

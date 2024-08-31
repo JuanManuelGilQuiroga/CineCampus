@@ -80,6 +80,14 @@ module.exports = class FuncionDTO {
         }
     }
 
+    templateAsientosPrice(arg){
+        return {
+            status: 200,
+            message: "El valor de los asiento solicitados es el siguiente",
+            precio: arg
+        }
+    }
+
     templateIncorrectPaymente(){
         return {
             status: 400,
