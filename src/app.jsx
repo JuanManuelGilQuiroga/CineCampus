@@ -3,7 +3,7 @@ import { Index } from "./components/views"
 import { Ejemplo, loader } from "./components/views/movieExample"
 import { MovieDetails, movieLoader } from "./components/views/movie"
 import { Function, functionLoader } from "./components/views/funciones"
-
+import { Payment, paymentLoader } from "./components/views/payment"
 
 const routes = createBrowserRouter([
     {
@@ -19,6 +19,11 @@ const routes = createBrowserRouter([
         path: "/function/:id",
         element: <Function/>,
         loader: functionLoader,
+    },
+    {
+        path: "/payment",
+        element: <Payment/>,
+        loader: paymentLoader,
     },
     {
         path: "/movie/:id/:saludo",

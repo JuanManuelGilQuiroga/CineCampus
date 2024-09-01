@@ -16,6 +16,7 @@ export const functionLoader = async ({params}) => {
 export const Function = () => {
     const data = useLoaderData()
 
+    console.log(data.data)
     const [posicionDia, setPosicionDia] = useState(0);
     const [posicionFuncion, setPosicionFuncion] = useState(0);
     const [selectedSeats, setSelectedSeats] = useState([]);
@@ -97,6 +98,21 @@ export const Function = () => {
         setTotalPrice(0)
     }, [posicionFuncion])
 
+    console.log(data.data)
+    const dataToSend = {
+        pelicula_id: data.data[0]._id,
+        pelicula_imagen: data.data[0].imagen,
+        pelicula_titulo: data.data[0].titulo,
+        pelicula_genero: data.data[0].genero,
+        funcion_fecha: data.data[0].fecha_hora_inicio,
+        asientos: selectedSeats,
+        precio_total: totalPrice
+    };
+    console.log(dataToSend)
+    const queryString = new URLSearchParams({
+        data: encodeURIComponent(JSON.stringify(dataToSend)),
+    }).toString();
+
     return (
         <>
             <Header titulo="Choose Seat"/>
@@ -158,8 +174,8 @@ export const Function = () => {
                     <p className="text-white text-[1.3rem]">Price</p>
                     <strong className="text-white text-[1.3rem]">${totalPrice}</strong>
                 </div>
-                <Link to={`/`} className="bg-custom-red w-[50vw] h-[7vh] rounded-xl flex justify-center items-center">
-                    <strong className="bg-transparent text-white">Buy Ticket</strong>
+                <Link to={selectedSeats.length > 0 ? `/payment?${queryString}`: `#`} className={` w-[50vw] h-[7vh] rounded-xl flex justify-center items-center ${selectedSeats.length > 0 ? "bg-custom-red" : "bg-custom-wine-381818"}`}>
+                    <strong className={`bg-transparent ${selectedSeats.length > 0 ? "text-white" : "text-custom-red font-light"}`}>Buy Ticket</strong>
                 </Link>
             </div>
         </>
