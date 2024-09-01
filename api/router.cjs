@@ -18,7 +18,7 @@ router.get("/users/v3", usuarioValidationEmpty(), listarTodosLosUsuarios);
 router.get("/users/v4", usuarioValidationRulesNick(), buscarUnUsuario)
 router.post("/cards/v1", tarjetaValidationRulesCreation(), crearTarjeta);
 router.get("/functions/v1", funcionValidationRulesAsientos(), verificarAsientos);
-router.get("/functions/v2", funcionValidationRulesAsientoPrice(), verificarPrecioAsiento);
+router.post("/functions/v2", funcionValidationRulesAsientoPrice(), verificarPrecioAsiento);
 router.post("/functions/v3", funcionValidationRulesAsientosPrice(), verificarPrecioAsientos)
 router.get("/movies/v1", peliculaValidationEmpty(), listarPeliculas);
 router.get("/movies/v2", peliculaValidationRulesDetalles(), detallesPelicula);

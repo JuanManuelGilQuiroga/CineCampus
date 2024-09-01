@@ -159,15 +159,15 @@ const verificarPrecioAsiento = async(req, res) => {
     let usuarioDTO = new UsuarioDTO();
     let objFuncion = new Funcion();
     let objUsuario = new Cliente();
-    let reqFuncionId = funcionDTO.fromHexStringToObjectId(req.query);
+    let reqFuncionId = funcionDTO.fromHexStringToObjectId(req.body);
     let resModel = await objFuncion.aggregateFuncion(reqFuncionId);
     let data = (resModel) ? funcionDTO.templateExistFunction(resModel) : funcionDTO.templateNotFunctions();
     if(data.status == 404) return res.status(data.status).json(data);
     data = (resModel.asientos.length == 0) ? funcionDTO.templateNotSeating() : funcionDTO.templateSeating(resModel);
     if(data.status == 404) return res.status(data.status).json(data);
-    data = (resModel.asientos.includes(req.query.asiento)) ? funcionDTO.templateSeating(resModel) : funcionDTO.templateNotSeating();
+    data = (resModel.asientos.includes(req.body.asientos)) ? funcionDTO.templateSeating(resModel) : funcionDTO.templateNotSeating();
     if(data.status == 404) return res.status(data.status).json(data);
-    resModel = (req.query.asiento.includes(resModel.preferencial)) ? funcionDTO.precioPreferencial(resModel) : funcionDTO.templateContinueWithSameObj(resModel);
+    resModel = (req.body.asientos.includes(resModel.preferencial)) ? funcionDTO.precioPreferencial(resModel) : funcionDTO.templateContinueWithSameObj(resModel);
     let mongoUser = usuarioDTO.mongoUserToObject(process.env.VITE_MONGO_USER);
     mongoUser = await objUsuario.findOneClienteByNickOrEmail(mongoUser);
     resModel = (mongoUser.tipo == "VIP") ? funcionDTO.precioVip(resModel) : funcionDTO.templateContinueWithSameObj(resModel);
