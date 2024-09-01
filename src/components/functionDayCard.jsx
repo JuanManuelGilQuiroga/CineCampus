@@ -1,6 +1,6 @@
 import "../../css/style.css";
 
-export function FunctionDayCard ({fecha, onDayClick, index}) {
+export function FunctionDayCard ({fecha, onDayClick, index, day}) {
     let diasSemana = {
         0: "Sun",
         1: "Mon",
@@ -11,9 +11,9 @@ export function FunctionDayCard ({fecha, onDayClick, index}) {
         6: "Sat"
     }
     return (
-        <button key={index} className="flex flex-col items-center justify-between rounded-xl bg-white p-4" onClick={() => {onDayClick(index)}}>
-                <span className="text-[1rem] bg-transparent">{diasSemana[new Date(fecha).getDay()]}</span>
-                <strong className="text-[1.5rem] bg-transparent">{new Date(fecha).getDate()}</strong>
+        <button key={index} className={`flex flex-col items-center justify-between rounded-xl p-4 ${day === index ? "bg-custom-red": "bg-white"}`} onClick={() => {onDayClick(index)}}>
+                <span className={`text-[1rem] bg-transparent ${day === index ? "text-white": "text-black"}`}>{diasSemana[new Date(fecha).getDay()]}</span>
+                <strong className={`text-[1.5rem] bg-transparent ${day === index ? "text-white": "text-black"}`}>{new Date(fecha).getDate()+1}</strong>
         </button>
     )
 }
