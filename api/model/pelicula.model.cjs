@@ -87,7 +87,7 @@ module.exports = class Pelicula extends Connect {
             {$unwind: "$salas"},
             {$addFields: {"salas.sala_id": "$salas._id"}},
             {$addFields: {"salas.sala_asientos": "$salas.asientos"}},
-            { $project: { "salas._id": 0 }},
+            {$project: { "salas._id": 0 , "salas.asientos": 0}},
             {$replaceRoot: {newRoot: {$mergeObjects: ["$$ROOT", "$salas"]}}},
             {$project: {"funciones": 0, "salas": 0 }}
         ]).toArray()
