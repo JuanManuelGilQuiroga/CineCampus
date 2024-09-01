@@ -88,6 +88,14 @@ module.exports = class FuncionDTO {
         }
     }
 
+    templatePrecioCero(){
+        return {
+            status: 200,
+            message: "No hay asientos seleccionados",
+            precio: 0
+        }
+    }
+
     templateIncorrectPaymente(){
         return {
             status: 400,
