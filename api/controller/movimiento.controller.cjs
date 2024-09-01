@@ -6,7 +6,7 @@ const Movimiento = require('../model/movimiento.model.cjs');
 const MovimientoDTO = require('../dto/movimiento.dto.cjs');
 const UsuarioDTO = require('../dto/usuario.dto.cjs');
 const FuncionDTO = require('../dto/funcion.dto.cjs');
-const { verificarPrecioAsiento } = require('./funcion.controller.cjs');
+const { verificarPrecioAsiento, verificarPrecioAsientos } = require('./funcion.controller.cjs');
 
 /**
  * Inserta un movimiento de pago en la base de datos.
@@ -93,10 +93,10 @@ const crearMovimiento = async(req, res) => {
     let simulatedReq = {
         body: {
             _id: reqFuncionId._id,
-            asiento: req.body.asiento
+            asiento: req.body.asientos
         }
     };
-    let reqAsiento = req.body.asiento;
+    let reqAsiento = req.body.asientos;
     let simulatedRes = {
         status: function(code) {
             this.statusCode = code;
@@ -107,7 +107,11 @@ const crearMovimiento = async(req, res) => {
             return this;
         }
     };
-    await verificarPrecioAsiento(simulatedReq, simulatedRes);
+    if(typeof req.body.asientos == "object"){
+        await verificarPrecioAsientos(simulatedReq, simulatedRes);
+    } else if(typeof req.body.asientos == "string"){
+        await verificarPrecioAsiento(simulatedReq, simulatedRes)
+    }
     let precioPagar = simulatedRes
     data = (req.body.monto_COP != precioPagar.data.precio) ? funcionDTO.templateIncorrectPaymente() : funcionDTO.templateContinue();
     if(data.status == 400) return res.status(data.status).json(data);
