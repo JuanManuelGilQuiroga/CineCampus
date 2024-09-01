@@ -1,10 +1,10 @@
+import React, { useEffect, useState } from 'react';
 import { useLoaderData } from "react-router";
-import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import "../../../css/style.css";
-import { Header } from "../header";
-import { FunctionDayCard } from "../functionDayCard";
 import { FunctionCard } from "../functionCart";
+import { FunctionDayCard } from "../functionDayCard";
+import { Header } from "../header";
 import { Seating } from "../seating";
 
 export const functionLoader = async ({params}) => {
@@ -19,6 +19,7 @@ export const Function = () => {
     const [posicionDia, setPosicionDia] = useState(1);
     const [posicionFuncion, setPosicionFuncion] = useState(0);
     const [selectedSeats, setSelectedSeats] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0);
 
     const cambiarEstadoDia = (index) => {
         setPosicionDia(index)
@@ -60,14 +61,33 @@ export const Function = () => {
         }
     }
 
-    const setPrice = (selectedSeats, id, seat) => {
+    const setPrice = async (selectedSeats, id) => {
+        console.log(selectedSeats)
         let price = 0
-        for(const i of selectedSeats) {
-            let res = fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/functions/v2?_id=${id}&asiento=${seat}`).then(res => res.json()).catch(error => console.error('Error:', error));
-            price+=res.precio
+        let dataForQuery = {
+            _id: id,
+            asientos: selectedSeats
         }
-        return price
+        let res = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/functions/v3`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dataForQuery)
+        });
+        let data = await res.json()
+        price+=data.precio
+        console.log(data)
+        setTotalPrice(price)
     }
+
+    // Usamos useEffect para ejecutar setPrice después de que selectedSeats cambie
+    useEffect(() => {
+        // Aquí `selectedSeats` ha cambiado, así que puedes ejecutar `setPrice`
+        setPrice(selectedSeats, resultFunciones[posicionDia].funciones[posicionFuncion].funcion_id);
+        
+    }, [selectedSeats]); // Este useEffect se ejecuta cada vez que `selectedSeats` cambia
 
     return (
         <>
@@ -93,12 +113,12 @@ export const Function = () => {
                 </svg>
             </div>
             <div className="w-[90vw] mt-10 gap-1">
-                <Seating resFunc={resultFunciones} row="A" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} setPriceClick={setPrice}/>
-                <Seating resFunc={resultFunciones} row="B" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} setPriceClick={setPrice}/>
-                <Seating resFunc={resultFunciones} row="C" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} setPriceClick={setPrice}/>
-                <Seating resFunc={resultFunciones} row="D" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} setPriceClick={setPrice}/>
-                <Seating resFunc={resultFunciones} row="E" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} setPriceClick={setPrice}/>
-                <Seating resFunc={resultFunciones} row="F" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} setPriceClick={setPrice}/>
+                <Seating resFunc={resultFunciones} row="A" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} />
+                <Seating resFunc={resultFunciones} row="B" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} />
+                <Seating resFunc={resultFunciones} row="C" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} />
+                <Seating resFunc={resultFunciones} row="D" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} />
+                <Seating resFunc={resultFunciones} row="E" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} />
+                <Seating resFunc={resultFunciones} row="F" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} />
             </div>
             <div className="w-[80vw] flex justify-around mt-6">
                 <div className="flex justify-evenly items-center w-[25%]">
@@ -121,14 +141,13 @@ export const Function = () => {
             </div>
             <div className="flex overflow-scroll mt-8 h-[7vh] w-[80vw] gap-4">
                 {resultFunciones[posicionDia].funciones.map(((obj, index) => {
-                    {console.log(obj.funcion_id)}
                     return <FunctionCard fecha={obj.fecha_completa} precio={obj.precio} tipo={obj.tipo} onFunctionClick={cambiarEstadoFuncion} index={index}/>
                 }))}
             </div>
             <div className="flex justify-between w-[80vw] mt-8">
                 <div>
                     <p className="text-white">Price</p>
-                    <strong className="text-white">${setPrice}</strong>
+                    <strong className="text-white">${totalPrice}</strong>
                 </div>
                 <Link to={`/`} className="bg-custom-red w-[50vw] h-[5vh] rounded-xl flex justify-center items-center">
                     <strong className="bg-transparent text-white">Buy Ticket</strong>
