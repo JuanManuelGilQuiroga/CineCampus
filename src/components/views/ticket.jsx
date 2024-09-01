@@ -7,10 +7,8 @@ import { Header } from "../header";
 export const ticketLoader = async ({request}) => {
    const url = new URL(request.url);
    const dataString = url.searchParams.get('data');
-   const dataDecoded = dataString ? JSON.parse(decodeURIComponent(dataString)) : null;
+   const data = dataString ? JSON.parse(decodeURIComponent(dataString)) : null;
    console.log("loader data: ", data)
-   const res = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/users/v4?nick=${import.meta.env.VITE_MONGO_USER}`).json();
-   const data = {...dataDecoded, cliente_id: res.data._id}
    return {data}
 }
 
@@ -45,7 +43,7 @@ export const Ticket = () => {
 
     return (
         <>
-            
+            <p>Hola</p>
         </>
     )
 

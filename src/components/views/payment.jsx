@@ -8,9 +8,9 @@ export const paymentLoader = async ({request}) => {
    const url = new URL(request.url);
    const dataString = url.searchParams.get('data');
    const dataDecoded = dataString ? JSON.parse(decodeURIComponent(dataString)) : null;
-   console.log("loader data: ", data)
-   const res = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/users/v4?nick=${import.meta.env.VITE_MONGO_USER}`).json();
-   const data = {...dataDecoded, cliente_id: res.data._id}
+   const res = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/users/v4?nick=${import.meta.env.VITE_MONGO_USER}`);
+   const response = await res.json();
+   const data = {...dataDecoded, cliente_id: response.data._id}
    return {data}
 }
 
@@ -45,7 +45,7 @@ export const Payment = () => {
     const asientos = data.asientos.join(", ")
 
     const [isEnable, setIsEnable] = useState(false);
-    const [isPayed, setIsPayed] = useState(false);
+    const [isPayed, setIsPayed] = useState({_id: "1234567890123456"});
     const [isReady, setIsReady] = useState([]);
 
     const handleEnableClick = () => {
@@ -72,11 +72,12 @@ export const Payment = () => {
             body: JSON.stringify(dataForQuery)
         });
         let dataMovement = await res.json()
-        setIsPayed(true)
-        return dataMovement
+        console.log(dataMovement)
+        setIsPayed(dataMovement)
     }
+    console.log(isPayed)
 
-    const insertBoleta = async (dataMovement) => {
+    const insertBoleta = async (isPayed) => {
         let dataToSend = []
         for(const asiento of data.asientos){
             let res = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/tickets/v1`,
@@ -86,7 +87,7 @@ export const Payment = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    movimiento_id: dataMovement.data._id,
+                    movimiento_id: isPayed.data._id,
                     funcion_id: data.funcion_id,
                     asiento: asiento
                 })
@@ -98,10 +99,23 @@ export const Payment = () => {
     }
 
     useEffect(() => {
-        insertBoleta(dataMovement)
+        insertBoleta(isPayed)
     }, [isPayed])
 
+    let incompleteQuery = isReady.map(boleta => {
+        return {
+            ...boleta,
+            pelicula_imagen: data.pelicula_imagen,
+            pelicula_titulo: data.pelicula_titulo,
+            funcion_fecha: data.funcion_fecha,
+            precio_total: data.precio_total
+        }
+    })
 
+    const queryString = new URLSearchParams({
+        data: encodeURIComponent(JSON.stringify(incompleteQuery)),
+    }).toString();
+    console.log(isReady)
 
     return (
         <>
@@ -152,7 +166,7 @@ export const Payment = () => {
                     <span className='text-custom-red bg-transparent'>05:00</span>
                 </div>
             </div>
-            <Link to={isEnable ? `/ticket?${isReady}`: `#`} className={` w-[80vw] h-[5vh] rounded-xl flex justify-center items-center mt-8 ${isEnable ? "bg-custom-red" : "bg-custom-wine-381818"}`}>
+            <Link to={isEnable ? `/ticket?${queryString}`: `#`} className={` w-[80vw] h-[5vh] rounded-xl flex justify-center items-center mt-8 ${isEnable ? "bg-custom-red" : "bg-custom-wine-381818"}`} onClick={() => insertMovement()} >
                 <strong className={`bg-transparent ${isEnable ? "text-white" : "text-custom-red font-light"}`}>Buy Ticket</strong>
             </Link>
         </>

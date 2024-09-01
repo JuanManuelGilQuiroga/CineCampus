@@ -16,7 +16,6 @@ export const functionLoader = async ({params}) => {
 export const Function = () => {
     const data = useLoaderData()
 
-    console.log(data.data)
     const [posicionDia, setPosicionDia] = useState(0);
     const [posicionFuncion, setPosicionFuncion] = useState(0);
     const [selectedSeats, setSelectedSeats] = useState([]);
@@ -43,7 +42,6 @@ export const Function = () => {
             dia_semana: fecha.getDay()
         }
     })
-    console.log(funciones)
 
     let fechasFunciones = Array.from(new Set(funciones.map(obj => obj.fecha_completa.split('T')[0])))
 
