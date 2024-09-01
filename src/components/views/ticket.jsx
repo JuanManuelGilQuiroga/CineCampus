@@ -43,7 +43,25 @@ export const Ticket = () => {
 
     return (
         <>
-            <p>Hola</p>
+            <Header titulo="Ticket"></Header>
+            <div className='flex flex-col'>
+                <div>
+                    <img src="" alt="" />
+                    <h1></h1>
+                    <span>Show this ticket at the entrance</span>
+                </div>
+                <div className='h-[1px] w-[90%] bg-custom-gray-9CA3AF'></div>
+                <div>
+                    <div>
+                        <p>Cinema</p>
+                        <h1>CineCampus</h1>
+                    </div>
+                    <img src="" alt="" />
+                </div>
+                <div className=''>
+                    
+                </div>
+            </div>
         </>
     )
 
