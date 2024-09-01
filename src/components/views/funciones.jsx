@@ -105,6 +105,7 @@ export const Function = () => {
         pelicula_titulo: data.data[0].titulo,
         pelicula_genero: data.data[0].genero,
         funcion_fecha: data.data[0].fecha_hora_inicio,
+        funcion_id: data.data[0].funcion_id,
         asientos: selectedSeats,
         precio_total: totalPrice
     };

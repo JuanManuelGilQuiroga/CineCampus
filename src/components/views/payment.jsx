@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
 import "../../../css/style.css";
 import { Header } from "../header";
@@ -7,8 +7,10 @@ import { Header } from "../header";
 export const paymentLoader = async ({request}) => {
    const url = new URL(request.url);
    const dataString = url.searchParams.get('data');
-   const data = dataString ? JSON.parse(decodeURIComponent(dataString)) : null;
+   const dataDecoded = dataString ? JSON.parse(decodeURIComponent(dataString)) : null;
    console.log("loader data: ", data)
+   const res = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/users/v4?nick=${import.meta.env.VITE_MONGO_USER}`).json();
+   const data = {...dataDecoded, cliente_id: res.data._id}
    return {data}
 }
 
@@ -43,6 +45,8 @@ export const Payment = () => {
     const asientos = data.asientos.join(", ")
 
     const [isEnable, setIsEnable] = useState(false);
+    const [isPayed, setIsPayed] = useState(false);
+    const [isReady, setIsReady] = useState([]);
 
     const handleEnableClick = () => {
         if(isEnable){
@@ -52,7 +56,52 @@ export const Payment = () => {
         }
     }
 
-    
+    const insertMovement = async () => {
+        let dataForQuery = {
+            cliente_id: data.cliente_id,
+            monto_COP: data.precio_total,
+            funcion_id: data.funcion_id,
+            asientos: data.asientos
+        }
+        let res = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/payments/v1`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dataForQuery)
+        });
+        let dataMovement = await res.json()
+        setIsPayed(true)
+        return dataMovement
+    }
+
+    const insertBoleta = async (dataMovement) => {
+        let dataToSend = []
+        for(const asiento of data.asientos){
+            let res = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/tickets/v1`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    movimiento_id: dataMovement.data._id,
+                    funcion_id: data.funcion_id,
+                    asiento: asiento
+                })
+            });
+            let response = await res.json();
+            dataToSend.push(response.data)
+        }
+        setIsReady(dataToSend)
+    }
+
+    useEffect(() => {
+        insertBoleta(dataMovement)
+    }, [isPayed])
+
+
 
     return (
         <>
@@ -103,7 +152,7 @@ export const Payment = () => {
                     <span className='text-custom-red bg-transparent'>05:00</span>
                 </div>
             </div>
-            <Link className={` w-[80vw] h-[5vh] rounded-xl flex justify-center items-center mt-8 ${isEnable ? "bg-custom-red" : "bg-custom-wine-381818"}`}>
+            <Link to={isEnable ? `/ticket?${isReady}`: `#`} className={` w-[80vw] h-[5vh] rounded-xl flex justify-center items-center mt-8 ${isEnable ? "bg-custom-red" : "bg-custom-wine-381818"}`}>
                 <strong className={`bg-transparent ${isEnable ? "text-white" : "text-custom-red font-light"}`}>Buy Ticket</strong>
             </Link>
         </>
