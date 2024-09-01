@@ -16,7 +16,7 @@ export const functionLoader = async ({params}) => {
 export const Function = () => {
     const data = useLoaderData()
 
-    const [posicionDia, setPosicionDia] = useState(1);
+    const [posicionDia, setPosicionDia] = useState(0);
     const [posicionFuncion, setPosicionFuncion] = useState(0);
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
@@ -42,6 +42,7 @@ export const Function = () => {
             dia_semana: fecha.getDay()
         }
     })
+    console.log(funciones)
 
     let fechasFunciones = Array.from(new Set(funciones.map(obj => obj.fecha_completa.split('T')[0])))
 
@@ -78,16 +79,23 @@ export const Function = () => {
         });
         let data = await res.json()
         price+=data.precio
-        console.log(data)
         setTotalPrice(price)
     }
 
-    // Usamos useEffect para ejecutar setPrice después de que selectedSeats cambie
     useEffect(() => {
-        // Aquí `selectedSeats` ha cambiado, así que puedes ejecutar `setPrice`
         setPrice(selectedSeats, resultFunciones[posicionDia].funciones[posicionFuncion].funcion_id);
-        
-    }, [selectedSeats]); // Este useEffect se ejecuta cada vez que `selectedSeats` cambia
+    }, [selectedSeats]);
+
+    useEffect(() => {
+        setSelectedSeats([]);
+        setTotalPrice(0)
+        setPosicionFuncion(0)
+    }, [posicionDia])
+
+    useEffect(() => {
+        setSelectedSeats([]);
+        setTotalPrice(0)
+    }, [posicionFuncion])
 
     return (
         <>
@@ -120,36 +128,37 @@ export const Function = () => {
                 <Seating resFunc={resultFunciones} row="E" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} />
                 <Seating resFunc={resultFunciones} row="F" day={posicionDia} func={posicionFuncion} onSeatClick={handleSeatClick} selectedSeats={selectedSeats} />
             </div>
-            <div className="w-[80vw] flex justify-around mt-6">
-                <div className="flex justify-evenly items-center w-[25%]">
-                    <div className="h-2.5 w-2.5 bg-custom-black-323232 rounded-full"></div>
+            <div className="w-[80vw] flex justify-around items-center mt-8">
+                <div className="flex justify-evenly w-[25%]">
+                    <div className="h-3 w-3 bg-custom-black-323232 rounded-full"></div>
                     <span className="text-[0.7rem] text-white">Available</span>
                 </div>
-                <div className="flex justify-evenly items-center w-[25%]">
-                    <div className="h-2.5 w-2.5 bg-custom-white-CECECE rounded-full"></div>
+                <div className="flex justify-evenly w-[25%]">
+                    <div className="h-3 w-3 bg-custom-white-CECECE rounded-full"></div>
                     <span className="text-[0.7rem] text-white">Reserved</span>
                 </div>
-                <div className="flex justify-evenly items-center w-[25%]">
-                    <div className="h-2.5 w-2.5 bg-custom-red rounded-full"></div>
+                <div className="flex justify-evenly w-[25%]">
+                    <div className="h-3 w-3 bg-custom-red rounded-full"></div>
                     <span className="text-[0.7rem] text-white">Selected</span>
                 </div>
             </div>
-            <div className="flex mt-8 h-[10vh]">
+            <div className="flex overflow-scroll mt-8 h-[10vh] w-[80vw] gap-4">
                 {fechasFunciones.map((i, index) => {
-                    return <FunctionDayCard fecha={i} onDayClick={cambiarEstadoDia} index={index}/>
+                return <FunctionDayCard fecha={i} onDayClick={cambiarEstadoDia} index={index} day={posicionDia}/> 
                 })}
             </div>
             <div className="flex overflow-scroll mt-8 h-[7vh] w-[80vw] gap-4">
                 {resultFunciones[posicionDia].funciones.map(((obj, index) => {
-                    return <FunctionCard fecha={obj.fecha_completa} precio={obj.precio} tipo={obj.tipo} onFunctionClick={cambiarEstadoFuncion} index={index}/>
+                    {console.log(posicionDia)}
+                    return <FunctionCard fecha={obj.fecha_completa} precio={obj.precio} tipo={obj.tipo} onFunctionClick={cambiarEstadoFuncion} index={index} functionPosition={posicionFuncion} />
                 }))}
             </div>
-            <div className="flex justify-between w-[80vw] mt-8">
+            <div className="flex justify-between w-[80vw] mt-10">
                 <div>
-                    <p className="text-white">Price</p>
-                    <strong className="text-white">${totalPrice}</strong>
+                    <p className="text-white text-[1.3rem]">Price</p>
+                    <strong className="text-white text-[1.3rem]">${totalPrice}</strong>
                 </div>
-                <Link to={`/`} className="bg-custom-red w-[50vw] h-[5vh] rounded-xl flex justify-center items-center">
+                <Link to={`/`} className="bg-custom-red w-[50vw] h-[7vh] rounded-xl flex justify-center items-center">
                     <strong className="bg-transparent text-white">Buy Ticket</strong>
                 </Link>
             </div>
