@@ -86,7 +86,7 @@ const crearMovimiento = async(req, res) => {
     let data = (resModel) ? usuarioDTO.templateExistUser(resModel) : usuarioDTO.templateNotUsers();
     if(data.status == 404) return res.status(data.status).json(data);
 
-    data = (resModel.nick != process.env.MONGO_USER) ? usuarioDTO.templateBadCredentials() : usuarioDTO.templateContinue();
+    data = (resModel.nick != process.env.VITE_MONGO_USER) ? usuarioDTO.templateBadCredentials() : usuarioDTO.templateContinue();
     if(data.status == 401) return res.status(data.status).json(data);
 
     let reqFuncionId = funcionDTO.funcionIdToIdKey(req.body);
