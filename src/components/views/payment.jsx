@@ -139,17 +139,15 @@ export const Payment = () => {
                     <h1 className='font-medium text-custom-gray-9CA3AF'>{data.asientos.length} {data.asientos.length > 1 ? "TICKETS" : "TICKET"}</h1>
                     <h2 className='font-medium text-custom-gray-9CA3AF'>{asientos}</h2>
                 </div>
-                <div className='h-[1px] w-[100%] bg-custom-gray-9CA3AF'></div>
-                <div className='flex justify-between'>
+                <hr className='bg-custom-gray-9CA3AF'/>                <div className='flex justify-between'>
                     <h1 className='font-medium text-custom-gray-9CA3AF'>PRICE</h1>
                     <h2 className='font-medium text-custom-gray-9CA3AF'>${data.precio_total}</h2>
                 </div>
-                <div className='h-[1px] w-[100%] bg-custom-gray-9CA3AF'></div>
-                <div className='flex justify-between'>
+                <hr className='bg-custom-gray-9CA3AF'/>                <div className='flex justify-between'>
                     <h1 className='font-medium text-custom-gray-9CA3AF'>SERVICE FEE</h1>
                     <h2 className='font-medium text-custom-gray-9CA3AF'>$500</h2>
                 </div>
-                <div className='h-[1px] w-[100%] bg-custom-gray-9CA3AF'></div>
+                <hr className='bg-custom-gray-9CA3AF'/>
             </div>
             <div className='flex flex-col justify-between h-[20vh] w-[80vw] '>
                 <h1 className='text-white font-medium text-[1.2rem]'>Payment method</h1>
