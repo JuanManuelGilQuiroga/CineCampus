@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
-import "../../../css/style.css";
-import { Header } from "../header";
+import "../../css/style.css";
+import { Header } from "../components/header";
 
 
 export const paymentLoader = async ({request}) => {
@@ -45,7 +45,11 @@ export const Payment = () => {
     const asientos = data.asientos.join(", ")
 
     const [isEnable, setIsEnable] = useState(false);
-    const [isPayed, setIsPayed] = useState({_id: "1234567890123456"});
+    const [isPayed, setIsPayed] = useState({
+        _id: "123",
+        monto_COP: 18000,
+        cliente_id: "123"
+    });
     const [isReady, setIsReady] = useState([]);
 
     const handleEnableClick = () => {
@@ -72,12 +76,11 @@ export const Payment = () => {
             body: JSON.stringify(dataForQuery)
         });
         let dataMovement = await res.json()
-        console.log(dataMovement)
-        setIsPayed(dataMovement)
+        setIsPayed({dataMovement})
+        console.log(isPayed)
     }
-    console.log(isPayed)
 
-    const insertBoleta = async (isPayed) => {
+    const insertBoleta = async () => {
         let dataToSend = []
         for(const asiento of data.asientos){
             let res = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/tickets/v1`,
@@ -99,7 +102,7 @@ export const Payment = () => {
     }
 
     useEffect(() => {
-        insertBoleta(isPayed)
+        insertBoleta()
     }, [isPayed])
 
     let incompleteQuery = isReady.map(boleta => {
@@ -115,7 +118,7 @@ export const Payment = () => {
     const queryString = new URLSearchParams({
         data: encodeURIComponent(JSON.stringify(incompleteQuery)),
     }).toString();
-    console.log(isReady)
+    console.log(isPayed)
 
     return (
         <>

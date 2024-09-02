@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
-import "../../../css/style.css";
-import { Header } from "../header";
+import "../../css/style.css";
+import { Header } from "../components/header";
 
 
 export const ticketLoader = async ({request}) => {
