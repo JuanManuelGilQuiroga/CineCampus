@@ -6,7 +6,6 @@ import "../../css/style.css";
 export const movieLoader = async ({params}) => {
     let detallesPelicula = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/movies/v2?_id=${params.id}`);
     let data = await detallesPelicula.json();
-    console.log(data.data)
     return data
 }
 

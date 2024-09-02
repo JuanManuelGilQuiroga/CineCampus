@@ -51,7 +51,7 @@ export const Function = () => {
             funciones: funciones.filter(obj => obj.fecha_completa.includes(fecha))
         };
     });
-
+    console.log(resultFunciones)
 
     const handleSeatClick = (seat) => {
         if(selectedSeats.includes(seat)){
@@ -62,7 +62,6 @@ export const Function = () => {
     }
 
     const setPrice = async (selectedSeats, id) => {
-        console.log(selectedSeats)
         let price = 0
         let dataForQuery = {
             _id: id,
@@ -96,18 +95,16 @@ export const Function = () => {
         setTotalPrice(0)
     }, [posicionFuncion])
 
-    console.log(data.data)
     const dataToSend = {
         pelicula_id: data.data[0]._id,
         pelicula_imagen: data.data[0].imagen,
         pelicula_titulo: data.data[0].titulo,
         pelicula_genero: data.data[0].genero,
-        funcion_fecha: data.data[0].fecha_hora_inicio,
-        funcion_id: data.data[0].funcion_id,
+        funcion_fecha: resultFunciones[posicionFuncion].fecha_completa,
+        funcion_id: resultFunciones[posicionFuncion].funcion_id,
         asientos: selectedSeats,
         precio_total: totalPrice
     };
-    console.log(dataToSend)
     const queryString = new URLSearchParams({
         data: encodeURIComponent(JSON.stringify(dataToSend)),
     }).toString();
@@ -164,7 +161,6 @@ export const Function = () => {
             </div>
             <div className="flex overflow-scroll mt-8 h-[7vh] w-[80vw] gap-4">
                 {resultFunciones[posicionDia].funciones.map(((obj, index) => {
-                    {console.log(posicionDia)}
                     return <FunctionCard fecha={obj.fecha_completa} precio={obj.precio} tipo={obj.tipo} onFunctionClick={cambiarEstadoFuncion} index={index} functionPosition={posicionFuncion} />
                 }))}
             </div>
