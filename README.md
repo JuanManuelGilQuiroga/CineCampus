@@ -83,12 +83,16 @@ Para instalar y configurar el proyecto, sigue estos pasos:
 Asegúrate de tener configurado el archivo '.env' las variables requeridas para la conexión a la base de datos.
 
 ```javascript
-MONGO_USER=[USUARIO DE LA BASE DE DATOS EN MONGO]
-MONGO_PORT=[PUERTO DE LA BASE DE DATOS]
-MONGO_PWD=[CONTRASEÑA DE LA BASE DE DATOS]
-MONGO_HOST=[HOS DE LA BASE DE DATOS]
-MONGO_CLUSTER=[CLUSTER O SERVIDOR AL DONDE ESTA ALOJADA LA BASE DE DATOS]
-MONGO_DB=[NOMBRE DE LA BASE DE DATOS]
+VITE_MONGO_USER=admin
+VITE_MONGO_PORT=40728
+VITE_MONGO_PWD=adminCineCampus
+VITE_MONGO_HOST=mongodb://
+VITE_MONGO_CLUSTER=monorail.proxy.rlwy.net
+VITE_MONGO_DB=cineCampus
+
+VITE_HOST=localhost
+VITE_PORT_FRONTEND=3050
+VITE_PORT_BACKEND=3051
 ```
 **Cadena de conexion(superAdmin)**:
 mongodb://mongo:VljkCKrxozLMDcJAfREVOpguXgTHgYwm@monorail.proxy.rlwy.net:40728
@@ -96,94 +100,115 @@ mongodb://mongo:VljkCKrxozLMDcJAfREVOpguXgTHgYwm@monorail.proxy.rlwy.net:40728
 **Cadena de conexion(Admin)**:
 mongodb://admin:adminCineCampus@monorail.proxy.rlwy.net:40728/cineCampus
 
+**EJECUTAR NPM RUN DEV EN UNA TERMINAL Y NPM RUN START EN OTRA**
+
 ## Estructura de Archivos y Carpetas
 
 ```
 ProyectoMongoII/
-├── helpers/
-│   └── db/
-│       └── connect.js
-├── js/
-│   ├── module/
-│   │   ├── gestionBoleta/
-│   │   │   ├── boleta.js
-│   │   │   └── boletaLogica.js
-│   │   ├── gestionFuncion/
-│   │   │   ├── funcion.js
-│   │   │   └── funcionLogica.js
-│   │   ├── gestionMovimiento/
-│   │   │   ├── movimiento.js
-│   │   │   └── movimientoLogica.js
-│   │   ├── gestionPelicula/
-│   │   │   ├── pelicula.js
-│   │   │   └── peliculaLogica.js
-│   │   ├── gestionSala/
-│   │   │   ├── sala.js
-│   │   │   └── salaLogica.js
-│   │   ├── gestionTarjeta/
-│   │   │   ├── tarjeta.js
-│   │   │   └── tarjetaLogica.js
-│   │   └── gestionUsuarioYCliente/
-│   │       ├── cliente.js
-│   │       └── usuarioYClienteLogica.js
-│   └── main.js
-├── node_modules/
-├── .env.template
-├── .gitignore
-├── diagramaColecciones.js
-├── package-lock.json
-├── package.json
-└── README.md
+├── api/
+│    │
+│    ├── controller/               # Controladores para las colecciones
+│    │   ├── boleta.controller.cjs
+│    │   ├── funcion.controller.cjs
+│    │   ├── movimiento.controller.cjs
+│    │   ├── pelicula.controller.cjs
+│    │   ├── sala.controller.cjs
+│    │   ├── tarjeta.controller.cjs
+│    │   └── usuario.controller.cjs
+│    │
+│    ├── dto/                      # Data Transfer Objects (DTOs) para las colecciones
+│    │   ├── boleta.dto.cjs
+│    │   ├── funcion.dto.cjs
+│    │   ├── movimiento.dto.cjs
+│    │   ├── pelicula.dto.cjs
+│    │   ├── sala.dto.cjs
+│    │   ├── tarjeta.dto.cjs
+│    │   └── usuario.dto.cjs
+│    │
+│    ├── model/                    # Modelos de las colecciones (esquemas de MongoDB)
+│    │   ├── boleta.model.cjs
+│    │   ├── funcion.model.cjs
+│    │   ├── movimiento.model.cjs
+│    │   ├── pelicula.model.cjs
+│    │   ├── sala.model.cjs
+│    │   ├── tarjeta.model.cjs
+│    │   └── usuario.model.cjs
+│    │
+│    ├── validators/               # Validadores de datos de entrada
+│    │   ├── app.cjs
+│    │   ├── diagramaColecciones.cjs
+│    │   └── index.cjs
+│    │
+│    ├── helpers/                  # Utilidades y funciones auxiliares
+│    │
+│    ├── main.cjs                  # Archivo principal del backend
+│    ├── router.cjs                # Definición de rutas del API
+│    └── index.cjs                 # Punto de entrada del servidor
+│
+├── css/
+│       └── style.css                # Archivo de estilos CSS
+│
+├── node_modules/                    # Módulos de Node.js (dependencias del proyecto)
+│
+├── public/                          # Archivos públicos y recursos estáticos
+│       ├── 4562102.png
+│       ├── Barcode.svg
+│       ├── campuscineLogo.jpg
+│       ├── Group 18102.svg
+│       ├── Mastercard.png
+│       └── perfil.png
+│
+├── src/                             # Código fuente del frontend
+│    │
+│    ├── components/                  # Componentes de React reutilizables
+│    │   ├── carousel.jsx
+│    │   ├── comingSoon.jsx
+│    │   ├── footerIndex.jsx
+│    │   ├── FunctionCart.jsx
+│    │   ├── FunctionDayCard.jsx
+│    │   ├── header.jsx
+│    │   ├── headerIndex.jsx
+│    │   ├── headerUser.jsx
+│    │   ├── seating.jsx
+│    │   └── timer.jsx
+│    │
+│    ├── views/                       # Vistas de la aplicación (páginas principales)
+│    │   ├── Funciones.jsx
+│    │   ├── index.jsx
+│    │   ├── movie.jsx
+│    │   ├── movieExample.jsx
+│    │   ├── payment.jsx
+│    │   └── ticket.jsx
+│    │
+│    ├── app.jsx                      # Componente principal de la aplicación React
+│    └── main.jsx                     # Punto de entrada de la aplicación React│
+│
+├── .env                             # Variables de entorno
+│
+├── .env.templates                   # Plantilla de variables de entorno
+│
+├── .gitignore                       # Archivos y directorios que Git debe ignorar
+│
+├── index.html                       # Archivo HTML principal
+│
+├── package.json                     # Dependencias y scripts del proyecto
+│
+├── package-lock.json                # Versión bloqueada de las dependencias
+│
+├── postcss.config.js                # Configuración de PostCSS
+│
+├── README.md                        # Archivo README del proyecto
+│
+├── tailwind.config.js               # Configuración de Tailwind CSS
+│
+├── vite.config.js                   # Configuración de Vite para el proyecto
+
 
 ```
 
-- **helpers/db/connect.js**: Configuración y conexión a la base de datos MongoDB.
-- **js/module/**: Contiene los diferentes módulos para la gestión de la aplicación.
-  - **gestionBoleta/**: Módulo para la gestión de boletos.
-    - `boleta.js`: Definición del modelo de boleto.
-    - `boletaLogica.js`: Lógica de negocio relacionada con boletos.
-  - **gestionFuncion/**: Módulo para la gestión de funciones.
-    - `funcion.js`: Definición del modelo de función.
-    - `funcionLogica.js`: Lógica de negocio relacionada con funciones.
-  - **gestionMovimiento/**: Módulo para la gestión de movimientos.
-    - `movimiento.js`: Definición del modelo de movimiento.
-    - `movimientoLogica.js`: Lógica de negocio relacionada con movimientos.
-  - **gestionPelicula/**: Módulo para la gestión de películas.
-    - `pelicula.js`: Definición del modelo de película.
-    - `peliculaLogica.js`: Lógica de negocio relacionada con películas.
-  - **gestionSala/**: Módulo para la gestión de salas.
-    - `sala.js`: Definición del modelo de sala.
-    - `salaLogica.js`: Lógica de negocio relacionada con salas.
-  - **gestionTarjeta/**: Módulo para la gestión de tarjetas.
-    - `tarjeta.js`: Definición del modelo de tarjeta.
-    - `tarjetaLogica.js`: Lógica de negocio relacionada con tarjetas.
-  - **gestionUsuarioYCliente/**: Módulo para la gestión de usuarios y clientes.
-    - `cliente.js`: Definición del modelo de cliente.
-    - `usuarioYClienteLogica.js`: Lógica de negocio relacionada con usuarios y clientes.
-- **main.js**: Archivo principal de la aplicación que inicia el servidor.
 
 
-
-### Justificación de la Estructura
-
-La estructura de carpetas modular permite una gestión clara y eficiente de las validaciones y la interacción con la base de datos. Al separar cada funcionalidad en módulos específicos, como la gestión de boletos, funciones, movimientos, películas, salas, tarjetas y usuarios/clientes, se logra una clara separación de responsabilidades. Esto no solo mejora la mantenibilidad y escalabilidad del código, sino que también facilita la implementación y reutilización de validaciones y lógica de negocio, asegurando una interacción consistente y segura con la base de datos.
-
-
-
-## Ejecución del Proyecto
-
-El proyecto se ejecuta directamente en el archivo main.js, por medio del comando **npm run dev**, este archivo cuenta con las importaciones de todas las funciones a las cuales se le pasaran los parametros para ejecutar los casos de uso.
-
-#### **Ejemplo**:
-
-Para ejecutar el caso de uso de ***API para Obtener Detalles de Película**, se necesita importar y llamar a la función ***detallesPelicula*** de la siguiente manera:
-
-```javascript
-import { detallesPelicula } from "./module/gestionPelicula/peliculaLogica.js";
-
-let peliculaId = new ObjectId('66a597b03d45ef35a8b018ac')
-
-console.log(await detallesPelicula(peliculaId))
 
 
 ```
