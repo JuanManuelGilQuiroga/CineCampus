@@ -100,8 +100,8 @@ export const Function = () => {
         pelicula_imagen: data.data[0].imagen,
         pelicula_titulo: data.data[0].titulo,
         pelicula_genero: data.data[0].genero,
-        funcion_fecha: resultFunciones[posicionFuncion].fecha_completa,
-        funcion_id: resultFunciones[posicionFuncion].funcion_id,
+        funcion_fecha: resultFunciones[posicionDia].funciones[posicionFuncion].fecha_completa,
+        funcion_id: resultFunciones[posicionDia].funciones[posicionFuncion].funcion_id,
         asientos: selectedSeats,
         precio_total: totalPrice
     };
