@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLoaderData } from 'react-router-dom';
+import { useLoaderData} from 'react-router-dom';
 import "../../css/style.css";
 import { Header } from "../components/header";
 
@@ -45,12 +45,6 @@ export const Payment = () => {
     const asientos = data.asientos.join(", ")
 
     const [isEnable, setIsEnable] = useState(false);
-    const [isPayed, setIsPayed] = useState({
-        _id: "123",
-        monto_COP: 18000,
-        cliente_id: "123"
-    });
-    const [isReady, setIsReady] = useState([]);
 
     const handleEnableClick = () => {
         if(isEnable){
@@ -60,65 +54,64 @@ export const Payment = () => {
         }
     }
 
-    const insertMovement = async () => {
-        let dataForQuery = {
+    const handlePayment = async () => {
+        const dataMovement = await insertMovement(data);
+        const boletos = await insertBoleta(dataMovement.data);
+        let incompleteQuery = boletos.map(boleta => {
+            return {
+                ...boleta,
+                pelicula_imagen: data.pelicula_imagen,
+                pelicula_titulo: data.pelicula_titulo,
+                funcion_fecha: data.funcion_fecha,
+                precio_total: data.precio_total
+            }
+        })
+        const queryString = new URLSearchParams({
+            data: encodeURIComponent(JSON.stringify(incompleteQuery)),
+        }).toString();
+        window.location.href = `/ticket?${queryString}`;
+    };
+    
+    const insertMovement = async (data) => {
+        const dataForQuery = {
             cliente_id: data.cliente_id,
             monto_COP: data.precio_total,
             funcion_id: data.funcion_id,
-            asientos: data.asientos
-        }
-        let res = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/payments/v1`,
-        {
+            asientos: data.asientos,
+        };
+    
+        const res = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/payments/v1`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(dataForQuery)
+            body: JSON.stringify(dataForQuery),
         });
-        let dataMovement = await res.json()
-        setIsPayed({dataMovement})
-        console.log(isPayed)
-    }
-
-    const insertBoleta = async () => {
-        let dataToSend = []
-        for(const asiento of data.asientos){
-            let res = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/tickets/v1`,
-            {
+    
+        const dataMovement = await res.json();
+        return dataMovement;
+    };
+    
+    const insertBoleta = async (isPayed) => {
+        let dataToSend = [];
+        for (const asiento of data.asientos) {
+            const res = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/tickets/v1`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    movimiento_id: isPayed.data._id,
+                    movimiento_id: isPayed._id,
                     funcion_id: data.funcion_id,
-                    asiento: asiento
-                })
+                    asiento: asiento,
+                }),
             });
-            let response = await res.json();
-            dataToSend.push(response.data)
+    
+            const response = await res.json();
+            dataToSend.push(response.data);
         }
-        setIsReady(dataToSend)
-    }
-
-    useEffect(() => {
-        insertBoleta()
-    }, [isPayed])
-
-    let incompleteQuery = isReady.map(boleta => {
-        return {
-            ...boleta,
-            pelicula_imagen: data.pelicula_imagen,
-            pelicula_titulo: data.pelicula_titulo,
-            funcion_fecha: data.funcion_fecha,
-            precio_total: data.precio_total
-        }
-    })
-
-    const queryString = new URLSearchParams({
-        data: encodeURIComponent(JSON.stringify(incompleteQuery)),
-    }).toString();
-    console.log(isPayed)
+        return dataToSend;
+    };
 
     return (
         <>
@@ -167,9 +160,9 @@ export const Payment = () => {
                     <span className='text-custom-red bg-transparent'>05:00</span>
                 </div>
             </div>
-            <Link to={isEnable ? `/ticket?${queryString}`: `#`} className={` w-[80vw] h-[5vh] rounded-xl flex justify-center items-center mt-8 ${isEnable ? "bg-custom-red" : "bg-custom-wine-381818"}`} onClick={() => insertMovement()} >
+            <div className={` w-[80vw] h-[5vh] rounded-xl flex justify-center items-center mt-8 ${isEnable ? "bg-custom-red" : "bg-custom-wine-381818"}`} onClick={() => handlePayment()} >
                 <strong className={`bg-transparent ${isEnable ? "text-white" : "text-custom-red font-light"}`}>Buy Ticket</strong>
-            </Link>
+            </div>
         </>
     )
 
