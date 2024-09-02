@@ -1,10 +1,10 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import { Index } from "./components/views"
-import { Ejemplo, loader } from "./components/views/movieExample"
-import { MovieDetails, movieLoader } from "./components/views/movie"
-import { Function, functionLoader } from "./components/views/funciones"
-import { Payment, paymentLoader } from "./components/views/payment"
-import { Ticket, ticketLoader } from "./components/views/ticket"
+import { Index } from "./views"
+import { Ejemplo, loader } from "./views/movieExample"
+import { MovieDetails, movieLoader } from "./views/movie"
+import { Function, functionLoader } from "./views/funciones"
+import { Payment, paymentLoader } from "./views/payment"
+import { Ticket, ticketLoader } from "./views/ticket"
 
 const routes = createBrowserRouter([
     {

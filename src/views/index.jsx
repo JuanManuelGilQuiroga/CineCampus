@@ -1,7 +1,7 @@
-import { HeaderIndex } from "../headerIndex";
-import { NowPlaying } from "../nowPlaying";
-import { CoomingSoon } from "../coomingSoon";
-import { FooterIndex } from "../footerIndex";
+import { HeaderIndex } from "../components/headerIndex";
+import { NowPlaying } from "../components/nowPlaying";
+import { CoomingSoon } from "../components/coomingSoon";
+import { FooterIndex } from "../components/footerIndex";
 
 export function Index () {
     return (
