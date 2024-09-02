@@ -93,7 +93,7 @@ const crearMovimiento = async(req, res) => {
     let simulatedReq = {
         body: {
             _id: reqFuncionId._id,
-            asiento: req.body.asientos
+            asientos: req.body.asientos
         }
     };
     let reqAsiento = req.body.asientos;

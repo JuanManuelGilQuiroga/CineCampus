@@ -127,13 +127,13 @@ const verificarPrecioAsientos = async(req, res) => {
     let reqFuncionId = funcionDTO.fromHexStringToObjectId(req.body);
     let resModel = await objFuncion.aggregateFuncion(reqFuncionId);
     let data = (resModel) ? funcionDTO.templateExistFunction(resModel) : funcionDTO.templateNotFunctions();
-    console.log("hola")
     if(data.status == 404) return res.status(data.status).json(data);
     data = (resModel.asientos.length == 0) ? funcionDTO.templateNotSeating() : funcionDTO.templateSeating(resModel);
     if(data.status == 404) return res.status(data.status).json(data);
     let mongoUser = usuarioDTO.mongoUserToObject(process.env.VITE_MONGO_USER);
     mongoUser = await objUsuario.findOneClienteByNickOrEmail(mongoUser);
     let price = 0
+    console.log(req.body)
     if(req.body.asientos.length == 0){ 
         data = funcionDTO.templatePrecioCero();
         return res.status(data.status).json(data)
