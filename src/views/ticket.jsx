@@ -8,7 +8,6 @@ export const ticketLoader = async ({request}) => {
    const url = new URL(request.url);
    const dataString = url.searchParams.get('data');
    const data = dataString ? JSON.parse(decodeURIComponent(dataString)) : null;
-   console.log("loader data: ", data)
    return {data}
 }
 

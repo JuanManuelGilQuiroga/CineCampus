@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLoaderData} from 'react-router-dom';
 import "../../css/style.css";
 import { Header } from "../components/header";
+import { Timer } from '../components/timer';
 
 
 export const paymentLoader = async ({request}) => {
@@ -56,6 +57,7 @@ export const Payment = () => {
 
     const handlePayment = async () => {
         const dataMovement = await insertMovement(data);
+        console.log(dataMovement.data)
         const boletos = await insertBoleta(dataMovement.data);
         let incompleteQuery = boletos.map(boleta => {
             return {
@@ -79,7 +81,6 @@ export const Payment = () => {
             funcion_id: data.funcion_id,
             asientos: data.asientos,
         };
-    
         const res = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/payments/v1`, {
             method: "POST",
             headers: {
@@ -87,12 +88,13 @@ export const Payment = () => {
             },
             body: JSON.stringify(dataForQuery),
         });
-    
+        
         const dataMovement = await res.json();
+        console.log(dataMovement)
         return dataMovement;
     };
     
-    const insertBoleta = async (isPayed) => {
+    const insertBoleta = async (dataMovement) => {
         let dataToSend = [];
         for (const asiento of data.asientos) {
             const res = await fetch(`http://localhost:${import.meta.env.VITE_PORT_BACKEND}/tickets/v1`, {
@@ -101,7 +103,7 @@ export const Payment = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    movimiento_id: isPayed._id,
+                    movimiento_id: dataMovement._id,
                     funcion_id: data.funcion_id,
                     asiento: asiento,
                 }),
@@ -157,7 +159,7 @@ export const Payment = () => {
                 </div>
                 <div className='w-[80vw] flex justify-between items-center rounded-lg bg-custom-wine-381818 p-2'>
                     <p className='text-white bg-transparent text-[0.8rem]'>Complete your payment in</p>
-                    <span className='text-custom-red bg-transparent'>05:00</span>
+                    <Timer/>
                 </div>
             </div>
             <div className={` w-[80vw] h-[5vh] rounded-xl flex justify-center items-center mt-8 ${isEnable ? "bg-custom-red" : "bg-custom-wine-381818"}`} onClick={() => handlePayment()} >
